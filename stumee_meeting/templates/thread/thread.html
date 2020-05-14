@@ -1,0 +1,117 @@
+{% extends 'thread/base.html' %}
+
+{% block title %}{{ thread.title }}{% endblock %}
+
+{% block extracss %}
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'thread/thread.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!--Side Menu-->
+        <div class="col-md-2 d-none d-md-block sidebar border-right" style="background-color: white;">
+            <div class="sidebar-sticky row">
+                 <div class="col-5"></div>
+                 <ul class="nav flex-column col-7 pr-0">
+                     <li class="nav-item"><a class="nav-link" href="{% url 'stumee_meeting:index' %}">ホーム</a></li>
+                     <li class="nav-item" style="background-color: #e0ffff; border-right: solid 3px orange;">
+                         <a class="nav-link" href="{% url 'stumee_meeting:question' %}">質問</a>
+                     </li>
+                     <li class="nav-item"><a class="nav-link" href="{% url 'stumee_meeting:tags' %}">タグ</a></li>
+                     <li class="nav-item"><a class="nav-link" href="#">ユーザ</a></li>
+                 </ul>
+             </div>
+        </div>
+        <!--Main Contents-->
+        <div role="main" class="col-md-8">
+
+            <div class="mb-5">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom row">
+                    <div class="d-flex flex-wrap row">
+                        <h1 class="h2 mb-3 col-12 ml-3">{{ thread.title }}</h1>
+                        <div class="col-12 ml-3">
+                            <span class="h5 pr-3">回答 <span class="font-weight-bold" style="color:orange;">{{ comments | length }}</span></span>
+                            <span class="small pr-5">投稿日 {{ thread.make_date|date:"Y/n/j H:m" }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="thread_description" class="mb-2">{{ thread.description }}</div>
+                <div id="thread-good">
+                    <span id="thread-good-mark" data-href="{% url 'stumee_meeting:thread_good' thread.id %}">&hearts;</span>
+                    <span class="thread-good-count">{{ thread.good_count }}</span>
+                </div>
+
+                <div class="row">
+                    <div class="col-9">
+                        {% for tag in thread.tag.all %}
+                            <a class="btn btn-outline-secondary btn-sm" role="button" href="{% url 'stumee_meeting:tag_filter' tag.name %}">{{ tag.name }}</a>
+                        {% endfor %}
+                    </div>
+                    <div class="row col-2">
+                        <div>
+                            <img class="rounded" src="{{ thread.user.small.url }}">
+                        </div>
+                        <div>
+                            <a href="{% url 'stumee_auth:profile' thread.user.id %}">{{ thread.user.username }}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <h4 class="mb-3">この質問に対する回答</h4>
+                {% if comments %}
+                {% for comment in comments %}
+                    <div class="thread_contents border-bottom pb-4">
+                        <div class="text">{{ comment.comment }}</div>
+                        <div class="comment-good">
+                            <span class="comment-good-mark" data-href="{% url 'stumee_meeting:comment_good' comment.id %}">&hearts;</span>
+                            <span id="comment-good-count-{{ comment.id }}">{{ comment.good_count }}</span>
+                        </div>
+                        <div class="row">
+                            <div class="col-9"></div>
+                            <div class="row col-2">
+                                <div>
+                                    <img class="rounded" src="{{ comment.user.small.url }}">
+                                </div>
+                                <div>
+                                    <a href="{% url 'stumee_auth:profile' comment.user.id %}">{{ comment.user.username }}</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+                {% else %}
+                <div>まだ回答がありません。</div>
+                {% endif %}
+            </div>
+
+            <div>
+                <h4 class="mt-4">この質問に回答する</h4>
+                <form method="POST" action="">
+                    {% for field in form %}
+                        <div class="form-group">
+                            {{ field }}
+                            {{ field.errors }}
+                        </div>
+                    {% endfor %}
+                    {% csrf_token %}
+                    <button class="btn btn-primary btn-sm" type="submit">回答する</button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extrajs %}
+    <script type='text/javascript' src="{% static 'thread/js/thread_good.js' %}"></script>
+    <script type='text/javascript' src="{% static 'thread/js/comment_good.js' %}"></script>
+    <script>
+        $('div.form-group [id^=id_]').addClass('form-control');
+    </script>
+{% endblock %}

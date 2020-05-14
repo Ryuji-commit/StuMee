@@ -1,0 +1,18 @@
+div.thread_contents {
+    margin-bottom:20px;
+}
+
+input#id_comment {
+    height:150px;
+    width:300px;
+}
+
+span#thread-good-mark {
+    cursor: pointer;
+    color: orange;
+}
+
+span.comment-good-mark {
+    cursor: pointer;
+    color: orange;
+}

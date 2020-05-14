@@ -1,0 +1,26 @@
+{% extends 'thread/base.html' %}
+
+{% block title %}質問する{% endblock %}
+
+{% block content %}
+    <div class="container"><h1>質問する</h1></div>
+    <form method="POST" action="">
+        <div class="container">
+            {% for field in form %}
+                <div class="form-group">
+                    {{ field.label_tag }}
+                    {{ field }}
+                    {{ field.errors }}
+                </div>
+            {% endfor %}
+            {% csrf_token %}
+            <button class="btn btn-primary btn-sm" type="submit">質問を投稿する</button>
+        </div>
+    </form>
+{% endblock %}
+
+{% block extrajs %}
+    <script>
+        $('div.form-group [id^=id_]').addClass('form-control');
+    </script>
+{% endblock %}

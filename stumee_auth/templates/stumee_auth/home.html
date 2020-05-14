@@ -1,0 +1,11 @@
+{% extends 'thread/base.html' %}
+
+{% block title %}StuMee home{% endblock %}
+
+{% block content %}
+    {% if user.is_authenticated %}
+        <p class="display-4">Hello, {{ user.username }}</p>
+    {% else %}
+        <p>please login for StuMee</p>
+    {% endif %}
+{% endblock %}

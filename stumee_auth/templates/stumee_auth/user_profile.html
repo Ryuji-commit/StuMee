@@ -1,0 +1,11 @@
+{% extends 'thread/base.html' %}
+
+{% block title %}Profile-{{ user_profile.username }}{% endblock %}
+
+{% block content %}
+    <h2>name:{{ user_profile.username }}</h2>
+    {% for comment in user_comments %}
+        <p>{{ comment.comment }}</p>
+    {% endfor %}
+    <a href="{% url 'stumee_auth:home' %}">トップページ</a>
+{% endblock %}

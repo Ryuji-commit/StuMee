@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="ja">
+    <head>
+        <title>{% block title %}{% endblock %}</title>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/timedropper/1.0/timedropper.min.css">
+        {% block extracss %}
+        {% endblock %}
+    </head>
+    <body style="width:100%;">
+
+        <nav class="navbar navbar-expand-sm navbar-light bg-light fixed-top">
+
+            <!--Logo-->
+            <a href="{% url 'stumee_auth:home' %}" class="navbar-brand mr-4">
+                {% load static %}
+                <img src="{% static 'thread/picture/logo.PNG' %}" width="120" height="50">
+            </a>
+
+            <!--PC menu-->
+            <div class="collapse navbar-collapse" id="main_menu">
+                <ul class="navbar-nav mr-auto">
+                    <!--Home-->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'stumee_auth:home' %}">Home</a>
+                    </li>
+                    <!--Study-->
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Study</a>
+                    </li>
+                    <!--Meeting-->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'stumee_meeting:index' %}">Meeting</a>
+                    </li>
+                    <!--Setting-->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'stumee_auth:user_profile' %}">Setting</a>
+                    </li>
+                </ul>
+
+                <ul class="navbar-nav">
+                    {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'stumee_auth:logout' %}">Logout</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'social:begin' 'google-oauth2' %}">Login</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+
+            <!--sm toggle menu-->
+            <button class="navbar-toggler" type="button"
+                    data-toggle="collapse"
+                    data-target="#main_menu"
+                    aria-controls="main_menu"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+            </button>
+
+        </nav>
+
+        <div style="margin-top:80px;">
+            {% block content %}
+            {% endblock %}
+        </div>
+
+        <!-- Optional JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+        {% block extrajs %}
+        {% endblock %}
+    </body>
+</html>

@@ -1,0 +1,57 @@
+{% extends 'thread/base.html' %}
+
+{% block title %}Meeting{% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+             <div class="col-md-2 d-none d-md-block sidebar border-right" style="background-color: white;">
+                 <div class="sidebar-sticky row">
+                     <div class="col-5"></div>
+                     <ul class="nav flex-column col-7 pr-0">
+                        <li class="nav-item"><a class="nav-link" href="{% url 'stumee_meeting:index' %}">ホーム</a></li>
+                        <li class="nav-item" style="background-color: #e0ffff; border-right: solid 3px orange;">
+                            <a class="nav-link" href="">質問</a>
+                        </li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'stumee_meeting:tags' %}">タグ</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#">ユーザ</a></li>
+                     </ul>
+                 </div>
+             </div>
+            <div role="main" class="col-md-8">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">質問一覧</h1>
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        <div class="btn-group mr-2">
+                            <a class="btn btn-primary btn-sm" role="button" href="{% url 'stumee_meeting:post_thread' %}">質問する</a>
+                        </div>
+                    </div>
+                </div>
+                {% if threads_list %}
+                    {% for thread in threads_list %}
+                        <div class="card border-primary mb-2">
+
+                            <div class="card-header">
+                                <a href="{% url 'stumee_meeting:thread' thread.id %}">{{ thread.title }}</a>
+                            </div>
+
+                            <div class="card-body row">
+                                <div class="col-sm-6">
+                                {% for tag in thread.tag.all %}
+                                    <a class="btn btn-outline-secondary btn-sm" role="button" href="{% url 'stumee_meeting:tag_filter' tag.name %}">{{ tag.name }}</a>
+                                {% endfor %}
+                                </div>
+                                <div class="text-right col-sm-6">
+                                    {{ thread.make_date|date:"Y/n/j H:i" }}
+                                    <a href="{% url 'stumee_auth:profile' thread.user.id %}">{{ thread.user.username }}</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p>No thread here</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
