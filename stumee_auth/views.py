@@ -17,17 +17,22 @@ def home(request):
 
 @login_required
 def user_setting(request):
+    initial_dict = {
+        'username': request.user.username,
+    }
+    user = request.user
     if request.method == "POST":
         form = forms.ProfileForm(request.POST, request.FILES, instance=request.user)
         if form.is_valid():
             form.save()
     else:
-        form = forms.ProfileForm()
+        form = forms.ProfileForm(initial=initial_dict)
     return render(
         request,
         'stumee_auth/user_setting.html',
         {
             'form': form,
+            'user': user,
         }
     )
 

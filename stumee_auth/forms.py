@@ -5,3 +5,7 @@ class ProfileForm(forms.ModelForm):
     class Meta:
         model = models.CustomUser
         fields = ('username', 'original_image',)
+        labels = {
+            'username': 'ユーザ名',
+            'original_image': 'アイコン',
+        }

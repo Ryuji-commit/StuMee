@@ -18,7 +18,7 @@ class CustomUser(AbstractUser):
 
     big = ImageSpecField(
         source="original_image",
-        processors=[ResizeToFill(1280, 1280)],
+        processors=[ResizeToFill(300, 300)],
         format='JPEG'
     )
 

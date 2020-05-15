@@ -5,21 +5,33 @@
 {% block content %}
     <form method="POST" enctype="multipart/form-data">
         <div class="container">
-            {% for field in form %}
-                <div class="form-group">
-                    {{ field.label_tag }}
-                    {{ field }}
-                    {{ field.errors }}
+            <div class="form-group">
+                <div class="row">
+                    {{ form.username.errors }}
+                    {{ form.username.label_tag }}
+                    {{ form.username }}
                 </div>
-            {% endfor %}
+
+                <div class="row mt-5">
+                    <img src="{{ user.big.url }}" class="img-thumbnail">
+                    <label class="input-group-btn  d-flex align-items-end ml-3">
+                        <span class="btn btn-secondary">
+                            変更{{ form.original_image }}
+                        </span>
+                    </label>
+                </div>
+            </div>
             {% csrf_token %}
-            <button class="btn btn-primary btn-sm" type="submit">確定</button>
+            <div class="row">
+                <button class="btn btn-primary btn-sm" type="submit">更新</button>
+            </div>
         </div>
     </form>
 {% endblock %}
 
 {% block extrajs %}
     <script>
-        $('div.form-group [id^=id_]').addClass('form-control');
+        $('div.form-group input[name="username"]').addClass('form-control');
+        $('div.form-group input[name="original_image"]').css('display', 'none');
     </script>
 {% endblock %}
