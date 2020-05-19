@@ -7,7 +7,6 @@ from imagekit.processors import ResizeToFill
 
 
 # Create your models here.
-
 class CustomUser(AbstractUser):
     original_image = models.ImageField(
         upload_to='user_icon/',
@@ -28,5 +27,9 @@ class CustomUser(AbstractUser):
         format="JPEG",
         options={'quality': 75}
     )
+
+    # 0=student, 1=TA, 2=teacher
+    user_auth = models.IntegerField(verbose_name='権限', default=0)
+
 
 

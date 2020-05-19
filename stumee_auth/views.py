@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views import generic
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -19,12 +19,15 @@ def home(request):
 def user_setting(request):
     initial_dict = {
         'username': request.user.username,
+        'user_auth': request.user.user_auth,
     }
     user = request.user
     if request.method == "POST":
         form = forms.ProfileForm(request.POST, request.FILES, instance=request.user)
         if form.is_valid():
             form.save()
+        else:
+            return redirect('stumee_meeting:index')
     else:
         form = forms.ProfileForm(initial=initial_dict)
     return render(

@@ -12,6 +12,20 @@
                     {{ form.username }}
                 </div>
 
+                <div class="mt-5">
+                    {{ form.user_auth.label_tag }}
+                    <div class="border-top border-bottom">
+                    {% for radio in form.user_auth %}
+                        <div class="custom-control custom-radio pt-1 pb-1">
+                            {{ radio.tag }}
+                            <label class="custom-control-label" for="{{ radio.id_for_label }}">
+                                {{ radio.choice_label }}
+                            </label>
+                        </div>
+                    {% endfor %}
+                    </div>
+                </div>
+
                 <div class="row mt-5">
                     <div class="mx-auto">
                         <img src="{{ user.big.url }}" class="img-thumbnail">
@@ -23,7 +37,9 @@
                     </div>
                 </div>
             </div>
+
             {% csrf_token %}
+
             <div class="row">
                 <button class="btn btn-primary btn-sm" type="submit">更新</button>
             </div>
@@ -34,6 +50,13 @@
 {% block extrajs %}
     <script>
         $('div.form-group input[name="username"]').addClass('form-control');
-        $('div.form-group input[name="original_image"]').css('display', 'none');
+        $('div.form-group input[name="user_auth"]').addClass('custom-control-input');
+
+        var icon_css = {
+            visibility:'hidden',
+            width:'0',
+            height:'0',
+        }
+        $('div.form-group input[name="original_image"]').css(icon_css);
     </script>
 {% endblock %}
