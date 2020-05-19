@@ -7,7 +7,7 @@ from imagekit.processors import ResizeToFill
 
 
 # Create your models here.
-@cleanup.ignore
+
 class CustomUser(AbstractUser):
     original_image = models.ImageField(
         upload_to='user_icon/',

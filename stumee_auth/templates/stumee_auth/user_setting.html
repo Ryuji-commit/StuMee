@@ -13,12 +13,14 @@
                 </div>
 
                 <div class="row mt-5">
-                    <img src="{{ user.big.url }}" class="img-thumbnail">
-                    <label class="input-group-btn  d-flex align-items-end ml-3">
-                        <span class="btn btn-secondary">
-                            変更{{ form.original_image }}
-                        </span>
-                    </label>
+                    <div class="mx-auto">
+                        <img src="{{ user.big.url }}" class="img-thumbnail">
+                        <label class="input-group-btn align-bottom ml-2">
+                            <span class="btn btn-secondary">
+                                変更{{ form.original_image }}
+                            </span>
+                        </label>
+                    </div>
                 </div>
             </div>
             {% csrf_token %}
