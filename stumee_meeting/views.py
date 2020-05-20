@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.http.response import JsonResponse
 from django.views import generic
 from taggit.models import Tag
-from django.db.models import Count
+from django.db.models import Count, Q
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 
@@ -17,7 +17,13 @@ class IndexView(generic.ListView):
     context_object_name = 'latest_threads_list'
 
     def get_queryset(self):
-        return Thread.objects.order_by('-is_picked', '-good_count', '-make_date')
+        search_word = self.request.GET.get('search_form')
+        if search_word:
+            return Thread.objects.filter(
+                Q(title__icontains=search_word) | Q(tag__name__icontains=search_word)
+            ).order_by('-is_picked', '-good_count', '-make_date').distinct()
+        else:
+            return Thread.objects.order_by('-is_picked', '-good_count', '-make_date')
 
 
 # Ask question
