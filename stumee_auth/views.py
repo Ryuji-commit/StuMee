@@ -15,6 +15,7 @@ def home(request):
     )
 
 
+# The view for setting user profile
 @login_required
 def user_setting(request):
     initial_dict = {

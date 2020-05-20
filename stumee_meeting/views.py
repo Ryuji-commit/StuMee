@@ -143,6 +143,7 @@ class TagListView(generic.ListView):
         return context
 
 
+# The ListView for thread order by make date
 class QuestionView(generic.ListView):
     template_name = 'thread/question.html'
     context_object_name = 'threads_list'
@@ -151,6 +152,7 @@ class QuestionView(generic.ListView):
         return Thread.objects.order_by('-make_date')
 
 
+# The ListView for list of all tag
 class AllTagView(generic.ListView):
     template_name = 'thread/all_tag.html'
     context_object_name = 'tag_list'
@@ -162,6 +164,7 @@ class AllTagView(generic.ListView):
         )
 
 
+# The ListView for search function
 class SearchThreadView(generic.ListView):
     template_name = 'thread/search_result.html'
     context_object_name = 'search_results'
