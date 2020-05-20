@@ -16,9 +16,7 @@
                  <div class="sidebar-sticky row">
                      <div class="col-5"></div>
                      <ul class="nav flex-column col-7 pr-0">
-                        <li class="nav-item" style="background-color: #e0ffff; border-right: solid 3px orange;">
-                            <a class="nav-link" href="{% url 'stumee_meeting:index' %}">ホーム</a>
-                        </li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'stumee_meeting:index' %}">ホーム</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'stumee_meeting:question' %}">質問</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'stumee_meeting:tags' %}">タグ</a></li>
                         <li class="nav-item"><a class="nav-link" href="#">ユーザ</a></li>
@@ -27,15 +25,15 @@
              </div>
             <div role="main" class="col-md-8">
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                    <h1 class="h2">Meeting</h1>
+                    <h1 class="h2">Search result : {{ search_word }}</h1>
                     <div class="btn-toolbar mb-2 mb-md-0">
                         <div class="btn-group mr-2">
                             <a class="btn btn-primary btn-sm" role="button" href="{% url 'stumee_meeting:post_thread' %}">質問する</a>
                         </div>
                     </div>
                 </div>
-                {% if latest_threads_list %}
-                    {% for thread in latest_threads_list %}
+                {% if search_results %}
+                    {% for thread in search_results %}
                         <div class="card border-primary mb-2">
                             <div class="card-header">
                                 <div class="row">

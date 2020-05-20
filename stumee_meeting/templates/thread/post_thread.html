@@ -2,6 +2,13 @@
 
 {% block title %}質問する{% endblock %}
 
+{% block search_form %}
+<form class="form-inline my-2 my-lg-0 mr-5" action="{% url 'stumee_meeting:thread_search' %}" method="get">
+      <input name="search_form" type="search" class="form-control mr-sm-2" placeholder="検索..." aria-label="検索..." value="{{ request.GET.search_form }}">
+      <button type="submit" class="btn btn-outline-secondary my-2 my-sm-0">検索</button>
+</form>
+{% endblock %}
+
 {% block content %}
     <div class="container"><h1>質問する</h1></div>
     <form method="POST" action="">

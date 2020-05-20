@@ -17,13 +17,7 @@ class IndexView(generic.ListView):
     context_object_name = 'latest_threads_list'
 
     def get_queryset(self):
-        search_word = self.request.GET.get('search_form')
-        if search_word:
-            return Thread.objects.filter(
-                Q(title__icontains=search_word) | Q(tag__name__icontains=search_word)
-            ).order_by('-is_picked', '-good_count', '-make_date').distinct()
-        else:
-            return Thread.objects.order_by('-is_picked', '-good_count', '-make_date')
+        return Thread.objects.order_by('-is_picked', '-good_count', '-make_date')
 
 
 # Ask question
@@ -166,3 +160,23 @@ class AllTagView(generic.ListView):
         return queryset.annotate(
             thread_count=Count('taggit_taggeditem_items')
         )
+
+
+class SearchThreadView(generic.ListView):
+    template_name = 'thread/search_result.html'
+    context_object_name = 'search_results'
+
+    def get_queryset(self):
+        search_word = self.request.GET.get('search_form')
+        if search_word:
+            return Thread.objects.filter(
+                Q(title__icontains=search_word) | Q(tag__name__icontains=search_word)
+            ).order_by('-is_picked', '-good_count', '-make_date').distinct()
+        else:
+            return Thread.objects.order_by('-is_picked', '-good_count', '-make_date')
+
+    def get_context_data(self, **kwargs):
+        context = super(SearchThreadView, self).get_context_data(**kwargs)
+        search_word = self.request.GET.get('search_form')
+        context['search_word'] = search_word
+        return context
