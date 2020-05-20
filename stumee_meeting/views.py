@@ -4,6 +4,7 @@ from django.views import generic
 from taggit.models import Tag
 from django.db.models import Count
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseRedirect
 
 from .models import Thread, Comment, ThreadGood, CommentGood
 from . import forms
@@ -16,7 +17,7 @@ class IndexView(generic.ListView):
     context_object_name = 'latest_threads_list'
 
     def get_queryset(self):
-        return Thread.objects.order_by('-good_count')
+        return Thread.objects.order_by('-is_picked', '-good_count', '-make_date')
 
 
 # Ask question
@@ -106,6 +107,24 @@ def add_good_for_comment(request, comment_id):
             "count": CommentGood.objects.filter(comment=comment).count(),
         }
         return JsonResponse(d)
+
+
+# Pick the thread
+@login_required
+def pick_up_thread(request, thread_id):
+    thread_picked = get_object_or_404(Thread, pk=thread_id)
+    if request.method == "POST":
+        next_url = request.POST.get('next', None)
+        if thread_picked.is_picked:
+            thread_picked.is_picked = False
+        else:
+            thread_picked.is_picked = True
+        thread_picked.save()
+
+    if next_url:
+        return HttpResponseRedirect(next_url)
+    else:
+        return redirect('stumee_meeting:index')
 
 
 # Tag Detail
