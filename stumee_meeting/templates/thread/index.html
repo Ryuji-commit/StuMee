@@ -46,7 +46,7 @@
                                         {% endif %}
                                     </div>
                                     <div class="col-sm-2">
-                                        {% if user.user_auth is not 0 %}
+                                        {% if user.user_auth is not 0 and user.is_authenticated %}
                                         <form action="{% url 'stumee_meeting:thread_pickup' thread.id %}" method="post">
                                             {% csrf_token %}
                                             <input type="hidden" name="next" value="{{ request.path }}"/>
