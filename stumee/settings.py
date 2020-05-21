@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'stumee_auth.apps.StumeeAuthConfig',
     'stumee_meeting.apps.StumeeMeetingConfig',
     'stumee_search.apps.StumeeSearchConfig',
+    'stumee_study.apps.StumeeStudyConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

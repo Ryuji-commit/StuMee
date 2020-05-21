@@ -24,6 +24,7 @@ urlpatterns = [
     path('', include('stumee_auth.urls')),
     path('meeting/', include('stumee_meeting.urls')),
     path('search/', include('stumee_search.urls')),
+    path('study/', include('stumee_study.urls')),
     path('auth/', include('social_django.urls', namespace='social')),
     path('admin/', admin.site.urls),
 ]
