@@ -37,6 +37,7 @@ AUTH_USER_MODEL = 'stumee_auth.CustomUser'
 INSTALLED_APPS = [
     'stumee_auth.apps.StumeeAuthConfig',
     'stumee_meeting.apps.StumeeMeetingConfig',
+    'stumee_search.apps.StumeeSearchConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
