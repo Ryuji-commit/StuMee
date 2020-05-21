@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.http.response import JsonResponse
 from django.views import generic
 from taggit.models import Tag
-from django.db.models import Count, Q
+from django.db.models import Count
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 
