@@ -11,7 +11,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AddField(
-            model_name='thread',
+            model_name='stumee_meeting',
             name='good_count',
             field=models.IntegerField(default=0),
         ),

@@ -17,7 +17,7 @@ class Migration(migrations.Migration):
             field=models.DateTimeField(default=datetime.datetime.now),
         ),
         migrations.AlterField(
-            model_name='thread',
+            model_name='stumee_meeting',
             name='make_date',
             field=models.DateTimeField(default=datetime.datetime.now),
         ),

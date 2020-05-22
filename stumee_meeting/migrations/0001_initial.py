@@ -32,7 +32,7 @@ class Migration(migrations.Migration):
             name='ThreadGood',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('thread', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='stumee_meeting.Thread')),
+                ('stumee_meeting', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='stumee_meeting.Thread')),
                 ('user', models.ForeignKey(default=1, on_delete=django.db.models.deletion.PROTECT, to=settings.AUTH_USER_MODEL)),
             ],
         ),
@@ -43,7 +43,7 @@ class Migration(migrations.Migration):
                 ('no', models.IntegerField(default=1, validators=[django.core.validators.MinValueValidator(1), django.core.validators.MaxValueValidator(1000)])),
                 ('comment', models.TextField(max_length=200, verbose_name='コメント')),
                 ('up_date', models.DateTimeField(auto_now=True)),
-                ('thread', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='stumee_meeting.Thread')),
+                ('stumee_meeting', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='stumee_meeting.Thread')),
                 ('user', models.ForeignKey(default=1, on_delete=django.db.models.deletion.PROTECT, to=settings.AUTH_USER_MODEL)),
             ],
         ),

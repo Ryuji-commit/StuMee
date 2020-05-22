@@ -13,7 +13,7 @@ from . import forms
 
 # Threads list
 class IndexView(generic.ListView):
-    template_name = 'thread/index.html'
+    template_name = 'stumee_meeting/index.html'
     context_object_name = 'latest_threads_list'
 
     def get_queryset(self):
@@ -35,7 +35,7 @@ def post_thread(request):
         form = forms.ThreadForm()
     return render(
         request,
-        'thread/post_thread.html',
+        'stumee_meeting/post_thread.html',
         {
             'form': form,
         }
@@ -65,7 +65,7 @@ def thread(request, thread_id):
         form = forms.CommentForm()
     return render(
         request,
-        'thread/thread.html',
+        'stumee_meeting/thread.html',
         {
             'thread': thread,
             'form': form,
@@ -131,7 +131,7 @@ def pick_up_thread(request, thread_id):
 class TagListView(generic.ListView):
     model = Thread
     context_object_name = 'tag_threads_list'
-    template_name = 'thread/tag_list.html'
+    template_name = 'stumee_meeting/tag_list.html'
 
     def get_queryset(self):
         tag_name = self.kwargs['tag_name']
@@ -145,7 +145,7 @@ class TagListView(generic.ListView):
 
 # The ListView for thread order by make date
 class QuestionView(generic.ListView):
-    template_name = 'thread/question.html'
+    template_name = 'stumee_meeting/question.html'
     context_object_name = 'threads_list'
 
     def get_queryset(self):
@@ -154,7 +154,7 @@ class QuestionView(generic.ListView):
 
 # The ListView for list of all tag
 class AllTagView(generic.ListView):
-    template_name = 'thread/all_tag.html'
+    template_name = 'stumee_meeting/all_tag.html'
     context_object_name = 'tag_list'
 
     def get_queryset(self):
