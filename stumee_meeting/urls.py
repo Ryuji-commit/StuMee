@@ -13,4 +13,5 @@ urlpatterns = [
     path('question', views.QuestionView.as_view(), name='question'),
     path('tags', views.AllTagView.as_view(), name='tags'),
     path('<int:thread_id>/pickup', views.pick_up_thread, name='thread_pickup'),
+    path('users', views.AllUserView.as_view(), name='users')
 ]

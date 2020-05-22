@@ -1,6 +1,6 @@
 {% extends 'stumee_meeting/meeting_base.html' %}
 
-{% block title %}Meeting{% endblock %}
+{% block title %}ユーザ一覧{% endblock %}
 
 {% block content %}
     <div class="container-fluid">
@@ -11,40 +11,37 @@
                      <ul class="nav flex-column col-7 pr-0">
                         <li class="nav-item"><a class="nav-link" href="{% url 'stumee_meeting:index' %}">ホーム</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'stumee_meeting:question' %}">質問</a></li>
-                        <li class="nav-item" style="background-color: #e0ffff; border-right: solid 3px orange;">
-                            <a class="nav-link" href="">タグ</a>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'stumee_meeting:tags' %}">タグ</a></li>
+                        <li class="nav-item"  style="background-color: #e0ffff; border-right: solid 3px orange;">
+                            <a class="nav-link" href="">ユーザ</a>
                         </li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'stumee_meeting:users' %}">ユーザ</a></li>
                      </ul>
                  </div>
              </div>
             <div role="main" class="col-md-8">
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                    <h1 class="h2">タグ一覧</h1>
+                    <h1 class="h2">ユーザ一覧</h1>
                     <div class="btn-toolbar mb-2 mb-md-0">
                         <div class="btn-group mr-2">
                             <a class="btn btn-primary btn-sm" role="button" href="{% url 'stumee_meeting:post_thread' %}">質問する</a>
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                {% if tag_list %}
-                    {% for tag in tag_list %}
-                        <div class="card border-secondary m-3 col-md-3 p-0">
-
-                            <div class="card-header" style="background-color: white;">
-                                <a class="btn btn-outline-secondary btn-sm" role="button" href="{% url 'stumee_meeting:tag_filter' tag.name %}">{{ tag.name }}</a>
+                {% if user_list %}
+                    <div class="row">
+                    {% for user in user_list %}
+                            <div class="card border-secondary m-3 col-md-2 p-0">
+                                <img class="card-img-top" src="{{ user.big.url }}" alt="ユーザアイコン">
+                                <div class="card-body text-truncate">
+                                    <span class="card-title">
+                                        <a href="{% url 'stumee_auth:profile' user.id %}">{{ user.username }}</a>
+                                    </span>
+                                    <p class="card-text">role : {{ user.get_user_auth_display }}</p>
+                                </div>
                             </div>
-
-                            <div class="card-body row">
-                                <p>質問 : {{ tag.thread_count }}</p>
-                            </div>
-                        </div>
                     {% endfor %}
-                {% else %}
-                    <p>No Tag here</p>
+                    </div>
                 {% endif %}
-                </div>
             </div>
         </div>
     </div>

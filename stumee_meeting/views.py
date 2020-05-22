@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 
 from .models import Thread, Comment, ThreadGood, CommentGood
+from stumee_auth.models import CustomUser
 from . import forms
 # Create your views here.
 
@@ -162,3 +163,12 @@ class AllTagView(generic.ListView):
         return queryset.annotate(
             thread_count=Count('taggit_taggeditem_items')
         )
+
+
+class AllUserView(generic.ListView):
+    template_name = 'stumee_meeting/all_user.html'
+    context_object_name = 'user_list'
+
+    def get_queryset(self):
+        queryset = CustomUser.objects.all()
+        return queryset

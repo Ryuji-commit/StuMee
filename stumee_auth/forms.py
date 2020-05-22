@@ -1,12 +1,6 @@
 from django import forms
 from . import models
 
-UserAuth = [
-    (0, 'student'),
-    (1, 'TA'),
-    (2, 'teacher'),
-]
-
 
 class ProfileForm(forms.ModelForm):
     original_image = forms.ImageField(
@@ -14,6 +8,12 @@ class ProfileForm(forms.ModelForm):
         label='アイコン',
         required=False,
     )
+
+    UserAuth = [
+        (0, 'student'),
+        (1, 'TA'),
+        (2, 'teacher'),
+    ]
 
     user_auth = forms.ChoiceField(
         widget=forms.RadioSelect,

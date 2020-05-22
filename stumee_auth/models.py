@@ -29,7 +29,12 @@ class CustomUser(AbstractUser):
     )
 
     # 0=student, 1=TA, 2=teacher
-    user_auth = models.IntegerField(verbose_name='権限', default=0)
+    UserAuth = [
+        (0, 'student'),
+        (1, 'TA'),
+        (2, 'teacher'),
+    ]
+    user_auth = models.IntegerField(verbose_name='権限', default=0, choices=UserAuth)
 
 
 
