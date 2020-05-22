@@ -45,9 +45,16 @@
 
                 <ul class="navbar-nav">
                     <!-- Meeting search form -->
-                    <form class="form-inline my-2 my-lg-0 mr-5" action="{% url 'stumee_search:meeting_search' %}" method="get">
-                          <input name="meeting_search_form" type="search" class="form-control mr-sm-2" placeholder="Meeting内を検索" aria-label="検索..." value="{{ request.GET.search_form }}">
-                          <button type="submit" class="btn btn-outline-secondary my-2 my-sm-0">検索</button>
+                    <form class="form-inline my-lg-0 mr-3" action="{% url 'stumee_search:meeting_search' %}" method="get">
+                        <div class="input-group">
+                            <input name="meeting_search_form" type="search" class="form-control" placeholder="Meeting内を検索"
+                                     aria-label="検索..." value="{{ request.GET.meeting_search_form }}" aria-describedby="button-addon2">
+                            <div class="input-group-append">
+                                <button type="submit" class="btn btn-outline-secondary my-2 my-sm-0" id="button-addon2">
+                                    検索
+                                </button>
+                            </div>
+                        </div>
                     </form>
 
                     {% if user.is_authenticated %}
