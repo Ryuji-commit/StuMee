@@ -44,9 +44,6 @@
                 </ul>
 
                 <ul class="navbar-nav">
-                    {% block search_form %}
-                    {% endblock %}
-
                     {% if user.is_authenticated %}
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'stumee_auth:logout' %}">Logout</a>
