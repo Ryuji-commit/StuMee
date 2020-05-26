@@ -9,6 +9,8 @@
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
         <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <!-- Font Awesome -->
+        <link href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" rel="stylesheet">
         {% block extracss %}
         {% endblock %}
     </head>
@@ -51,7 +53,7 @@
                                      aria-label="検索..." value="{{ request.GET.meeting_search_form }}" aria-describedby="button-addon2">
                             <div class="input-group-append">
                                 <button type="submit" class="btn btn-outline-secondary my-2 my-sm-0" id="button-addon2">
-                                    検索
+                                    <i class="fas fa-search"></i>
                                 </button>
                             </div>
                         </div>
