@@ -59,14 +59,16 @@
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                     <h1 class="h2">Study</h1>
                     <div class="btn-toolbar mb-2 mb-md-0">
+                        {% if user.is_authenticated and user.user_auth is 2 %}
                         <div class="btn-group mr-2">
                             <a class="btn btn-primary btn-sm" role="button" href="{% url 'stumee_study:create_course' %}">コース作成</a>
                         </div>
+                        {% endif %}
                     </div>
                 </div>
                 {% if course_list %}
                     {% for course in course_list %}
-                        <div class="card border-primary">
+                        <div class="card border-primary mb-4">
                             <div class="card-body p-0 m-4">
                                 <div class="border-bottom">
                                     <div class="mb-2 text-secondary">{{ course.category }}</div>
