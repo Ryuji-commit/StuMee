@@ -42,7 +42,6 @@ class CreateCourseView(LoginRequiredMixin, generic.CreateView):
         course.create_user = user
         if user.user_auth == 2:
             course.save()
-            course.save_m2m()
         return super().form_valid(form)
 
     def get_success_url(self):

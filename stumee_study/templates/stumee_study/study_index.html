@@ -5,11 +5,11 @@
 {% block content %}
     <div class="container-fluid">
         <div class="row">
-             <div class="col-md-3 d-none d-md-block sidebar border-right" style="background-color: white;">
+             <div class="col-md-2 d-none d-md-block sidebar border-right" style="background-color: white;">
                  <div class="sidebar-sticky row">
-                     <div class="col-5"></div>
-                     <ul class="nav flex-column col-7 pr-0">
-                         <li class="nav-item"><h4>Category</h4></li>
+                     <div class="col-4"></div>
+                     <ul class="nav flex-column col-8 pr-0">
+                         <li class="nav-item mt-3"><h4>Category</h4></li>
                          {% if category_list %}
                             {% for category in category_list %}
                                 <li class="nav-item"><a class="nav-link" href="">{{ category.name }}</a></li>
@@ -54,6 +54,7 @@
                 </div>
             </div>
 
+
             <div role="main" class="col-md-8">
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                     <h1 class="h2">Study</h1>
@@ -65,7 +66,30 @@
                 </div>
                 {% if course_list %}
                     {% for course in course_list %}
-
+                        <div class="card border-primary">
+                            <div class="card-body p-0 m-4">
+                                <div class="border-bottom">
+                                    <div class="mb-2 text-secondary">{{ course.category }}</div>
+                                    <h5 class="card-title"><a class="course-title-a" href="">{{ course.title }}</a></h5>
+                                    <div class="text-right my-3">
+                                        Teacher : <a href="{% url 'stumee_auth:profile' course.create_user.id %}">{{ course.create_user }}</a>
+                                    </div>
+                                </div>
+                                <div class="mt-4">
+                                    <a data-toggle="collapse" href="#course-detail-{{ course.id }}" aria-expanded="false" aria-controls="course-detail-{{ course.id }}">
+                                        <span><i class="fas fa-angle-down"></i> Course Detail</span>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="collapse" id="course-detail-{{ course.id }}">
+                                <div class="card-footer" style="background-color: white;">
+                                    <div>
+                                        <h5>このコースの説明</h5>
+                                        <p class="course-description-p">{{ course.description }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     {% endfor %}
                 {% else %}
                     <p>No Course here</p>
@@ -74,6 +98,7 @@
         </div>
     </div>
 {% endblock %}
+
 
 {% block extrajs %}
     <script>
@@ -85,4 +110,20 @@
              });
         });
     </script>
+{% endblock %}
+
+
+{% block extracss %}
+    a.course-title-a {
+        color: black;
+    }
+
+    a.course-title-a:hover {
+        color: #33CCFF;
+        text-decoration: none;
+    }
+
+    p.course-description-p {
+        white-space: pre-wrap;
+    }
 {% endblock %}
