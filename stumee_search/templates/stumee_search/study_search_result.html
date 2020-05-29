@@ -102,12 +102,6 @@
 {% block extrajs %}
     <script>
         $('div.form-group [id^=id_]').addClass('form-control');
-
-        $(function(){
-             $('#category-modal-btn').click(function(){
-                 $('#modalCategoryForm').find('input[type="text"]').val('');
-             });
-        });
     </script>
 {% endblock %}
 

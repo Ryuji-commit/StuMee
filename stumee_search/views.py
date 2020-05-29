@@ -35,7 +35,9 @@ class StudySearchView(generic.ListView):
         search_word = self.request.GET.get('study_search_form')
         if search_word:
             return Course.objects.filter(
-                Q(title__icontains=search_word) | Q(category__name__icontains=search_word)
+                Q(title__icontains=search_word) |
+                Q(category__name__icontains=search_word) |
+                Q(create_user__username__icontains=search_word)
             ).order_by('-make_date').distinct()
         else:
             return Course.objects.order_by('-make_date')
