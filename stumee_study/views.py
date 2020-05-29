@@ -1,5 +1,5 @@
 from django.views.generic.edit import ModelFormMixin
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views import generic
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -30,6 +30,7 @@ def study_index(request):
         }
     )
 
+
 # Make Course
 class CreateCourseView(LoginRequiredMixin, generic.CreateView):
     model = Course
@@ -46,6 +47,21 @@ class CreateCourseView(LoginRequiredMixin, generic.CreateView):
 
     def get_success_url(self):
         return reverse('stumee_study:study_index')
+
+
+class DeleteCourseView(LoginRequiredMixin, generic.DeleteView):
+    model = Course
+
+    def get_success_url(self):
+        return reverse('stumee_study:study_index')
+
+    def delete(self, request, *args, **kwargs):
+        self.object = course = self.get_object()
+        if request.user == course.create_user:
+            course.delete()
+
+        return redirect(self.get_success_url())
+
 
 
 
