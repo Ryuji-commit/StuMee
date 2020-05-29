@@ -7,7 +7,7 @@ class CreateCourseForm(forms.ModelForm):
 
     class Meta:
         model = models.Course
-        fields = ('title', 'description', 'category')
+        fields = ('title', 'description', 'category', 'staffs')
 
 
 class CreateCategoryForm(forms.ModelForm):

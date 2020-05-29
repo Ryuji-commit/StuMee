@@ -48,6 +48,19 @@
                 </ul>
 
                 <ul class="navbar-nav">
+                    <!-- Study search form -->
+                    <form class="form-inline my-lg-0 mr-3" action="{% url 'stumee_search:study_search' %}" method="get">
+                        <div class="input-group">
+                            <input name="study_search_form" type="search" class="form-control" placeholder="Study内を検索"
+                                     aria-label="検索..." value="{{ request.GET.study_search_form }}" aria-describedby="button-addon2">
+                            <div class="input-group-append">
+                                <button type="submit" class="btn btn-outline-secondary my-2 my-sm-0" id="button-addon2">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+
                     {% if user.is_authenticated %}
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'stumee_auth:logout' %}">Logout</a>

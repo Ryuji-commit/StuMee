@@ -15,49 +15,14 @@
                                 <li class="nav-item"><a class="nav-link" href="">{{ category.name }}</a></li>
                             {% endfor %}
                          {% endif %}
-                         {% if user.user_auth is 2 and user.is_authenticated %}
-                             <button type="button" id="category-modal-btn" class="btn btn-outline-primary" data-toggle="modal" data-target="#modalCategoryForm">
-                                 <i class="fa fa-plus" aria-hidden="true"></i>
-                             </button>
-                         {% endif %}
                      </ul>
                  </div>
              </div>
 
-            <!--モーダル-->
-            <div class="modal fade" id="modalCategoryForm" tabindex="-1" role="dialog" aria-labelledby="ModalCategoryForm" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Category追加</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="閉じる">
-                              <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <form action="" method="post">
-                            <div class="modal-body">
-                                {% csrf_token %}
-                                {% for field in form %}
-                                    <div class="form-group">
-                                        {{ field.label_tag }}
-                                        {{ field }}
-                                        {{ field.errors }}
-                                    </div>
-                                {% endfor %}
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">閉じる</button>
-                                <button type="submit" class="btn btn-primary">送信</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-
 
             <div role="main" class="col-md-8">
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                    <h1 class="h2">Study</h1>
+                    <h1 class="h2">"{{ search_word }}"の検索結果</h1>
                     <div class="btn-toolbar mb-2 mb-md-0">
                         {% if user.is_authenticated and user.user_auth is 2 %}
                         <div class="btn-group mr-2">
@@ -66,8 +31,8 @@
                         {% endif %}
                     </div>
                 </div>
-                {% if course_list %}
-                    {% for course in course_list %}
+                {% if search_results %}
+                    {% for course in search_results %}
                         <div class="card border-primary mb-4">
                             <div class="card-body p-0 m-4">
                                 <div class="border-bottom">
