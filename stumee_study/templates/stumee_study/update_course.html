@@ -3,21 +3,36 @@
 {% block title %}コース設定{% endblock %}
 
 {% block content %}
-    <div class="container"><h1>コースの設定</h1></div>
-    <form method="POST" action="">
-        <div class="container">
-            {% for field in form %}
-                <div class="form-group">
-                    {{ field.label_tag }}
-                    {{ field }}
-                    {{ field.errors }}
-                </div>
-            {% endfor %}
-            {% csrf_token %}
-            <a class="btn btn-secondary btn-sm mr-2" role="button" href="{% url 'stumee_study:study_index' %}">取り消し</a>
-            <button class="btn btn-primary btn-sm" type="submit">変更</button>
+    <div class="container mb-3">
+        <h1>コース【{{ updated_course.title }}】の設定</h1>
+        <form method="POST" action="">
+            <div class="container">
+                {% for field in form %}
+                    <div class="form-group">
+                        {{ field.label_tag }}
+                        {{ field }}
+                        {{ field.errors }}
+                    </div>
+                {% endfor %}
+                {% csrf_token %}
+                <a class="btn btn-secondary btn-sm mr-2" role="button" href="{% url 'stumee_study:study_index' %}">取り消し</a>
+                <button class="btn btn-primary btn-sm" type="submit">変更</button>
+            </div>
+        </form>
+
+        <!-- staff一覧
+        <div class="border mt-3 mb-5">
+            <span>スタッフ一覧</span>
+            {% if updated_course %}
+                {% for staff in updated_course.staffs.all %}
+                    <ul>
+                        <li>{{ staff.username }}</li>
+                    </ul>
+                {% endfor %}
+            {% endif %}
         </div>
-    </form>
+        -->
+    </div>
 {% endblock %}
 
 {% block extrajs %}

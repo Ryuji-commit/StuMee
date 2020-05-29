@@ -17,7 +17,7 @@ class Course(models.Model):
     description = models.TextField(max_length=200)
     make_date = models.DateTimeField(default=datetime.now)
     create_user = models.ForeignKey(CustomUser, on_delete=models.PROTECT, default=1, related_name='create_user')
-    staffs = models.ManyToManyField(CustomUser, related_name='staffs')
+    staffs = models.ManyToManyField(CustomUser, related_name='staffs', blank=True, default=None)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
 
     def __str__(self):

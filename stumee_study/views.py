@@ -75,8 +75,14 @@ class UpdateCourseView(LoginRequiredMixin, generic.UpdateView):
         course = form.save(commit=False)
         if self.request.user == course.create_user:
             course.save()
+            form.save_m2m()
 
         return redirect(self.get_success_url())
+
+    def get_context_data(self, **kwargs):
+        context = super(UpdateCourseView, self).get_context_data(**kwargs)
+        context['updated_course'] = Course.objects.filter(id=self.kwargs['pk']).first()
+        return context
 
 
 
