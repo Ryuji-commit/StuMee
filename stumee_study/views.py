@@ -6,7 +6,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse
 
 from .models import Course, Category
-from .forms import CreateCourseForm, CreateCategoryForm
+from .forms import CreateCourseForm, CreateCategoryForm, UpdateCourseForm
 
 
 # Course list
@@ -61,6 +61,25 @@ class DeleteCourseView(LoginRequiredMixin, generic.DeleteView):
             course.delete()
 
         return redirect(self.get_success_url())
+
+
+class UpdateCourseView(LoginRequiredMixin, generic.UpdateView):
+    model = Course
+    template_name = 'stumee_study/update_course.html'
+    form_class = UpdateCourseForm
+
+    def get_success_url(self):
+        return reverse('stumee_study:study_index')
+
+    def form_valid(self, form):
+        course = form.save(commit=False)
+        if self.request.user == course.create_user:
+            course.save()
+
+        return redirect(self.get_success_url())
+
+
+
 
 
 

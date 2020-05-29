@@ -75,7 +75,7 @@
                                         <div class="mb-2 text-secondary col-6">{{ course.category }}</div>
                                         {% ifequal user course.create_user %}
                                         <div class="text-right col-6 operate_course">
-                                            <a href="#" class="mr-3"><i class="fas fa-cog"></i></a>
+                                            <a href="{% url 'stumee_study:update_course' course.id %}" class="mr-3"><i class="fas fa-cog"></i></a>
                                             <a data-toggle="modal" data-target="#CourseDeleteModal"><i class="fas fa-trash-alt"></i></a>
                                             <!-- modal Course Delete Modal -->
                                             <div class="modal fade" id="CourseDeleteModal" tabindex="-1" role="dialog" aria-labelledby="CourseDeleteModal" aria-hidden="true">
@@ -94,7 +94,7 @@
                                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">閉じる</button>
                                                             <form action="{% url 'stumee_study:delete_course' course.id %}" method="post">
                                                                 {% csrf_token %}
-                                                                <button type="submit" class="btn btn-primary">送信</button>
+                                                                <button type="submit" class="btn btn-danger">削除</button>
                                                             </form>
                                                         </div>
                                                     </div>

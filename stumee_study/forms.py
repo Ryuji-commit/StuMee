@@ -18,3 +18,10 @@ class CreateCategoryForm(forms.ModelForm):
         labels = {
             'name': 'Category名',
         }
+
+
+class UpdateCourseForm(forms.ModelForm):
+
+    class Meta:
+        model = models.Course
+        fields = ('title', 'description', 'category')

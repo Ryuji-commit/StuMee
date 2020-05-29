@@ -1,9 +1,9 @@
 {% extends 'stumee_study/study_base.html' %}
 
-{% block title %}コースを作成{% endblock %}
+{% block title %}コース設定{% endblock %}
 
 {% block content %}
-    <div class="container"><h1>コースを作成する</h1></div>
+    <div class="container"><h1>コースの設定</h1></div>
     <form method="POST" action="">
         <div class="container">
             {% for field in form %}
@@ -15,7 +15,7 @@
             {% endfor %}
             {% csrf_token %}
             <a class="btn btn-secondary btn-sm mr-2" role="button" href="{% url 'stumee_study:study_index' %}">取り消し</a>
-            <button class="btn btn-primary btn-sm" type="submit">確定</button>
+            <button class="btn btn-primary btn-sm" type="submit">変更</button>
         </div>
     </form>
 {% endblock %}
