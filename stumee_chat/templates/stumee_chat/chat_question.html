@@ -1,0 +1,78 @@
+{% extends 'stumee_study/study_base.html' %}
+
+{% block title %}質問ルーム{% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-2 d-none d-md-block sidebar border-right" style="background-color: white;">
+                <div class="sidebar-sticky row">
+                    <div class="col-4"></div>
+                     <ul class="nav flex-column col-8 pr-0">
+                         <li class="nav-item" style="background-color: #e0ffff; border-right: solid 3px orange;">
+                             <a class="nav-link" href="">TAに質問する</a>
+                         </li>
+                     </ul>
+                </div>
+            </div>
+
+            <div role="main" class="col-md-8">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">TAに質問</h1>
+                </div>
+
+                <div class="form-group">
+                    <textarea id="chat-log" cols="100" rows="20" class="form-control" style="background-color: white;" readonly></textarea><br>
+                    <input id="chat-message-input" type="text" size="100" class="form-control" placeholder="質問を入力"><br>
+                    <button type="submit" class="btn btn-primary" id="chat-message-submit">送信</button>
+                </div>
+                {{ course_id|json_script:"course-id" }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extrajs %}
+    <script>
+        const CourseID = JSON.parse(document.getElementById('course-id').textContent);
+
+        const chatSocket = new WebSocket(
+            'ws://'
+            + window.location.host
+            + '/ws/chat/'
+            + CourseID
+            + '/question'
+            + '/'
+        );
+
+        chatSocket.onmessage = function(e) {
+            const data = JSON.parse(e.data);
+            document.querySelector('#chat-log').value += (data.message + '\n');
+        };
+
+        chatSocket.onclose = function(e) {
+            console.error('Chat socket closed unexpectedly');
+            if (event.wasClean) {
+                alert(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
+            } else {
+                alert('[close] Connection died');
+            }
+        };
+
+        document.querySelector('#chat-message-input').focus();
+        document.querySelector('#chat-message-input').onkeyup = function(e) {
+            if (e.keyCode === 13) {  // enter, return
+                document.querySelector('#chat-message-submit').click();
+            }
+        };
+
+        document.querySelector('#chat-message-submit').onclick = function(e) {
+            const messageInputDom = document.querySelector('#chat-message-input');
+            const message = messageInputDom.value;
+            chatSocket.send(JSON.stringify({
+                'message': message
+            }));
+            messageInputDom.value = '';
+        };
+    </script>
+{% endblock %}

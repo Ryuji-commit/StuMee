@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'stumee_meeting.apps.StumeeMeetingConfig',
     'stumee_search.apps.StumeeSearchConfig',
     'stumee_study.apps.StumeeStudyConfig',
+    'stumee_chat.apps.StumeeChatConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -48,6 +49,7 @@ INSTALLED_APPS = [
     'social_django',
     'taggit',
     'django_cleanup',
+    'channels',
 ]
 
 MIDDLEWARE = [
@@ -83,6 +85,19 @@ TEMPLATES = [
 '''
 DB setting here
 '''
+
+############################
+# Django channels
+ASGI_APPLICATION = "stumee.routing.application"
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('redis', 6379)],
+        },
+    },
+}
+############################
 
 WSGI_APPLICATION = 'stumee.wsgi.application'
 

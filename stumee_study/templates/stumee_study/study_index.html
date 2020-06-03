@@ -104,7 +104,7 @@
                                         </div>
                                         {% endifequal %}
                                     </div>
-                                    <h5 class="card-title"><a class="course-title-a" href="">{{ course.title }}</a></h5>
+                                    <h5 class="card-title"><a class="course-title-a" href="{% url 'stumee_chat:chat_question' course.id %}">{{ course.title }}</a></h5>
                                     <div class="text-right my-3">
                                         Teacher : <a href="{% url 'stumee_auth:profile' course.create_user.id %}">{{ course.create_user }}</a>
                                     </div>
