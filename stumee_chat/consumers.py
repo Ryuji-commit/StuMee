@@ -33,28 +33,28 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
-
+        await self.create_message(message)
         # Send message to room group
         await self.channel_layer.group_send(
             self.room_group_name,
             {
                 'type': 'chat_message',
                 'message': message,
-                'user': self.user
+                'user_id': self.user.id
             }
         )
 
     # Receive message from room group
     async def chat_message(self, event):
         message = event['message']
-        await self.create_message(event)
         # Send message to WebSocket
         await self.send(text_data=json.dumps({
-            'message': message
+            'message': message,
+            'user_id': self.user.id
         }))
 
     @database_sync_to_async
-    def create_message(self, event):
+    def create_message(self, message):
         try:
             course = Course.objects.get(id=self.course_id)
             channel_user = CustomUser.objects.get(id=self.room_name)
@@ -66,7 +66,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             message = Message(
                 channel=channel,
                 user=self.user,
-                content=event['message']
+                content=message
             )
             message.save()
         except Exception as e:
