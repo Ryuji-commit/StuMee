@@ -39,11 +39,11 @@
                     {% endifequal %}
                 {% endfor %}
                 <!-- jsでここに追加するようにする　-->
+                <div id="chat-append-by-js">
+                </div>
             </div>
 
-            <div class="form-group">
-                <textarea id="chat-log" cols="100" rows="20" class="form-control" style="background-color: white;"
-                          readonly></textarea><br>
+            <div class="form-group mt-5">
                 <input id="chat-message-input" type="text" size="100" class="form-control" placeholder="質問を入力"><br>
                 <button type="submit" class="btn btn-primary" id="chat-message-submit">送信</button>
             </div>
@@ -72,7 +72,30 @@
 
     chatSocket.onmessage = function(e) {
         const data = JSON.parse(e.data);
-        document.querySelector('#chat-log').value += (data.message + '\n');
+        if ({{ user.id }} == data.user_id){
+            var h = '<p class="chat-talk mytalk">'
+                  + '<span class="talk-icon">'
+                  + '<img class="rounded" src='
+                  + data.user_img
+                  + '>'
+                  + '</span>'
+                  + '<span class="talk-content">'
+                  + data.message
+                  + '</span>'
+                  + '</p>'
+        } else {
+            var h = '<p class="chat-talk">'
+                  + '<span class="talk-icon">'
+                  + '<img class="rounded" src='
+                  + data.user_img
+                  + '>'
+                  + '</span>'
+                  + '<span class="talk-content">'
+                  + data.message
+                  + '</span>'
+                  + '</p>'
+        }
+        document.getElementById('chat-append-by-js').insertAdjacentHTML('beforeend',h);
     };
 
     chatSocket.onclose = function(e) {
@@ -96,7 +119,9 @@
         const messageInputDom = document.querySelector('#chat-message-input');
         const message = messageInputDom.value;
         chatSocket.send(JSON.stringify({
-            'message': message
+            'message': message,
+            'user_id': {{ user.id }},
+            'user_img': "{{ user.small.url }}",
         }));
         messageInputDom.value = '';
     };
@@ -112,6 +137,8 @@
     margin: auto;
     padding: 1em 2em;
     background-color: #D8F3F0;
+    overflow: scroll;
+    height: 75%;
 }
 .chat-talk {
     overflow: hidden;
