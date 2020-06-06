@@ -2,6 +2,8 @@
 
 {% block title %}Study{% endblock %}
 
+{% load study_tags %}
+
 {% block content %}
     <div class="container-fluid">
         <div class="row">
@@ -104,7 +106,13 @@
                                         </div>
                                         {% endifequal %}
                                     </div>
-                                    <h5 class="card-title"><a class="course-title-a" href="{% url 'stumee_chat:chat_question' course.id user.id %}">{{ course.title }}</a></h5>
+                                    {% with course.id|judge_if_staffs as staff_list %}
+                                        {% if user.id in staff_list %}
+                                            <h5 class="card-title"><a class="course-title-a" href="{% url 'stumee_chat:chat_discussion' course.id %}">{{ course.title }}</a></h5>
+                                        {% else %}
+                                            <h5 class="card-title"><a class="course-title-a" href="{% url 'stumee_chat:chat_question' course.id user.id %}">{{ course.title }}</a></h5>
+                                        {% endif %}
+                                    {% endwith %}
                                     <div class="text-right my-3">
                                         Teacher : <a href="{% url 'stumee_auth:profile' course.create_user.id %}">{{ course.create_user }}</a>
                                     </div>

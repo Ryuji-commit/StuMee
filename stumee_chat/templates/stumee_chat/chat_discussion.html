@@ -1,0 +1,198 @@
+{% extends 'stumee_study/study_base.html' %}
+
+{% block title %}相談部屋{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2 d-none d-md-block sidebar border-right" style="background-color: white;">
+            <div class="sidebar-sticky row">
+                <div class="col-4"></div>
+                <ul class="nav flex-column col-8 pr-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="">質問に回答する</a>
+                    </li>
+                    <li class="nav-item" style="background-color: #e0ffff; border-right: solid 3px orange;">
+                        <a class="nav-link" href="">相談部屋</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div role="main" class="col-md-8">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2">相談部屋</h1>
+            </div>
+            <div id="chat-frame">
+                {% for message in messages %}
+                    {% ifequal user message.user %}
+                    <p class="chat-talk mytalk">
+                        <span class="talk-icon">
+                            <img class="rounded" src="{{ message.user.small.url }}">
+                        </span>
+                        <span class="talk-content">{{ message.content }}</span>
+                    </p>
+                    {% else %}
+                    <p class="chat-talk">
+                        <span class="talk-icon">
+                            <img class="rounded" src="{{ message.user.small.url }}">
+                        </span>
+                        <span class="talk-content">{{ message.content }}</span>
+                    </p>
+                    {% endifequal %}
+                {% endfor %}
+                <!-- jsでここに追加するようにする　-->
+                <div id="chat-append-by-js">
+                </div>
+            </div>
+
+            <div class="form-group mt-5">
+                <input id="chat-message-input" type="text" size="100" class="form-control" placeholder="質問を入力"><br>
+                <button type="submit" class="btn btn-primary" id="chat-message-submit">送信</button>
+            </div>
+            {{ course_id|json_script:"course-id" }}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+<!-- JS読み込み -->
+{% block extrajs %}
+<script>
+    const CourseID = JSON.parse(document.getElementById('course-id').textContent);
+
+    const chatSocket = new WebSocket(
+        'ws://'
+        + window.location.host
+        + '/ws/chat/'
+        + CourseID
+        + '/discussion/'
+    );
+
+    chatSocket.onmessage = function(e) {
+        const data = JSON.parse(e.data);
+        if ({{ user.id }} == data.user_id){
+            var h = '<p class="chat-talk mytalk">'
+                  + '<span class="talk-icon">'
+                  + '<img class="rounded" src='
+                  + data.user_img
+                  + '>'
+                  + '</span>'
+                  + '<span class="talk-content">'
+                  + data.message
+                  + '</span>'
+                  + '</p>'
+        } else {
+            var h = '<p class="chat-talk">'
+                  + '<span class="talk-icon">'
+                  + '<img class="rounded" src='
+                  + data.user_img
+                  + '>'
+                  + '</span>'
+                  + '<span class="talk-content">'
+                  + data.message
+                  + '</span>'
+                  + '</p>'
+        }
+        document.getElementById('chat-append-by-js').insertAdjacentHTML('beforeend',h);
+    };
+
+    chatSocket.onclose = function(e) {
+        console.error('Chat socket closed unexpectedly');
+        if (e.wasClean) {
+            alert(`[close] Connection closed cleanly, code=${e.code} reason=${e.reason}`);
+        } else {
+            alert('[close] Connection died');
+            alert(chatSocket.url);
+        }
+    };
+
+    document.querySelector('#chat-message-input').focus();
+    document.querySelector('#chat-message-input').onkeyup = function(e) {
+        if (e.keyCode === 13) {  // enter, return
+            document.querySelector('#chat-message-submit').click();
+        }
+    };
+
+    document.querySelector('#chat-message-submit').onclick = function(e) {
+        const messageInputDom = document.querySelector('#chat-message-input');
+        const message = messageInputDom.value;
+        chatSocket.send(JSON.stringify({
+            'message': message,
+            'user_id': {{ user.id }},
+            'user_img': "{{ user.small.url }}",
+        }));
+        messageInputDom.value = '';
+    };
+
+</script>
+{% endblock %}
+
+
+
+<!-- CSS 読み込み -->
+{% block extracss %}
+#chat-frame {
+    margin: auto;
+    padding: 1em 2em;
+    background-color: #D8F3F0;
+    overflow: scroll;
+    height: 75%;
+}
+.chat-talk {
+    overflow: hidden;
+    margin: 0 0 1em 0;
+    padding: 0;
+}
+.chat-talk span {
+    display: block;
+    margin: 0;
+    padding: 0;
+}
+.chat-talk .talk-icon {
+    float: left;
+    width: auto;
+}
+.chat-talk .talk-content {
+    position: relative;
+    box-sizing: border-box;
+    width: auto;
+    min-height: 50px;
+    border-radius: 10px;
+    background-color: #fff;
+    margin: 0 auto 0 70px;
+    padding: 1em;
+}
+.chat-talk .talk-icon img {
+    max-width: 100%;
+    height: auto;
+    vertical-align: bottom;
+    border: 2px solid #fff;
+    border-radius: 50%;
+}
+.chat-talk .talk-content:before {
+    position: absolute;
+    top: 15px;
+    left: -20px;
+    display: block;
+    width: 0;
+    height: 0;
+    content: '';
+    border: 10px solid transparent;
+    border-right-color: #FFFFFF;
+}
+.chat-talk.mytalk .talk-icon {
+    float: right;
+}
+.chat-talk.mytalk .talk-content {
+    margin: 0 70px 0 auto;
+    color: #000;
+    background: #78FF6C;
+}
+.chat-talk.mytalk .talk-content:before {
+    right: -20px;
+    left: auto;
+    border-color: transparent;
+    border-left-color: #78FF6C;
+}
+{% endblock %}

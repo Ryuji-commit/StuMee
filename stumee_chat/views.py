@@ -13,10 +13,27 @@ def chat_question(request, course_id, user_id):
     channel, bool = Channel.objects.get_or_create(
         course=course,
         user=user,
+        is_discussion=False,
     )
     messages = Message.objects.filter(channel__id=channel.id).order_by('created_at')
     return render(request, 'stumee_chat/chat_question.html', {
         'course_id': course_id,
         'user_id': user_id,
+        'messages': messages,
+    })
+
+
+@login_required
+def chat_discussion(request, course_id):
+    course = Course.objects.get(id=course_id)
+    user = course.create_user
+    channel, bool = Channel.objects.get_or_create(
+        course=course,
+        user=user,
+        is_discussion=True,
+    )
+    messages = Message.objects.filter(channel__id=channel.id).order_by('created_at')
+    return render(request, 'stumee_chat/chat_discussion.html', {
+        'course_id': course_id,
         'messages': messages,
     })
