@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 
 from .models import Message, Channel
@@ -26,6 +26,10 @@ def chat_question(request, course_id, user_id):
 @login_required
 def chat_discussion(request, course_id):
     course = Course.objects.get(id=course_id)
+    # もし不正アクセスがあればindexページにリダイレクト
+    if not CustomUser.objects.filter(staffs=course, id=request.user.id).exists():
+        return redirect('stumee_study:study_index')
+
     user = course.create_user
     channel, bool = Channel.objects.get_or_create(
         course=course,
