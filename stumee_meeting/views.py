@@ -120,7 +120,12 @@ def pick_up_thread(request, thread_id):
             thread_picked.is_picked = False
         else:
             thread_picked.is_picked = True
-        thread_picked.save()
+
+        # ユーザの権限がTA以上ならば保存。それ以外ならばリダイレクト
+        if request.user.user_auth >= 1:
+            thread_picked.save()
+        else:
+            return redirect('stumee_meeting:index')
 
     if next_url:
         return HttpResponseRedirect(next_url)
