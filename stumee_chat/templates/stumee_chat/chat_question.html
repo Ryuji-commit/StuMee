@@ -2,6 +2,8 @@
 
 {% block title %}質問ルーム{% endblock %}
 
+{% load study_tags %}
+
 {% block content %}
 <div class="container-fluid">
     <div class="row">
@@ -9,16 +11,44 @@
             <div class="sidebar-sticky row">
                 <div class="col-4"></div>
                 <ul class="nav flex-column col-8 pr-0">
-                    <li class="nav-item" style="background-color: #e0ffff; border-right: solid 3px orange;">
-                        <a class="nav-link" href="">TAに質問する</a>
-                    </li>
+                    {% with course_id|judge_if_staffs as staff_list %}
+                        {% if user.id in staff_list %}
+                            <li class="nav-item" style="background-color: #e0ffff; border-right: solid 3px orange;">
+                                <div class="dropdown">
+                                    <!-- 切替ボタンの設定 -->
+                                    <button type="button" class="btn btn-outline-primary dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        質問に回答する
+                                    </button>
+                                    <!-- ドロップメニューの設定 -->
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        {% for channel in student_channel %}
+                                            <a class="dropdown-item" href="{% url 'stumee_chat:chat_question' channel.course.id channel.user.id %}">{{ channel.user.username }}</a>
+                                        {% endfor %}
+                                    </div><!-- /.dropdown-menu -->
+                                </div><!-- /.dropdown -->
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'stumee_chat:chat_discussion' course_id %}">相談部屋</a>
+                            </li>
+                        {% else %}
+                            <li class="nav-item" style="background-color: #e0ffff; border-right: solid 3px orange;">
+                                <a class="nav-link" href="">TAに質問する</a>
+                            </li>
+                        {% endif %}
+                    {% endwith %}
                 </ul>
             </div>
         </div>
 
         <div role="main" class="col-md-8">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                <h1 class="h2">TAに質問</h1>
+                {% with course_id|judge_if_staffs as staff_list %}
+                    {% if user.id in staff_list %}
+                        <h1 class="h2">質問に回答</h1>
+                    {% else %}
+                        <h1 class="h2">TAに質問</h1>
+                    {% endif %}
+                {% endwith %}
             </div>
             <div id="chat-frame">
                 {% for message in messages %}

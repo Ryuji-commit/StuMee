@@ -78,6 +78,9 @@ TEMPLATES = [
                 'social_django.context_processors.backends',
                 'social_django.context_processors.login_redirect',
             ],
+            'libraries': {
+                'utility': 'stumee_study.templatetags.study_tags'
+            }
         },
     },
 ]

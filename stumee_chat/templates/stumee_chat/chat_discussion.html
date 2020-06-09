@@ -9,8 +9,19 @@
             <div class="sidebar-sticky row">
                 <div class="col-4"></div>
                 <ul class="nav flex-column col-8 pr-0">
-                    <li class="nav-item">
-                        <a class="nav-link" href="">質問に回答する</a>
+                    <li class="nav-item mb-3">
+                        <div class="dropdown">
+                            <!-- 切替ボタンの設定 -->
+                            <button type="button" class="btn btn-outline-primary dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                質問に回答する
+                            </button>
+                            <!-- ドロップメニューの設定 -->
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                {% for channel in student_channel %}
+                                    <a class="dropdown-item" href="{% url 'stumee_chat:chat_question' channel.course.id channel.user.id %}">{{ channel.user.username }}</a>
+                                {% endfor %}
+                            </div><!-- /.dropdown-menu -->
+                        </div><!-- /.dropdown -->
                     </li>
                     <li class="nav-item" style="background-color: #e0ffff; border-right: solid 3px orange;">
                         <a class="nav-link" href="">相談部屋</a>
