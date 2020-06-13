@@ -22,7 +22,7 @@ class IndexViewTests(TestCase):
         response = self.client.get(reverse('stumee_meeting:index'))
         saved_thread = Thread.objects.all()
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'No thread here')
+        self.assertContains(response, 'No stumee_meeting here')
         self.assertQuerysetEqual(response.context['latest_threads_list'], [])
         self.assertEqual(saved_thread.count(), 0)
 
@@ -301,7 +301,7 @@ class TagListViewTests(TestCase):
         client.force_login(test_user1)
         response = client.get(reverse('stumee_meeting:tag_filter', args=('Java',)))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'No thread here')
+        self.assertContains(response, 'No stumee_meeting here')
         self.assertQuerysetEqual(response.context['tag_threads_list'], [])
 
 
@@ -311,7 +311,7 @@ class QuestionViewTests(TestCase):
         response = self.client.get(reverse('stumee_meeting:question'))
         saved_thread = Thread.objects.all()
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'No thread here')
+        self.assertContains(response, 'No stumee_meeting here')
         self.assertQuerysetEqual(response.context['threads_list'], [])
         self.assertEqual(saved_thread.count(), 0)
 

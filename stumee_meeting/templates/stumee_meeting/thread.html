@@ -2,11 +2,6 @@
 
 {% block title %}{{ thread.title }}{% endblock %}
 
-{% block extracss %}
-    {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'thread/thread.css' %}">
-{% endblock %}
-
 {% block content %}
 <div class="container-fluid">
     <div class="row">
@@ -108,11 +103,3 @@
 </div>
 {% endblock %}
 
-{% block extrajs %}
-    {% load static %}
-    <script type='text/javascript' src="{% static 'thread/js/thread_good.js' %}"></script>
-    <script type='text/javascript' src="{% static 'thread/js/comment_good.js' %}"></script>
-    <script>
-        $('div.form-group [id^=id_]').addClass('form-control');
-    </script>
-{% endblock %}

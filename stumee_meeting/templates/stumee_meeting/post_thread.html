@@ -18,16 +18,3 @@
         </div>
     </form>
 {% endblock %}
-
-{% block extrajs %}
-    <script>
-        $('div.form-group [id^=id_]').addClass('form-control');
-        $('div.form-group input[id=id_tag]').attr({
-            'pattern': '^[0-9A-Za-z, ]+$',
-            'aria-describedby' : 'tagHelpBlock'
-        });
-        $('div.form-group input[id=id_tag]').after(
-            '<small id="tagHelpBlock" class="form-text text-muted">タグ名は半角英数字で、カンマ区切りで入力してください。</small>'
-        );
-    </script>
-{% endblock %}
