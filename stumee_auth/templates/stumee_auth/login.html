@@ -1,0 +1,31 @@
+{% extends 'stumee_auth/auth_base.html' %}
+
+{% block title %}Loginページ{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="h4 mb-5 pt-3">
+            認証コードを入力してください。
+        </div>
+
+        <div>
+            <form method="post">
+                {% csrf_token %}
+                {% for field in form %}
+                    <div class="form-group">
+                        {{ field.label_tag }}
+                        {{ field }}
+                        {{ field.errors }}
+                    </div>
+                {% endfor %}
+                <button class="btn btn-primary btn-sm" type="submit">送信</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extrajs %}
+    <script>
+        $('div.form-group [id="password"]').addClass('form-control');
+    </script>
+{% endblock %}

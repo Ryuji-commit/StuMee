@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect
 from django.views import generic
+from django.urls import reverse_lazy, reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import CustomUser
+
+from .models import CustomUser, CertificationPass
 from stumee_meeting.models import Thread, Comment
 from . import forms
 
@@ -53,5 +55,19 @@ class UserProfileView(LoginRequiredMixin, generic.DetailView):
         user = CustomUser.objects.get(id=user_id)
         context['user_comments'] = Comment.objects.filter(user=user)
         return context
+
+
+class CustomCertificationView(generic.FormView):
+    template_name = 'stumee_auth/login.html'
+    form_class = forms.CertificationForm
+    success_url = reverse_lazy('social:begin', args=['google-oauth2'])
+
+    def form_valid(self, form):
+        certification_pass = form.cleaned_data['certification_login_password']
+        if CertificationPass.objects.filter(login_certification_key=certification_pass).exists():
+            return super(CustomCertificationView, self).form_valid(form)
+        else:
+            redirect_url = reverse('stumee_auth:home')
+            return redirect(redirect_url)
 
 

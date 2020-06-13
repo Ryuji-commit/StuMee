@@ -33,7 +33,13 @@ class CustomUser(AbstractUser):
         (1, 'TA'),
         (2, 'teacher'),
     ]
+
     user_auth = models.IntegerField(verbose_name='権限', default=0, choices=UserAuth)
 
 
+class CertificationPass(models.Model):
+    login_certification_key = models.CharField(max_length=10)
+
+    def __str__(self):
+        return self.login_certification_key
 

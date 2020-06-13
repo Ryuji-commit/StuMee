@@ -35,11 +35,11 @@
                     </li>
                     <!--Study-->
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'stumee_study:study_index' %}">Study</a>
+                        <a class="nav-link" href="{% url 'stumee_study:study_index' %}">Ask</a>
                     </li>
                     <!--Meeting-->
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'stumee_meeting:index' %}">Meeting</a>
+                        <a class="nav-link" href="{% url 'stumee_meeting:index' %}">Board</a>
                     </li>
                     <!--Setting-->
                     <li class="nav-item">
@@ -67,7 +67,7 @@
                         </li>
                     {% else %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'social:begin' 'google-oauth2' %}">Login</a>
+                            <a class="nav-link" href="{% url 'stumee_auth:login' %}">Login</a>
                         </li>
                     {% endif %}
                 </ul>

@@ -27,3 +27,18 @@ class ProfileForm(forms.ModelForm):
         labels = {
             'username': 'ユーザ名',
         }
+
+
+class CertificationForm(forms.Form):
+    certification_login_password = forms.CharField(
+        label='認証パス',
+        required=True,
+        disabled=False,
+        max_length=10,
+        min_length=1,
+        widget=forms.PasswordInput(attrs={
+            'id': 'password',
+            'placeholder': '半角英数字のみ入力可能です。',
+            'pattern': '^[A-Za-z0-9]+$'})
+    )
+

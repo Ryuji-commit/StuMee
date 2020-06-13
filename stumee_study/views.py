@@ -10,6 +10,7 @@ from .forms import CreateCourseForm, CreateCategoryForm, UpdateCourseForm
 
 
 # Course list
+@login_required
 def study_index(request):
     course_list = Course.objects.order_by('-make_date')
     category_list = Category.objects.all()

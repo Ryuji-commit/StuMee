@@ -114,7 +114,8 @@ AUTHENTICATION_BACKENDS = (
 Auth PassWard here 
 '''
 
-LOGIN_URL = reverse_lazy('social:begin', args=['google-oauth2'])
+LOGIN_URL = 'stumee_auth:login'
+LOGOUT_URL = 'stumee_auth:logout'
 LOGIN_REDIRECT_URL = '/home'
 LOGOUT_REDIRECT_URL = '/home'
 
