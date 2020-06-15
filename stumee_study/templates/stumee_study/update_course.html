@@ -19,24 +19,5 @@
                 <button class="btn btn-primary btn-sm" type="submit">変更</button>
             </div>
         </form>
-
-        <!-- staff一覧
-        <div class="border mt-3 mb-5">
-            <span>スタッフ一覧</span>
-            {% if updated_course %}
-                {% for staff in updated_course.staffs.all %}
-                    <ul>
-                        <li>{{ staff.username }}</li>
-                    </ul>
-                {% endfor %}
-            {% endif %}
-        </div>
-        -->
     </div>
-{% endblock %}
-
-{% block extrajs %}
-    <script>
-        $('div.form-group [id^=id_]').addClass('form-control');
-    </script>
 {% endblock %}

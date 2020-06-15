@@ -45,4 +45,62 @@
             </div>
         </div>
     </form>
+
+    <!--TAへの権限変更時、認証キーを入力するモーダル-->
+    <div class="modal fade" id="modal-TA-Certification-Key-Form" tabindex="-1" role="dialog" aria-labelledby="modal-TA-Certification-Key-Form" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="TACertificationKeyModalLabel">TA認証パス</h5>
+                    <button type="button" class="certification-modal-close close" data-dismiss="modal" aria-label="閉じる">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="" method="post">
+                    <div class="modal-body">
+                        {% csrf_token %}
+                        {% for field in change_ta_form %}
+                            <div class="form-group">
+                                {{ field.label_tag }}
+                                {{ field }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary certification-modal-close" data-dismiss="modal">閉じる</button>
+                        <button type="submit" class="btn btn-primary">送信</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!--Teacherへの権限変更時、認証キーを入力するモーダル-->
+    <div class="modal fade" id="modal-Teacher-Certification-Key-Form" tabindex="-1" role="dialog" aria-labelledby="modal-Teacher-Certification-Key-Form" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="TeacherCertificationKeyModalLabel">Teacher認証パス</h5>
+                    <button type="button" class="certification-modal-close close" data-dismiss="modal" aria-label="閉じる">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="" method="post">
+                    <div class="modal-body">
+                        {% csrf_token %}
+                        {% for field in change_teacher_form %}
+                            <div class="form-group">
+                                {{ field.label_tag }}
+                                {{ field }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary certification-modal-close" data-dismiss="modal">閉じる</button>
+                        <button type="submit" class="btn btn-primary">送信</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 {% endblock %}

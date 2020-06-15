@@ -26,18 +26,47 @@ def user_setting(request):
     }
     user = request.user
     if request.method == "POST":
-        form = forms.ProfileForm(request.POST, request.FILES, instance=request.user)
-        if form.is_valid():
-            form.save()
-        else:
-            return redirect('stumee_meeting:index')
+        profile_form = forms.ProfileForm(request.POST, request.FILES, instance=request.user)
+        change_authority_ta_form = forms.ChangeAuthorityToTA(request.POST)
+        change_authority_teacher_form = forms.ChangeAuthorityToTeacher(request.POST)
+
+        # TAへの権限変更認証キーが入力されたら
+        if change_authority_ta_form.is_valid():
+            input_key = change_authority_ta_form.cleaned_data['certification_password_change_auth_TA']
+            if CertificationPass.objects.filter(change_ta_certification_key=input_key).exists():
+                initial_dict['user_auth'] = 1
+                profile_form = forms.ProfileForm(initial=initial_dict)
+            else:
+                redirect_url = reverse('stumee_auth:home')
+                return redirect(redirect_url)
+
+        # Teacherへの権限変更認証キーが入力されたら
+        if change_authority_teacher_form.is_valid():
+            input_key = change_authority_teacher_form.cleaned_data['certification_password_change_auth_Teacher']
+            if CertificationPass.objects.filter(change_teacher_certification_key=input_key).exists():
+                initial_dict['user_auth'] = 2
+                profile_form = forms.ProfileForm(initial=initial_dict)
+            else:
+                redirect_url = reverse('stumee_auth:home')
+                return redirect(redirect_url)
+
+        # プロフィールは無条件に変更できる。(認証キーではじかれたらリダイレクトするはずなので)
+        # Warning! : ここら辺の処理は見直しやテストが必要です。
+        if profile_form.is_valid():
+            profile_form.save()
+
     else:
-        form = forms.ProfileForm(initial=initial_dict)
+        profile_form = forms.ProfileForm(initial=initial_dict)
+        change_authority_ta_form = forms.ChangeAuthorityToTA()
+        change_authority_teacher_form = forms.ChangeAuthorityToTeacher()
+
     return render(
         request,
         'stumee_auth/user_setting.html',
         {
-            'form': form,
+            'form': profile_form,
+            'change_ta_form': change_authority_ta_form,
+            'change_teacher_form': change_authority_teacher_form,
             'user': user,
         }
     )
@@ -59,11 +88,11 @@ class UserProfileView(LoginRequiredMixin, generic.DetailView):
 
 class CustomCertificationView(generic.FormView):
     template_name = 'stumee_auth/login.html'
-    form_class = forms.CertificationForm
+    form_class = forms.LoginCertificationForm
     success_url = reverse_lazy('social:begin', args=['google-oauth2'])
 
     def form_valid(self, form):
-        certification_pass = form.cleaned_data['certification_login_password']
+        certification_pass = form.cleaned_data['certification_password_login']
         if CertificationPass.objects.filter(login_certification_key=certification_pass).exists():
             return super(CustomCertificationView, self).form_valid(form)
         else:

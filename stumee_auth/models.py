@@ -39,6 +39,8 @@ class CustomUser(AbstractUser):
 
 class CertificationPass(models.Model):
     login_certification_key = models.CharField(max_length=10)
+    change_ta_certification_key = models.CharField(max_length=10, null=True)
+    change_teacher_certification_key = models.CharField(max_length=10, null=True)
 
     def __str__(self):
         return self.login_certification_key

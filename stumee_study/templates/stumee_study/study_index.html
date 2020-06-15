@@ -140,36 +140,3 @@
         </div>
     </div>
 {% endblock %}
-
-
-{% block extrajs %}
-    <script>
-        $('div.form-group [id^=id_]').addClass('form-control');
-
-        $(function(){
-             $('#category-modal-btn').click(function(){
-                 $('#modalCategoryForm').find('input[type="text"]').val('');
-             });
-        });
-    </script>
-{% endblock %}
-
-
-{% block extracss %}
-    a.course-title-a {
-        color: black;
-    }
-
-    a.course-title-a:hover {
-        color: #33CCFF;
-        text-decoration: none;
-    }
-
-    p.course-description-p {
-        white-space: pre-wrap;
-    }
-
-    div.operate_course a {
-        color: black;
-    }
-{% endblock %}
