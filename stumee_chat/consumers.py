@@ -70,6 +70,12 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 is_discussion=False,
             )
 
+            if self.user == channel_user:
+                channel.is_active = True
+            else:
+                channel.is_active = False
+            channel.save()
+
             message = Message(
                 channel=channel,
                 user=self.user,

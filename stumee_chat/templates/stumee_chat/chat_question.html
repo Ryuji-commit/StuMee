@@ -22,7 +22,11 @@
                                     <!-- ドロップメニューの設定 -->
                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                         {% for channel in student_channel %}
-                                            <a class="dropdown-item" href="{% url 'stumee_chat:chat_question' channel.course.id channel.user.id %}">{{ channel.user.username }}</a>
+                                            {% if channel.is_active %}
+                                                <a class="dropdown-item" href="{% url 'stumee_chat:chat_question' channel.course.id channel.user.id %}">{{ channel.user.username }}<i class="far fa-comment-dots pl-2"></i></a>
+                                            {% else %}
+                                                <a class="dropdown-item" href="{% url 'stumee_chat:chat_question' channel.course.id channel.user.id %}">{{ channel.user.username }}</a>
+                                            {% endif %}
                                         {% endfor %}
                                     </div><!-- /.dropdown-menu -->
                                 </div><!-- /.dropdown -->

@@ -10,6 +10,7 @@ class Channel(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     user = models.ForeignKey(CustomUser, on_delete=models.PROTECT, default=1)
     is_discussion = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=False)
 
 
 class Message(models.Model):
