@@ -1,10 +1,20 @@
 /* study indexページ */
 a.course-title-a {
     color: black;
+    font-weight: normal;
 }
 
 a.course-title-a:hover {
     color: #33CCFF;
+    text-decoration: none;
+}
+
+span.course-title-span {
+    font-weight: normal;
+}
+
+span.course-title-span:hover {
+    color: orange;
     text-decoration: none;
 }
 

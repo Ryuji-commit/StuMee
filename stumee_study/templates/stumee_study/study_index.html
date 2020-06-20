@@ -1,6 +1,6 @@
 {% extends 'stumee_study/study_base.html' %}
 
-{% block title %}Study{% endblock %}
+{% block title %}Ask{% endblock %}
 
 {% load study_tags %}
 
@@ -107,11 +107,46 @@
                                         {% endifequal %}
                                     </div>
                                     {% with course.id|judge_if_staffs as staff_list %}
-                                        {% if user.id in staff_list %}
-                                            <h5 class="card-title"><a class="course-title-a" href="{% url 'stumee_chat:chat_discussion' course.id %}">{{ course.title }}</a></h5>
-                                        {% else %}
-                                            <h5 class="card-title"><a class="course-title-a" href="{% url 'stumee_chat:chat_question' course.id user.id %}">{{ course.title }}</a></h5>
-                                        {% endif %}
+                                        {% with course.id|judge_if_students as students_list %}
+                                            {% if user.id in staff_list %}
+                                                <h5 class="card-title"><a class="course-title-a" href="{% url 'stumee_chat:chat_discussion' course.id %}">{{ course.title }}</a></h5>
+                                            {% elif user.id in students_list %}
+                                                <h5 class="card-title"><a class="course-title-a" href="{% url 'stumee_chat:chat_question' course.id user.id %}">{{ course.title }}</a></h5>
+                                            {% else %}
+                                                <h5 class="card-title"><span class="course-title-span" data-toggle="modal" data-target="#CourseCertificationModal">{{ course.title }}</span></h5>
+
+                                                <!--モーダル-->
+                                                <div class="modal fade" id="CourseCertificationModal" tabindex="-1" role="dialog" aria-labelledby="CourseCertificationModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="CourseCertificationModalLabel">このコースの認証キーを入力</h5>
+                                                                <button type="button" class="close" data-dismiss="modal" aria-label="閉じる">
+                                                                  <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            <form action="" method="get">
+                                                                <div class="modal-body">
+                                                                    {% csrf_token %}
+                                                                    <input type="hidden" name="course_id" value="{{ course.id }}">
+                                                                    {% for field in course_certification_form %}
+                                                                        <div class="form-group">
+                                                                            {{ field.label_tag }}
+                                                                            {{ field }}
+                                                                        </div>
+                                                                    {% endfor %}
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">閉じる</button>
+                                                                    <button type="submit" class="btn btn-primary">送信</button>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            {% endif %}
+                                        {% endwith %}
                                     {% endwith %}
                                     <div class="text-right my-3">
                                         Teacher : <a href="{% url 'stumee_auth:profile' course.create_user.id %}">{{ course.create_user }}</a>

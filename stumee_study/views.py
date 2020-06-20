@@ -6,7 +6,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse
 
 from .models import Course, Category
-from .forms import CreateCourseForm, CreateCategoryForm, UpdateCourseForm
+from .forms import CreateCourseForm, CreateCategoryForm, UpdateCourseForm, CourseCertificationForm
 
 
 # Course list
@@ -14,6 +14,7 @@ from .forms import CreateCourseForm, CreateCategoryForm, UpdateCourseForm
 def study_index(request):
     course_list = Course.objects.order_by('-make_date')
     category_list = Category.objects.all()
+
     if request.method == 'POST':
         form = CreateCategoryForm(request.POST)
         if form.is_valid():
@@ -21,6 +22,22 @@ def study_index(request):
                 form.save()
     else:
         form = CreateCategoryForm()
+
+    if request.method == 'GET':
+        course_certification_form = CourseCertificationForm(request.GET)
+        course_id = request.GET.get('course_id')
+        if course_certification_form.is_valid():
+            course = Course.objects.get(id=course_id)
+            input_key = course_certification_form.cleaned_data['certification_password_course']
+            if course.certification_key == input_key:
+                course.students.add(request.user)
+                course.save()
+                return redirect(reverse('stumee_study:study_index'))
+            else:
+                return redirect(reverse('stumee_study:study_index'))
+    else:
+        course_certification_form = CourseCertificationForm()
+
     return render(
         request,
         'stumee_study/study_index.html',
@@ -28,6 +45,7 @@ def study_index(request):
             'course_list': course_list,
             'category_list': category_list,
             'form': form,
+            'course_certification_form': course_certification_form,
         }
     )
 
