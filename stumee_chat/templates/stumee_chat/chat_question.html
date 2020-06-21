@@ -80,12 +80,25 @@
             <div class="form-group mt-5">
                 <input id="chat-message-input" type="text" size="100" class="form-control" placeholder="質問を入力"><br>
                 <button type="submit" class="btn btn-primary" id="chat-message-submit">送信</button>
+                <button type="submit" class="btn btn-primary" id="start-video"><i class="fas fa-video"></i></button>
+                <button type="submit" class="btn btn-danger" id="end-video"><i class="fas fa-video-slash"></i></button>
             </div>
             {{ course_id|json_script:"course-id" }}
             {{ user_id|json_script:"user-id" }}
         </div>
+
+        <!-- 画面共有 -->
+        <div id="videos-container">
+            <video id="local-video"></video>
+            <div class="remote-streams" id="remote-videos"></div>
+        </div>
+
     </div>
 </div>
+
+{{ request.get_full_path | json_script:"RoomNameURL" }}
+{% load static %}
+<script type="text/javascript" src="{% static 'stumee_chat/js/js_question.js'%}" defer="defer"></script>
 {% endblock %}
 
 <!-- JS読み込み -->
