@@ -6,29 +6,30 @@ const peer = new Peer({
 let room = null;
 let existingRoom = null;
 let LocalStream = null;
+let remoteVideos = document.getElementById('remote-videos');
 
 peer.on('open', function(){
     console.log('connected');
 });
 
 $('#start-video').on('click', function() {
-    startVideo();
+    RoomLogin();
 });
 
 $('#end-video').on('click', function(room) {
-    if (existingRoom) {
-        existingRoom.close();
-    };
-
-    removeAllRemoteVideos();
-    LocalStream.stop();
+    const localVideo = document.getElementById('local-video');
+    if (localVideo != null){
+        localVideo.srcObject.getTracks().forEach(track => track.stop());
+        localVideo.srcObject = null;
+    }
+    existingRoom.close();
     setupMakeCallUI();
 });
 
-async function startVideo(){
+async function RoomLogin(){
     const localVideo = document.getElementById('local-video');
 
-    LocalStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+    LocalStream = await navigator.mediaDevices.getDisplayMedia({video: {width:320, height:240}})
     $('#videos-container').show();
     setupEndCallUI();
 
@@ -37,6 +38,14 @@ async function startVideo(){
     localVideo.srcObject = LocalStream;
     localVideo.playsInline = true;
     await localVideo.play().catch(console.error);
+
+    // logged in Room
+    const RoomName = JSON.parse(document.getElementById('RoomNameURL').textContent);
+    room = peer.joinRoom(RoomName,{
+        mode: 'sfu',
+        stream: LocalStream,
+    });
+    setupRoomEventHandlers(room);
 }
 
 function setupRoomEventHandlers(room){
@@ -45,9 +54,11 @@ function setupRoomEventHandlers(room){
     };
 
     existingRoom = room;
-    $('#videos-container').show();
 
     room.on('stream', async function(stream){
+        $('#videos-container').show();
+        console.log('receive stream');
+
         const newVideo = document.createElement('video');
         newVideo.srcObject = stream;
         newVideo.playsInline = true;
@@ -56,13 +67,18 @@ function setupRoomEventHandlers(room){
         await newVideo.play().catch(console.error);
     });
 
+    room.on('peerJoin', function(peerId){
+        console.log(peerId + 'joined');
+    });
+
     room.on('peerLeave', function(peerId){
-        const remoteVideo = remoteVideos.querySelector(
-        `[data-peer-id=${peerId}]`
-        );
-        remoteVideo.srcObject.getTracks().forEach(track => track.stop());
-        remoteVideo.srcObject = null;
-        remoteVideo.remove();
+        console.log(peerId + 'leaved');
+        const remoteVideo = remoteVideos.querySelector('[data-peer-id="' + peerId + '"]');
+        if (remoteVideo != null){
+            remoteVideo.srcObject.getTracks().forEach(track => track.stop());
+            remoteVideo.srcObject = null;
+            remoteVideo.remove();
+        }
     });
 
     room.on('close', function(){
@@ -90,11 +106,4 @@ $(function(){
     // ページ読み込み時に実行したい処理
     $('#end-video').hide();
     $('#videos-container').hide();
-
-    const RoomName = JSON.parse(document.getElementById('RoomNameURL').textContent);
-    room = peer.joinRoom(RoomName,{
-        mode: 'sfu',
-        stream: LocalStream,
-    });
-    setupRoomEventHandlers(room);
 });
