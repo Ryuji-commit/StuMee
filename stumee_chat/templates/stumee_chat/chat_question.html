@@ -85,14 +85,16 @@
             </div>
             {{ course_id|json_script:"course-id" }}
             {{ user_id|json_script:"user-id" }}
-        </div>
 
-        <!-- 画面共有 -->
-        <div id="videos-container">
-            <video id="local-video"></video>
-            <div class="remote-streams" id="remote-videos"></div>
-        </div>
+            <!-- 画面共有 -->
+            <div id="videos-container">
+                <div class="ml-5">自分</div>
+                <video id="local-video" class="m-5"></video>
+                <div class="ml-5">相手</div>
+                <div class="remote-streams m-5" id="remote-videos"></div>
+            </div>
 
+        </div>
     </div>
 </div>
 

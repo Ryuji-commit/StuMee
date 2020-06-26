@@ -29,7 +29,7 @@ $('#end-video').on('click', function(room) {
 async function RoomLogin(){
     const localVideo = document.getElementById('local-video');
 
-    LocalStream = await navigator.mediaDevices.getDisplayMedia({video: {width:320, height:240}})
+    LocalStream = await navigator.mediaDevices.getDisplayMedia({video: {width:800, height:600}})
     $('#videos-container').show();
     setupEndCallUI();
 
