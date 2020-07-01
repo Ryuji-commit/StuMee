@@ -79,9 +79,9 @@
 
             <div class="form-group mt-5">
                 <input id="chat-message-input" type="text" size="100" class="form-control" placeholder="質問を入力"><br>
-                <button type="submit" class="btn btn-primary" id="chat-message-submit">送信</button>
-                <button type="submit" class="btn btn-primary" id="start-video"><i class="fas fa-video"></i></button>
-                <button type="submit" class="btn btn-danger" id="end-video"><i class="fas fa-video-slash"></i></button>
+                <button type="submit" class="btn btn-primary mr-3" id="chat-message-submit">チャット送信</button>
+                <button type="submit" class="btn btn-primary" id="start-video">画面共有開始</button>
+                <button type="submit" class="btn btn-danger" id="end-video">画面共有停止</button>
             </div>
             {{ course_id|json_script:"course-id" }}
             {{ user_id|json_script:"user-id" }}
@@ -89,9 +89,9 @@
             <!-- 画面共有 -->
             <div id="videos-container">
                 <div class="ml-5">自分</div>
-                <video id="local-video" class="m-5"></video>
+                <video id="local-video" class="m-3"></video>
                 <div class="ml-5">相手</div>
-                <div class="remote-streams m-5" id="remote-videos"></div>
+                <div class="remote-streams m-3" id="remote-videos"></div>
             </div>
 
         </div>
