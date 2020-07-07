@@ -6,6 +6,8 @@ const peer = new Peer({
 let room = null;
 let existingRoom = null;
 let LocalStream = null;
+let ScreenShareStream = null;
+let AudioStream = null;
 let remoteVideos = document.getElementById('remote-videos');
 
 peer.on('open', function(){
@@ -23,7 +25,9 @@ $('#end-video').on('click', function() {
     if (localVideo != null){
         localVideo.srcObject.getTracks().forEach(track => track.stop());
         localVideo.srcObject = null;
-        LocalStream = null
+        ScreenShareStream.getTracks().forEach(track => track.stop());
+        AudioStream.getTracks().forEach(track => track.stop());
+        LocalStream.getTracks().forEach(track => track.stop());
     }
     existingRoom.close();
     setupMakeCallUI();
@@ -34,7 +38,18 @@ async function RoomLogin(is_video_flag){
     const RoomName = JSON.parse(document.getElementById('RoomNameURL').textContent);
     if(is_video_flag == true){
         const localVideo = document.getElementById('local-video');
-        LocalStream = await navigator.mediaDevices.getDisplayMedia({video: {width:1000, height:800} , audio: true})
+
+        LocalStream = new MediaStream();
+        ScreenShareStream = await navigator.mediaDevices.getDisplayMedia({video: {width:1000, height:800} , audio: false})
+        AudioStream = await navigator.mediaDevices.getUserMedia({video: false, audio: true})
+
+        ScreenShareStream.getVideoTracks().forEach(track => {
+            LocalStream.addTrack(track.clone())
+        });
+        AudioStream.getAudioTracks().forEach(track => {
+            LocalStream.addTrack(track.clone())
+        });
+
         $('#videos-container').show();
         setupEndCallUI();
 
@@ -51,6 +66,7 @@ async function RoomLogin(is_video_flag){
         });
         console.log(room);
     }else{
+        LocalStream = null;
         room = peer.joinRoom(RoomName,{
             mode: 'sfu',
             stream: null,
@@ -66,6 +82,7 @@ function setupRoomEventHandlers(room){
     room.on('stream', async function(stream){
         $('#videos-container').show();
         console.log('receive stream');
+        console.log(stream);
 
         const newVideo = document.createElement('video');
         newVideo.srcObject = stream;
