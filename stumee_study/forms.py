@@ -9,6 +9,11 @@ class CreateCourseForm(forms.ModelForm):
         model = models.Course
         fields = ('title', 'description', 'category', 'staffs', 'certification_key')
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # TAに絞り込む
+        self.fields['staffs'].queryset = self.fields['staffs'].queryset.filter(user_auth__gte=1)
+
 
 class CreateCategoryForm(forms.ModelForm):
 
