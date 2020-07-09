@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
-import django_heroku
 from django.urls import reverse_lazy
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -170,5 +169,3 @@ try:
 except ImportError:
     pass
 
-if not DEBUG:
-    django_heroku.settings(locals())
