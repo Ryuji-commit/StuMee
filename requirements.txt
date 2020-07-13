@@ -7,5 +7,6 @@ django-imagekit
 django-cleanup
 channels
 channels_redis
-
+django-storages
+boto3
 
