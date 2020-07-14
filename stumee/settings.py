@@ -165,6 +165,9 @@ AWS_SECRET_ACCESS_KEY = 'stumeeminio'
 AWS_STORAGE_BUCKET_NAME = 'stumeestorage'
 AWS_S3_ENDPOINT_URL = 'http://192.168.99.102:9000/'
 
+# on server
+# AWS_S3_ENDPOINT_URL = 'http://localhost:9000/'
+
 # Use minio
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
