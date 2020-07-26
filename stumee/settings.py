@@ -152,22 +152,21 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATIC_URL = '/static/'
-
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
-]
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 DEFAULT_FILE_STORAGE = 'stumee.backends.MediaStorage'
 AWS_ACCESS_KEY_ID = 'stumeeminio'
 AWS_SECRET_ACCESS_KEY = 'stumeeminio'
 AWS_STORAGE_BUCKET_NAME = 'stumeestorage'
-AWS_S3_ENDPOINT_URL = 'http://192.168.99.102:9000/'
+AWS_S3_ENDPOINT_URL = 'http://192.168.99.102:9000'
 
 # on server
-# AWS_S3_ENDPOINT_URL = 'http://133.92.145.23:9000/'
+# AWS_S3_ENDPOINT_URL = 'http://133.92.145.23:9000'
 AWS_S3_SIGNATURE_VERSION = 's3v4'
+
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+AWS_LOCATION = 'static'
+STATIC_URL = "%s/%s/%s/" % (AWS_S3_ENDPOINT_URL, AWS_STORAGE_BUCKET_NAME, AWS_LOCATION)
 
 # Use minio
 MEDIA_URL = '/media/'
