@@ -21,13 +21,13 @@ from django.contrib.staticfiles.urls import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = [
-    path('', include('stumee_auth.urls')),
-    path('meeting/', include('stumee_meeting.urls')),
-    path('search/', include('stumee_search.urls')),
-    path('study/', include('stumee_study.urls')),
-    path('chat/', include('stumee_chat.urls')),
-    path('auth/', include('social_django.urls', namespace='social')),
-    path('admin/', admin.site.urls),
+    path('stumee/', include('stumee_auth.urls')),
+    path('stumee/meeting/', include('stumee_meeting.urls')),
+    path('stumee/search/', include('stumee_search.urls')),
+    path('stumee/study/', include('stumee_study.urls')),
+    path('stumee/chat/', include('stumee_chat.urls')),
+    path('stumee/auth/', include('social_django.urls', namespace='social')),
+    path('stumee/admin/', admin.site.urls),
 ]
 
 urlpatterns += staticfiles_urlpatterns()

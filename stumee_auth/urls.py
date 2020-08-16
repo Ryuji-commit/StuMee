@@ -7,6 +7,6 @@ urlpatterns = [
     path('home/', views.home, name='home'),
     path('login/', views.CustomCertificationView.as_view(), name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),
-    path('setting', views.user_setting, name='user_profile'),
-    path('<int:pk>/profile', views.UserProfileView.as_view(), name='profile'),
+    path('setting/', views.user_setting, name='user_profile'),
+    path('<int:pk>/profile/', views.UserProfileView.as_view(), name='profile'),
 ]
