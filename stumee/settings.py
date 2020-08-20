@@ -22,7 +22,7 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 '''
 Secret Key Here
@@ -114,7 +114,6 @@ Auth PassWard here
 
 LOGIN_URL = 'stumee_auth:login'
 LOGOUT_URL = 'stumee_auth:logout'
-LOGIN_REDIRECT_URL = 'stumee_auth:home'
 LOGOUT_REDIRECT_URL = 'stumee_auth:home'
 
 
@@ -149,19 +148,21 @@ USE_L10N = True
 
 USE_TZ = True
 
+if DEBUG:
+    # on local
+    AWS_S3_ENDPOINT_URL = 'http://192.168.99.102:9000'
+    LOGIN_REDIRECT_URL = 'stumee_auth:home'
+else:
+    # on server
+    AWS_S3_ENDPOINT_URL = 'https://ymir.eng.kagawa-u.ac.jp'
+    LOGIN_REDIRECT_URL = 'https://ymir.eng.kagawa-u.ac.jp/stumee/home/'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 DEFAULT_FILE_STORAGE = 'stumee.backends.MediaStorage'
-AWS_ACCESS_KEY_ID = 'stumeeminio'
-AWS_SECRET_ACCESS_KEY = 'stumeeminio'
 AWS_STORAGE_BUCKET_NAME = 'stumeestorage'
-# AWS_S3_ENDPOINT_URL = 'http://192.168.99.102:9000'
-
-# on server
-AWS_S3_ENDPOINT_URL = 'https://ymir.eng.kagawa-u.ac.jp'
 
 STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 AWS_LOCATION = 'static'
@@ -170,6 +171,7 @@ STATIC_URL = "%s/%s/%s/" % (AWS_S3_ENDPOINT_URL, AWS_STORAGE_BUCKET_NAME, AWS_LO
 # Use minio
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+
 
 ######################################
 # import local_settings
