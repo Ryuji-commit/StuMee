@@ -153,8 +153,13 @@ if DEBUG:
     AWS_S3_ENDPOINT_URL = 'http://192.168.99.102:9000'
     LOGIN_REDIRECT_URL = 'stumee_auth:home'
 else:
-    # on server
+    # when on server
     AWS_S3_ENDPOINT_URL = 'https://ymir.eng.kagawa-u.ac.jp'
+    AWS_QUERYSTRING_AUTH = False
+    AWS_S3_SIGNATURE_VERSION = 's3'
+
+    # when collect static
+    # AWS_S3_ENDPOINT_URL = 'http://133.92.145.23:9000'
     LOGIN_REDIRECT_URL = 'https://ymir.eng.kagawa-u.ac.jp/stumee/home/'
 
 # Static files (CSS, JavaScript, Images)
