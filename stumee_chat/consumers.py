@@ -35,6 +35,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         message = text_data_json['message']
         user_id = text_data_json['user_id']
         user_img = text_data_json['user_img']
+        user_name = text_data_json['user_name']
         await self.create_message(message)
         # Send message to room group
         await self.channel_layer.group_send(
@@ -44,6 +45,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 'message': message,
                 'user_id': user_id,
                 'user_img': user_img,
+                'user_name': user_name,
             }
         )
 
@@ -52,11 +54,13 @@ class ChatConsumer(AsyncWebsocketConsumer):
         message = event['message']
         user_id = event['user_id']
         user_img = event['user_img']
+        user_name = event['user_name']
         # Send message to WebSocket
         await self.send(text_data=json.dumps({
             'message': message,
             'user_id': user_id,
             'user_img': user_img,
+            'user_name': user_name,
         }))
 
     @database_sync_to_async
@@ -113,6 +117,7 @@ class DiscussionConsumer(AsyncWebsocketConsumer):
         message = text_data_json['message']
         user_id = text_data_json['user_id']
         user_img = text_data_json['user_img']
+        user_name = text_data_json['user_name']
         await self.create_message(message)
         # Send message to room group
         await self.channel_layer.group_send(
@@ -122,6 +127,7 @@ class DiscussionConsumer(AsyncWebsocketConsumer):
                 'message': message,
                 'user_id': user_id,
                 'user_img': user_img,
+                'user_name': user_name,
             }
         )
 
@@ -130,11 +136,13 @@ class DiscussionConsumer(AsyncWebsocketConsumer):
         message = event['message']
         user_id = event['user_id']
         user_img = event['user_img']
+        user_name = event['user_name']
         # Send message to WebSocket
         await self.send(text_data=json.dumps({
             'message': message,
             'user_id': user_id,
             'user_img': user_img,
+            'user_name': user_name,
         }))
 
     @database_sync_to_async

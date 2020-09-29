@@ -53,6 +53,19 @@ div.operate_course a {
     width: auto;
 }
 
+.chat-talk .talk-attached-information {
+    display: flex;
+    margin: 0px;
+}
+
+.chat-talk .talk-user {
+    margin-left: 20px;
+}
+
+.chat-talk .talk-attached-information .talk-send-time {
+    margin-left: 30px;
+}
+
 .chat-talk .talk-content {
     position: relative;
     box-sizing: border-box;
@@ -76,7 +89,6 @@ div.operate_course a {
 
 .chat-talk .talk-content:before {
     position: absolute;
-    top: 15px;
     left: -20px;
     display: block;
     width: 0;
@@ -84,6 +96,11 @@ div.operate_course a {
     content: '';
     border: 10px solid transparent;
     border-right-color: #FFFFFF;
+}
+
+.chat-talk:not(.mytalk) .talk-content:before {
+    top: 12px;
+    transform: scale(2,1) rotate(25deg);
 }
 
 .chat-talk.mytalk .talk-icon {
@@ -97,6 +114,7 @@ div.operate_course a {
 }
 
 .chat-talk.mytalk .talk-content:before {
+    top: 15px;
     right: -20px;
     left: auto;
     border-color: transparent;

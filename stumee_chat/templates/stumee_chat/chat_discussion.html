@@ -52,6 +52,10 @@
                         <span class="talk-icon">
                             <img class="rounded" src="{{ message.user.small.url }}">
                         </span>
+                        <span class="talk-attached-information">
+                            <span class="talk-user small">{{ message.user.username }}</span>
+                            <span class="talk-send-time small">{{ message.created_at|date:"H:i" }}</span>
+                        </span>
                         <span class="talk-content">{{ message.content }}</span>
                     </p>
                     {% endifequal %}
@@ -92,6 +96,8 @@
 
     chatSocket.onmessage = function(e) {
         const data = JSON.parse(e.data);
+        const now = new Date();
+        const time = now.getHours() + ':' + now.getMinutes();
         if ({{ user.id }} == data.user_id){
             var h = '<p class="chat-talk mytalk">'
                   + '<span class="talk-icon">'
@@ -109,6 +115,14 @@
                   + '<img class="rounded" src='
                   + data.user_img
                   + '>'
+                  + '</span>'
+                  + '<span class="talk-attached-information">'
+                  + '<span class="talk-user small">'
+                  + data.user_name
+                  + '</span>'
+                  + '<span class="talk-send-time small">'
+                  + time
+                  + '</span>'
                   + '</span>'
                   + '<span class="talk-content">'
                   + data.message
@@ -144,6 +158,7 @@
             'message': message,
             'user_id': {{ user.id }},
             'user_img': "{{ user.small.url }}",
+            'user_name': "{{ user.username }}",
         }));
         messageInputDom.value = '';
         messageInputDom.setAttribute("rows", 1);
