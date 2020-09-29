@@ -62,6 +62,8 @@ div.operate_course a {
     background-color: #fff;
     margin: 0 auto 0 70px;
     padding: 1em;
+    word-wrap: break-word;
+    white-space: pre-wrap;
 }
 
 .chat-talk .talk-icon img {

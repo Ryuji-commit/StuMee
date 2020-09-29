@@ -78,7 +78,7 @@
             </div>
 
             <div class="form-group mt-5">
-                <input id="chat-message-input" type="text" size="100" class="form-control" placeholder="質問を入力"><br>
+                <textarea id="chat-message-input" rows="1" class="form-control" placeholder="質問を入力(Ctrl+Enterで送信)" oninput="height_expansion();"></textarea><br>
                 <button type="submit" class="btn btn-primary mr-3" id="chat-message-submit">チャット送信</button>
                 <button type="submit" class="btn btn-primary" id="start-video">画面共有開始</button>
                 <button type="submit" class="btn btn-danger" id="end-video">画面共有停止</button>
@@ -165,8 +165,10 @@
 
     document.querySelector('#chat-message-input').focus();
     document.querySelector('#chat-message-input').onkeyup = function(e) {
-        if (e.keyCode === 13) {  // enter, return
-            document.querySelector('#chat-message-submit').click();
+        if (e.ctrlKey){
+            if (e.keyCode === 13) {  // enter, return
+                document.querySelector('#chat-message-submit').click();
+            }
         }
     };
 
@@ -179,7 +181,18 @@
             'user_img': "{{ user.small.url }}",
         }));
         messageInputDom.value = '';
+        messageInputDom.setAttribute("rows", 1);
     };
+
+    function height_expansion(){
+        const ChatContentTextArea = document.getElementById("chat-message-input");
+        const maxLineHeight = 5;
+        let LineHeight = Number(ChatContentTextArea.getAttribute("rows"));
+        while (ChatContentTextArea.scrollHeight > ChatContentTextArea.offsetHeight && LineHeight < maxLineHeight){
+            LineHeight++;
+            ChatContentTextArea.setAttribute("rows", LineHeight);
+        }
+    }
 
 </script>
 {% endblock %}

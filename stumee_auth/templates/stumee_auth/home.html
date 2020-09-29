@@ -5,6 +5,11 @@
 {% block content %}
     {% if user.is_authenticated %}
         <p class="display-4">Hello, {{ user.username }}</p>
+        <p>以下のアンケートにご協力ください。次のURLからも回答することができます。<a href="https://forms.gle/ZYd8gocS8jY9sr1c8">https://forms.gle/ZYd8gocS8jY9sr1c8</a></p>
+        <div class="text-center">
+            <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSeIw1IEB0EhfAzo6yZ1hlv0pG5awAALYFHRCFGZWkq3F-JL_A/viewform?embedded=true"
+                    width="640" height="1021" frameborder="0" marginheight="0" marginwidth="0">読み込んでいます…</iframe>
+        </div>>
     {% else %}
         <p>please login for StuMee</p>
     {% endif %}
