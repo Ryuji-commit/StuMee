@@ -212,6 +212,12 @@
         const ChatContentTextArea = document.getElementById("chat-message-input");
         const maxLineHeight = 5;
         let LineHeight = Number(ChatContentTextArea.getAttribute("rows"));
+
+        while (ChatContentTextArea.scrollHeight < ChatContentTextArea.offsetHeight && LineHeight > 1){
+            LineHeight--;
+            ChatContentTextArea.setAttribute("rows", LineHeight);
+        }
+
         while (ChatContentTextArea.scrollHeight > ChatContentTextArea.offsetHeight && LineHeight < maxLineHeight){
             LineHeight++;
             ChatContentTextArea.setAttribute("rows", LineHeight);

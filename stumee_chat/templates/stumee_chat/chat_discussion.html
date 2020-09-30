@@ -45,7 +45,7 @@
                         <span class="talk-icon">
                             <img class="rounded" src="{{ message.user.small.url }}">
                         </span>
-                        <span class="my-send-time">{{ message.created_at|date:"H:i" }}</span>
+                        <span class="my-send-time small">{{ message.created_at|date:"H:i" }}</span>
                         <span class="talk-content">{{ message.content }}</span>
                     </p>
                     {% else %}
@@ -177,6 +177,12 @@
         const ChatContentTextArea = document.getElementById("chat-message-input");
         const maxLineHeight = 5;
         let LineHeight = Number(ChatContentTextArea.getAttribute("rows"));
+
+        while (ChatContentTextArea.scrollHeight < ChatContentTextArea.offsetHeight && LineHeight > 1){
+            LineHeight--;
+            ChatContentTextArea.setAttribute("rows", LineHeight);
+        }
+
         while (ChatContentTextArea.scrollHeight > ChatContentTextArea.offsetHeight && LineHeight < maxLineHeight){
             LineHeight++;
             ChatContentTextArea.setAttribute("rows", LineHeight);
