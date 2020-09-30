@@ -40,6 +40,12 @@ div.operate_course a {
     overflow: hidden;
     margin: 0 0 1em 0;
     padding: 0;
+    float: left;
+    clear: both;
+}
+
+.chat-talk.mytalk {
+    float: right;
 }
 
 .chat-talk span {
@@ -66,6 +72,11 @@ div.operate_course a {
     margin-left: 30px;
 }
 
+.chat-talk.mytalk .my-send-time {
+    text-align: right;
+    margin-right: 100px;
+}
+
 .chat-talk .talk-content {
     position: relative;
     box-sizing: border-box;
@@ -75,7 +86,7 @@ div.operate_course a {
     background-color: #fff;
     margin: 0 auto 0 70px;
     padding: 1em;
-    word-wrap: break-word;
+    word-break: break-all;
     white-space: pre-wrap;
 }
 

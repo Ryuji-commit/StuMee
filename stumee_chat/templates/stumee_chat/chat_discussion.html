@@ -45,6 +45,7 @@
                         <span class="talk-icon">
                             <img class="rounded" src="{{ message.user.small.url }}">
                         </span>
+                        <span class="my-send-time">{{ message.created_at|date:"H:i" }}</span>
                         <span class="talk-content">{{ message.content }}</span>
                     </p>
                     {% else %}
@@ -97,13 +98,18 @@
     chatSocket.onmessage = function(e) {
         const data = JSON.parse(e.data);
         const now = new Date();
-        const time = now.getHours() + ':' + now.getMinutes();
+        const hour = ('00' + now.getHours()).slice(-2);
+        const minute = ('00' + now.getMinutes()).slice(-2);
+        const time = hour + ':' + minute;
         if ({{ user.id }} == data.user_id){
             var h = '<p class="chat-talk mytalk">'
                   + '<span class="talk-icon">'
                   + '<img class="rounded" src='
                   + data.user_img
                   + '>'
+                  + '</span>'
+                  + '<span class="my-send-time small">'
+                  + time
                   + '</span>'
                   + '<span class="talk-content">'
                   + data.message
@@ -154,6 +160,9 @@
     document.querySelector('#chat-message-submit').onclick = function(e) {
         const messageInputDom = document.querySelector('#chat-message-input');
         const message = messageInputDom.value;
+        if (!message) {
+            return false;
+        }
         chatSocket.send(JSON.stringify({
             'message': message,
             'user_id': {{ user.id }},
