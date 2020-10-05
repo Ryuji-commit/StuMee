@@ -62,6 +62,7 @@ def thread(request, thread_id):
             comment.user = request.user
             comment.thread = thread
             comment.save()
+            return HttpResponseRedirect(request.path)
     else:
         form = forms.CommentForm()
     return render(
