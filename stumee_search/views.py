@@ -14,7 +14,9 @@ class MeetingSearchView(generic.ListView):
         search_word = self.request.GET.get('meeting_search_form')
         if search_word:
             return Thread.objects.filter(
-                Q(title__icontains=search_word) | Q(tag__name__icontains=search_word)
+                Q(title__icontains=search_word) |
+                Q(tag__name__icontains=search_word) |
+                Q(description__icontains=search_word)
             ).order_by('-is_picked', '-good_count', '-make_date').distinct()
         else:
             return Thread.objects.order_by('-is_picked', '-good_count', '-make_date')
