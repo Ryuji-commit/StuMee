@@ -11,7 +11,7 @@ class CustomUser(AbstractUser):
         upload_to='user_icon/',
         verbose_name='オリジナルアイコン',
         blank=True,
-        default='default_icon/default_icon1.png',
+        default='default_icon/default_icon2.png',
     )
 
     big = ImageSpecField(
