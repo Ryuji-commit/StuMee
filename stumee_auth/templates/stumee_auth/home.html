@@ -1,6 +1,6 @@
 {% extends 'stumee_auth/auth_base.html' %}
 
-{% block title %}StuMee home{% endblock %}
+{% block title %}StuMee home{% endblock title %}
 
 {% block content %}
     {% if user.is_authenticated %}
@@ -13,4 +13,4 @@
     {% else %}
         <p>please login for StuMee</p>
     {% endif %}
-{% endblock %}
+{% endblock content %}

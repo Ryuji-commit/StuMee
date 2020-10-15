@@ -1,6 +1,6 @@
 {% extends 'stumee_auth/auth_base.html' %}
 
-{% block title %}Profile-{{ user_profile.username }}{% endblock %}
+{% block title %}Profile-{{ user_profile.username }}{% endblock title %}
 
 {% block content %}
     <h2>name:{{ user_profile.username }}</h2>
@@ -8,4 +8,4 @@
         <p>{{ comment.comment }}</p>
     {% endfor %}
     <a href="{% url 'stumee_auth:home' %}">トップページ</a>
-{% endblock %}
+{% endblock content %}
