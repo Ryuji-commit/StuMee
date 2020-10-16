@@ -1,6 +1,6 @@
 {% extends 'stumee_meeting/meeting_base.html' %}
 
-{% block title %}{{ thread.title }}{% endblock %}
+{% block title %}{{ thread.title }}{% endblock title %}
 
 {% block content %}
 <div class="container-fluid">
@@ -33,7 +33,7 @@
                     </div>
                 </div>
 
-                <div id="thread_description" class="mb-2">{{ thread.description }}</div>
+                <div id="thread_description" class="mb-2 need-pre-wrap">{{ thread.description }}</div>
                 <div id="thread-good">
                     <span id="thread-good-mark" data-href="{% url 'stumee_meeting:thread_good' thread.id %}">&hearts;</span>
                     <span class="thread-good-count">{{ thread.good_count }}</span>
@@ -61,7 +61,7 @@
                 {% if comments %}
                 {% for comment in comments %}
                     <div class="thread_contents border-bottom pb-4">
-                        <div class="text">{{ comment.comment }}</div>
+                        <div class="text need-pre-wrap">{{ comment.comment }}</div>
                         <div class="comment-good">
                             <span class="comment-good-mark" data-href="{% url 'stumee_meeting:comment_good' comment.id %}">&hearts;</span>
                             <span id="comment-good-count-{{ comment.id }}">{{ comment.good_count }}</span>
@@ -101,5 +101,5 @@
         </div>
     </div>
 </div>
-{% endblock %}
+{% endblock content %}
 

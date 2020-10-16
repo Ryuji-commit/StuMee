@@ -16,3 +16,7 @@ span.comment-good-mark {
     cursor: pointer;
     color: orange;
 }
+
+.need-pre-wrap {
+    white-space: pre-wrap;
+}
