@@ -8,7 +8,7 @@ from stumee_study.models import Course, Category
 # The ListView for search function of Meeting
 class MeetingSearchView(generic.ListView):
     template_name = 'stumee_search/meeting_search_result.html'
-    context_object_name = 'search_results'
+    context_object_name = 'threads_list'
 
     def get_queryset(self):
         search_word = self.request.GET.get('meeting_search_form')

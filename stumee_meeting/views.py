@@ -15,7 +15,7 @@ from . import forms
 # Threads list
 class IndexView(generic.ListView):
     template_name = 'stumee_meeting/index.html'
-    context_object_name = 'latest_threads_list'
+    context_object_name = 'threads_list'
 
     def get_queryset(self):
         return Thread.objects.order_by('-is_picked', '-good_count', '-make_date')
@@ -137,7 +137,7 @@ def pick_up_thread(request, thread_id):
 # Tag Detail
 class TagListView(generic.ListView):
     model = Thread
-    context_object_name = 'tag_threads_list'
+    context_object_name = 'threads_list'
     template_name = 'stumee_meeting/tag_list.html'
 
     def get_queryset(self):
