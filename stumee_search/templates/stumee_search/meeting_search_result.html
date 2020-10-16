@@ -12,17 +12,9 @@
 {% block content %}
     <div class="container-fluid">
         <div class="row">
-             <div class="col-md-2 d-none d-md-block sidebar border-right" style="background-color: white;">
-                 <div class="sidebar-sticky row">
-                     <div class="col-5"></div>
-                     <ul class="nav flex-column col-7 pr-0">
-                        <li class="nav-item"><a class="nav-link" href="{% url 'stumee_meeting:index' %}">ホーム</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'stumee_meeting:question' %}">質問</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'stumee_meeting:tags' %}">タグ</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'stumee_meeting:users' %}">ユーザ</a></li>
-                     </ul>
-                 </div>
-             </div>
+            <!-- include sidebar -->
+            {% include 'stumee_meeting/meeting_sidebar.html' %}
+
             <div role="main" class="col-md-8">
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                     <h1 class="h2">Search result : {{ search_word }}</h1>
