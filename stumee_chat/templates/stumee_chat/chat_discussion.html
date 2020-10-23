@@ -9,6 +9,7 @@
             <div class="sidebar-sticky row">
                 <div class="col-4"></div>
                 <ul class="nav flex-column col-8 pr-0">
+
                     <li class="nav-item mb-3">
                         <div class="dropdown">
                             <!-- 切替ボタンの設定 -->
@@ -18,17 +19,21 @@
                             <!-- ドロップメニューの設定 -->
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                 {% for channel in student_channel %}
-                                    {% if channel.is_active %}
-                                        <a class="dropdown-item" href="{% url 'stumee_chat:chat_question' channel.course.id channel.user.id %}">{{ channel.user.username }}<i class="far fa-comment-dots pl-2"></i></a>
-                                    {% else %}
-                                        <a class="dropdown-item" href="{% url 'stumee_chat:chat_question' channel.course.id channel.user.id %}">{{ channel.user.username }}</a>
-                                    {% endif %}
+                                    <a class="dropdown-item" href="{% url 'stumee_chat:chat_question' channel.course.id channel.user.id %}">{{ channel.user.username }}</a>
                                 {% endfor %}
                             </div><!-- /.dropdown-menu -->
                         </div><!-- /.dropdown -->
                     </li>
+
                     <li class="nav-item" style="background-color: #e0ffff; border-right: solid 3px orange;">
                         <a class="nav-link" href="">相談部屋</a>
+                    </li>
+
+                    <li class="nav-item text-center mt-2">
+                        <p class="font-weight-bold">新着の質問</p>
+                    </li>
+
+                    <li class=" nav-item text-center list-group" id="student-name-list">
                     </li>
                 </ul>
             </div>
@@ -147,47 +152,10 @@
             alert(chatSocket.url);
         }
     };
-
-    document.querySelector('#chat-message-input').focus();
-    document.querySelector('#chat-message-input').onkeyup = function(e) {
-        if (e.ctrlKey){
-            if (e.keyCode === 13) {  // enter, return
-                document.querySelector('#chat-message-submit').click();
-            }
-        }
-    };
-
-    document.querySelector('#chat-message-submit').onclick = function(e) {
-        const messageInputDom = document.querySelector('#chat-message-input');
-        const message = messageInputDom.value;
-        if (!message) {
-            return false;
-        }
-        chatSocket.send(JSON.stringify({
-            'message': message,
-            'user_id': {{ user.id }},
-            'user_img': "{{ user.small.url }}",
-            'user_name': "{{ user.username }}",
-        }));
-        messageInputDom.value = '';
-        messageInputDom.setAttribute("rows", 1);
-    };
-
-    function height_expansion(){
-        const ChatContentTextArea = document.getElementById("chat-message-input");
-        const maxLineHeight = 5;
-        let LineHeight = Number(ChatContentTextArea.getAttribute("rows"));
-
-        while (ChatContentTextArea.scrollHeight < ChatContentTextArea.offsetHeight && LineHeight > 1){
-            LineHeight--;
-            ChatContentTextArea.setAttribute("rows", LineHeight);
-        }
-
-        while (ChatContentTextArea.scrollHeight > ChatContentTextArea.offsetHeight && LineHeight < maxLineHeight){
-            LineHeight++;
-            ChatContentTextArea.setAttribute("rows", LineHeight);
-        }
-    }
-
 </script>
+
+{% include 'stumee_chat/js-related-frame-of-chat.html' %}
+<!-- include SSE function -->
+{% include 'stumee_chat/notice-not-replied-questions.html' %}
+
 {% endblock %}

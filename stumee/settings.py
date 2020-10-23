@@ -95,10 +95,12 @@ CHANNEL_LAYERS = {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
             "hosts": [('redis', 6379)],
+            "capacity": 300,
         },
     },
 }
 ############################
+ASGI_THREADS = 1000
 
 WSGI_APPLICATION = 'stumee.wsgi.application'
 

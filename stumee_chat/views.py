@@ -1,6 +1,11 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
+from django.views.decorators.http import condition
+from django.http import StreamingHttpResponse, JsonResponse
+import json
+import time
+import asyncio
 
 from .models import Message, Channel
 from stumee_study.models import Course
@@ -50,3 +55,19 @@ def chat_discussion(request, course_id):
         'messages': messages,
         'student_channel': student_channel,
     })
+
+
+def response_for_unread_question(request):
+    course_id = request.POST.get('courseId')
+    course = Course.objects.get(id=course_id)
+
+    student_channel = Channel.objects.exclude(user=course.create_user).filter(course=course, is_active=True)
+    students_list = []
+
+    for channel in student_channel:
+        student_dict = {"id": channel.user.id, "username": channel.user.username}
+        students_list.append(student_dict)
+
+    response = json.dumps(students_list)
+    return JsonResponse(response, safe=False)
+
