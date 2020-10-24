@@ -57,8 +57,7 @@ def chat_discussion(request, course_id):
     })
 
 
-def response_for_unread_question(request):
-    course_id = request.POST.get('courseId')
+def response_for_unread_question(request, course_id):
     course = Course.objects.get(id=course_id)
 
     student_channel = Channel.objects.exclude(user=course.create_user).filter(course=course, is_active=True)
@@ -68,6 +67,6 @@ def response_for_unread_question(request):
         student_dict = {"id": channel.user.id, "username": channel.user.username}
         students_list.append(student_dict)
 
-    response = json.dumps(students_list)
+    response = json.dumps({'studentinfo':students_list})
     return JsonResponse(response, safe=False)
 

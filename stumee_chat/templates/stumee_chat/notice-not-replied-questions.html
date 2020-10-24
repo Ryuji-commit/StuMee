@@ -1,59 +1,53 @@
 <script>
     window.onload = function() {
-        function getCookie(name) {
-            var cookieValue = null;
-            if (document.cookie && document.cookie !== '') {
-                var cookies = document.cookie.split(';');
-                for (var i = 0; i < cookies.length; i++) {
-                    var cookie = jQuery.trim(cookies[i]);
-                    // Does this cookie string begin with the name we want?
-                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        break;
-                    }
-                }
-            }
-            return cookieValue;
-        }
-
-        var csrftoken = getCookie('csrftoken');
-
-        function csrfSafeMethod(method) {
-            // these HTTP methods do not require CSRF protection
-            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-        }
-
-        $.ajaxSetup({
-            beforeSend: function (xhr, settings) {
-                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
-                }
-            }
-        });
-
         function poll() {
+            fetch("{% url "stumee_chat:polling-for-unread-question" course_id %}")
+                .then((response) => {
+                    // time out error
+                    if (response.status == 502) {
+                        console.log("status 502");
+                    }
+                    if (response.status != 200) {
+                        console.log("status" + response.status);
+                    }
+                    return response.json();
+                })
+                .then((studentsData) => {
+                    let newElement = '';
+                    let studentsList = document.getElementById('student-name-list');
+                    parsedData = JSON.parse(studentsData);
+                    parsedData.studentinfo.forEach(student => {
+                        newElement +=
+                            '<a href= "'
+                           + '{% url 'stumee_chat:chat_question' course_id 12345 %}'.replace(/12345/, student.id) //need change!
+                           + '" class="list-group-item list-group-item-action">'
+                           + student.username
+                           + '</a>'
+                    });
+                    studentsList.innerHTML = newElement;
+                })
+                .catch((error) => {
+                    console.log("polling error");
+                })
+                .finally(() => {
+                    setTimeout(poll, 3000);
+                });
+        }
+
+        function showStudentsList(studentJsonData) {
+            console.log(studentJsonData);
             let newElement = '';
             let studentsList = document.getElementById('student-name-list')
-            $.ajax({
-                'url': '{% url "stumee_chat:polling-for-unread-question" %}',
-                'type': 'POST',
-                'data': {
-                    'courseId': {{ course_id }},
-                },
-                'dataType': 'json'
-            }).done( response => {
-                let receiveMessage = JSON.parse(response);
-                receiveMessage.forEach(student => {
-                    newElement +=
-                        '<a href= "'
-                       + '{% url 'stumee_chat:chat_question' course_id 12345 %}'.replace(/12345/, student.id) //need change!
-                       + '" class="list-group-item list-group-item-action">'
-                       + student.username
-                       + '</a>'
-                });
-                studentsList.innerHTML = newElement;
+            studentJsonData.studentinfo.forEach(student => {
+                newElement +=
+                    '<a href= "'
+                   + '{% url 'stumee_chat:chat_question' course_id 12345 %}'.replace(/12345/, student.id) //need change!
+                   + '" class="list-group-item list-group-item-action">'
+                   + student.username
+                   + '</a>'
             });
         }
-        setInterval(function(){ poll(); }, 3000);
+
+        poll();
     }
 </script>
