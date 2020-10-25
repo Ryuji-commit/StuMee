@@ -58,15 +58,24 @@ def chat_discussion(request, course_id):
 
 
 def response_for_unread_question(request, course_id):
+    previous_data = json.loads(request.body)
     course = Course.objects.get(id=course_id)
+    max_seconds_of_connection = 20
 
-    student_channel = Channel.objects.exclude(user=course.create_user).filter(course=course, is_active=True)
-    students_list = []
+    for _ in range(max_seconds_of_connection):
+        student_channel = Channel.objects.exclude(user=course.create_user).filter(course=course, is_active=True)
+        students_list = []
 
-    for channel in student_channel:
-        student_dict = {"id": channel.user.id, "username": channel.user.username}
-        students_list.append(student_dict)
+        for channel in student_channel:
+            student_dict = {"id": channel.user.id, "username": channel.user.username}
+            students_list.append(student_dict)
 
-    response = json.dumps({'studentinfo':students_list})
+        if students_list != previous_data:
+            response = json.dumps(students_list)
+            return JsonResponse(response, safe=False)
+        else:
+            time.sleep(1)
+
+    response = json.dumps(students_list)
     return JsonResponse(response, safe=False)
 
