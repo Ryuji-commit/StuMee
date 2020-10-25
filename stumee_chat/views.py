@@ -70,7 +70,7 @@ def response_for_unread_question(request, course_id):
             student_dict = {"id": channel.user.id, "username": channel.user.username}
             students_list.append(student_dict)
 
-        if students_list != previous_data:
+        if sorted(students_list, key=lambda x: x["id"]) != sorted(previous_data, key=lambda x: x["id"]):
             response = json.dumps(students_list)
             return JsonResponse(response, safe=False)
         else:
