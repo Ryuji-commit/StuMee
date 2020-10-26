@@ -27,7 +27,7 @@ def chat_question(request, course_id, user_id):
     return render(request, 'stumee_chat/chat_question.html', {
         'course_id': course_id,
         'user_id': user_id,
-        'messages': messages,
+        'chat_messages': messages,
         'student_channel': student_channel,
     })
 
@@ -52,7 +52,7 @@ def chat_discussion(request, course_id):
     messages = Message.objects.filter(channel__id=channel.id).order_by('created_at')
     return render(request, 'stumee_chat/chat_discussion.html', {
         'course_id': course_id,
-        'messages': messages,
+        'chat_messages': messages,
         'student_channel': student_channel,
     })
 

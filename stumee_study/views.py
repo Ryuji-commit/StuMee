@@ -1,4 +1,5 @@
 from django.views.generic.edit import ModelFormMixin
+from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.views import generic
 from django.contrib.auth.decorators import login_required
@@ -32,8 +33,10 @@ def study_index(request):
             if course.certification_key == input_key:
                 course.students.add(request.user)
                 course.save()
-                return redirect(reverse('stumee_study:study_index'))
+                messages.success(request, f'{course.title}への認証に成功しました!')
+                return redirect(reverse('stumee_chat:chat_question', args=[course_id, request.user.id]))
             else:
+                messages.error(request, f'{course.title}への認証に失敗しました', extra_tags='danger')
                 return redirect(reverse('stumee_study:study_index'))
     else:
         course_certification_form = CourseCertificationForm()

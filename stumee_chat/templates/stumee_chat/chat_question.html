@@ -60,7 +60,7 @@
                 {% endwith %}
             </div>
             <div id="chat-frame">
-                {% for message in messages %}
+                {% for message in chat_messages %}
                     {% ifequal user message.user %}
                     <p class="chat-talk mytalk">
                         <span class="talk-icon">
