@@ -4,4 +4,6 @@ $(function(){
     $('#category-modal-btn').click(function(){
         $('#modalCategoryForm').find('input[type="text"]').val('');
     });
+
+    $('[data-toggle="tooltip"]').tooltip();
 });

@@ -16,7 +16,7 @@
                 {% endfor %}
                 {% csrf_token %}
                 <a class="btn btn-secondary btn-sm mr-2" role="button" href="{% url 'stumee_study:study_index' %}">取り消し</a>
-                <button class="btn btn-primary btn-sm" type="submit">変更</button>
+                <button class="btn btn-primary btn-sm" type="submit" data-toggle="tooltip" title="Tooltip message">変更</button>
             </div>
         </form>
     </div>

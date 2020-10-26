@@ -131,3 +131,7 @@ div.operate_course a {
     border-color: transparent;
     border-left-color: #78FF6C;
 }
+
+.tooltip-inner {
+    max-width: 300px;
+}

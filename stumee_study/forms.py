@@ -13,6 +13,17 @@ class CreateCourseForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         # TAに絞り込む
         self.fields['staffs'].queryset = self.fields['staffs'].queryset.filter(user_auth__gte=1)
+        self.fields['staffs'].widget.attrs = {'data-toggle': 'tooltip',
+                                              'title': 'TAを選択してください<br>Ctrl+クリックで複数選択が可能です',
+                                              'data-html': 'true'}
+        self.fields['category'].widget.attrs = {'data-toggle': 'tooltip',
+                                                'title': '受講する学生の学年を選んでください'}
+        self.fields['certification_key'].widget.attrs = {'data-toggle': 'tooltip',
+                                                         'title': '認証キーを設定してください<br>'
+                                                                  '学生がコースに登録する際に必要です',
+                                                         'data-html': 'true',
+                                                         'placeholder': '半角英数字のみ入力可能です。',
+                                                         'pattern': '^[A-Za-z0-9]+$'}
 
 
 class CreateCategoryForm(forms.ModelForm):
@@ -35,6 +46,17 @@ class UpdateCourseForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         # TAに絞り込む
         self.fields['staffs'].queryset = self.fields['staffs'].queryset.filter(user_auth__gte=1)
+        self.fields['staffs'].widget.attrs = {'data-toggle': 'tooltip',
+                                              'title': 'TAを選択してください<br>Ctrl+クリックで複数選択が可能です',
+                                              'data-html': 'true'}
+        self.fields['category'].widget.attrs = {'data-toggle': 'tooltip',
+                                                'title': '受講する学生の学年を選んでください'}
+        self.fields['certification_key'].widget.attrs = {'data-toggle': 'tooltip',
+                                                         'title': '認証キーを設定してください<br>'
+                                                                  '学生がコースに登録する際に必要です',
+                                                         'data-html': 'true',
+                                                         'placeholder': '半角英数字のみ入力可能です。',
+                                                         'pattern': '^[A-Za-z0-9]+$'}
 
 
 class CourseCertificationForm(forms.Form):
