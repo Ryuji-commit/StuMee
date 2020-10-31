@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.views.decorators.http import condition
-from django.http import StreamingHttpResponse, JsonResponse
+from django.http import JsonResponse, HttpResponseBadRequest
 import json
 import time
 import asyncio
@@ -10,6 +10,7 @@ import asyncio
 from .models import Message, Channel
 from stumee_study.models import Course
 from stumee_auth.models import CustomUser
+from .forms import FileUploadForm
 
 # Create your views here.
 @login_required
@@ -29,6 +30,7 @@ def chat_question(request, course_id, user_id):
         'user_id': user_id,
         'chat_messages': messages,
         'student_channel': student_channel,
+        'form': FileUploadForm(),
     })
 
 
@@ -54,6 +56,7 @@ def chat_discussion(request, course_id):
         'course_id': course_id,
         'chat_messages': messages,
         'student_channel': student_channel,
+        'form': FileUploadForm(),
     })
 
 
@@ -79,3 +82,10 @@ def response_for_unread_question(request, course_id):
     response = json.dumps(students_list)
     return JsonResponse(response, safe=False)
 
+
+def process_for_uploaded_file(request):
+    form = FileUploadForm(files=request.FILES)
+    if form.is_valid():
+        url = form.save()
+        return JsonResponse({'url': url})
+    return HttpResponseBadRequest()

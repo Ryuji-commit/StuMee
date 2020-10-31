@@ -74,6 +74,8 @@
             <div class="form-group mt-5">
                 <textarea id="chat-message-input" rows="1" class="form-control" placeholder="質問を入力(Ctrl+Enterで送信)" oninput="height_expansion();"></textarea><br>
                 <button type="submit" class="btn btn-primary" id="chat-message-submit">送信</button>
+                <button type="submit" class="btn btn-primary mr-3" id="file-upload-button">ファイル送信</button>
+                {{ form.as_p }}
             </div>
             {{ course_id|json_script:"course-id" }}
         </div>

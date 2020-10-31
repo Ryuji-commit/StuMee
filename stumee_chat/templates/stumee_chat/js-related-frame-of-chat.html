@@ -92,3 +92,45 @@ function height_expansion(){
         ChatContentTextArea.setAttribute("rows", LineHeight);
     }
 }
+
+const getCookie = name =>{
+    if (document.cookie && document.cookie !== '') {
+        for (const cookie of document.cookie.split(';')){
+            const [key, value] = cookie.trim().split('=');
+            if(key === name) {
+                return decodeURIComponent(value);
+            }
+        }
+    }
+};
+const csrftoken = getCookie('csrftoken');
+
+document.querySelector('#file-upload-button').onclick = function(e) {
+    const FileUploadForm = document.querySelector('#id_file');
+    FileUploadForm.click();
+}
+
+document.querySelector('#id_file').onchange = function(e) {
+    const UploadedFile = document.querySelector('#id_file').files[0];
+    const formData = new FormData();
+    formData.append('file', UploadedFile);
+    fetch('{% url 'stumee_chat:process_for_uploaded_file' %}', {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRFToken': csrftoken,
+        },
+    }).then(response => {
+        return response.json();
+    }).then(response => {
+        const extension = response.url.split('.').pop().toLowerCase();
+
+        if (['png', 'jpg', 'gif', 'jpeg', 'bmp'].includes(extension)) {
+            console.log('画像' + response.url);
+        } else {
+            console.log('ファイル' + response.url);
+        }
+    }).catch(error => {
+        console.log(error);
+    });
+}

@@ -7,4 +7,5 @@ urlpatterns = [
     path('<int:course_id>/question/<int:user_id>/', views.chat_question, name='chat_question'),
     path('<int:course_id>/discussion/', views.chat_discussion, name='chat_discussion'),
     path('<int:course_id>/response_unread_/', views.response_for_unread_question, name='polling-for-unread-question'),
+    path('process_for_uploaded_file/', views.process_for_uploaded_file, name='process_for_uploaded_file'),
 ]

@@ -1,17 +1,5 @@
 <script>
     window.onload = function() {
-        const getCookie = name =>{
-            if (document.cookie && document.cookie !== '') {
-                for (const cookie of document.cookie.split(';')){
-                    const [key, value] = cookie.trim().split('=');
-                    if(key === name) {
-                        return decodeURIComponent(value);
-                    }
-                }
-            }
-        };
-        const csrftoken = getCookie('csrftoken');
-
         function poll(receivedData) {
             let parsedData = [];
             fetch("{% url "stumee_chat:polling-for-unread-question" course_id %}", {
