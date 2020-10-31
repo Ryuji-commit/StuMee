@@ -187,10 +187,10 @@
             alert(chatSocket.url);
         }
     };
+    {% include 'stumee_chat/js-related-frame-of-chat.html' %}
 </script>
 
-{% include 'stumee_chat/js-related-frame-of-chat.html' %}
-<!-- include SSE function -->
+<!-- include Long Polling function -->
 {% with course_id|judge_if_staffs as staff_list %}
     {% if user.id in staff_list %}
         {% include 'stumee_chat/notice-not-replied-questions.html' %}
