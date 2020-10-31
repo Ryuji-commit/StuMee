@@ -135,58 +135,6 @@
         + '/'
     );
 
-    chatSocket.onmessage = function(e) {
-        const data = JSON.parse(e.data);
-        const now = new Date();
-        const hour = ('00' + now.getHours()).slice(-2);
-        const minute = ('00' + now.getMinutes()).slice(-2);
-        const time = hour + ':' + minute;
-        if ({{ user.id }} == data.user_id){
-            var h = '<p class="chat-talk mytalk">'
-                  + '<span class="talk-icon">'
-                  + '<img class="rounded" src='
-                  + data.user_img
-                  + '>'
-                  + '</span>'
-                  + '<span class="my-send-time small">'
-                  + time
-                  + '</span>'
-                  + '<span class="talk-content">'
-                  + data.message
-                  + '</span>'
-                  + '</p>'
-        } else {
-            var h = '<p class="chat-talk">'
-                  + '<span class="talk-icon">'
-                  + '<img class="rounded" src='
-                  + data.user_img
-                  + '>'
-                  + '</span>'
-                  + '<span class="talk-attached-information">'
-                  + '<span class="talk-user small">'
-                  + data.user_name
-                  + '</span>'
-                  + '<span class="talk-send-time small">'
-                  + time
-                  + '</span>'
-                  + '</span>'
-                  + '<span class="talk-content">'
-                  + data.message
-                  + '</span>'
-                  + '</p>'
-        }
-        document.getElementById('chat-append-by-js').insertAdjacentHTML('beforeend',h);
-    };
-
-    chatSocket.onclose = function(e) {
-        console.error('Chat socket closed unexpectedly');
-        if (e.wasClean) {
-            alert(`[close] Connection closed cleanly, code=${e.code} reason=${e.reason}`);
-        } else {
-            alert('[close] Connection died');
-            alert(chatSocket.url);
-        }
-    };
     {% include 'stumee_chat/js-related-frame-of-chat.html' %}
 </script>
 
