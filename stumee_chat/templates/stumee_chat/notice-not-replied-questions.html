@@ -1,5 +1,5 @@
 <script>
-    window.onload = function() {
+    window.addEventListener('load', function() {
         function poll(receivedData) {
             let parsedData = [];
             fetch("{% url "stumee_chat:polling-for-unread-question" course_id %}", {
@@ -41,5 +41,5 @@
                 });
         }
         poll([{id: "none", username: "none"}]);
-    }
+    })
 </script>

@@ -77,6 +77,8 @@ document.querySelector('#chat-message-submit').onclick = function(e) {
     messageInputDom.setAttribute("rows", 1);
 };
 
+document.getElementById("chat-message-input").oninput = height_expansion;
+
 function height_expansion(){
     const ChatContentTextArea = document.getElementById("chat-message-input");
     const maxLineHeight = 5;
@@ -92,18 +94,6 @@ function height_expansion(){
         ChatContentTextArea.setAttribute("rows", LineHeight);
     }
 }
-
-const getCookie = name =>{
-    if (document.cookie && document.cookie !== '') {
-        for (const cookie of document.cookie.split(';')){
-            const [key, value] = cookie.trim().split('=');
-            if(key === name) {
-                return decodeURIComponent(value);
-            }
-        }
-    }
-};
-const csrftoken = getCookie('csrftoken');
 
 document.querySelector('#file-upload-button').onclick = function(e) {
     const FileUploadForm = document.querySelector('#id_file');
@@ -124,13 +114,19 @@ document.querySelector('#id_file').onchange = function(e) {
         return response.json();
     }).then(response => {
         const extension = response.url.split('.').pop().toLowerCase();
-
-        if (['png', 'jpg', 'gif', 'jpeg', 'bmp'].includes(extension)) {
-            console.log('画像' + response.url);
-        } else {
-            console.log('ファイル' + response.url);
-        }
+        sendFileURL(response.url, response.filename);
     }).catch(error => {
         console.log(error);
     });
+}
+
+function sendFileURL(fileURL, fileName) {
+    const messageInputDom = document.querySelector('#chat-message-input');
+
+    $('#confirm-send-file-modal').modal('show');
+    document.querySelector('#file-send-btn').onclick = function(e) {
+        messageInputDom.value = `<a href=${fileURL}>ファイル：${fileName}</a>`;
+        document.querySelector('#chat-message-submit').click();
+        $('#confirm-send-file-modal').modal('hide');
+    }
 }

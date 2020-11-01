@@ -87,5 +87,6 @@ def process_for_uploaded_file(request):
     form = FileUploadForm(files=request.FILES)
     if form.is_valid():
         url = form.save()
-        return JsonResponse({'url': url})
+        file_obj = request.FILES['file']
+        return JsonResponse({'url': url, 'filename': file_obj.name})
     return HttpResponseBadRequest()

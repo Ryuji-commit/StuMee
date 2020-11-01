@@ -2,6 +2,8 @@
 
 {% block title %}質問ルーム{% endblock %}
 
+{% load urlize_filter %}
+
 {% load study_tags %}
 
 {% block content %}
@@ -67,7 +69,7 @@
                             <img class="rounded" src="{{ message.user.small.url }}">
                         </span>
                         <span class="my-send-time small">{{ message.created_at|date:"H:i" }}</span>
-                        <span class="talk-content">{{ message.content }}</span>
+                        <span class="talk-content">{{ message.content|my_urlize }}</span>
                     </p>
                     {% else %}
                     <p class="chat-talk">
@@ -78,7 +80,7 @@
                             <span class="talk-user small">{{ message.user.username }}</span>
                             <span class="talk-send-time small">{{ message.created_at|date:"H:i" }}</span>
                         </span>
-                        <span class="talk-content">{{ message.content }}</span>
+                        <span class="talk-content">{{ message.content|my_urlize }}</span>
                     </p>
                     {% endifequal %}
                 {% endfor %}
@@ -88,7 +90,7 @@
             </div>
 
             <div class="form-group mt-5">
-                <textarea id="chat-message-input" rows="1" class="form-control" placeholder="質問を入力(Ctrl+Enterで送信)" oninput="height_expansion();"></textarea><br>
+                <textarea id="chat-message-input" rows="1" class="form-control" placeholder="質問を入力(Ctrl+Enterで送信)"></textarea><br>
                 <button type="submit" class="btn btn-primary mr-3" id="chat-message-submit">チャット送信</button>
                 <button type="submit" class="btn btn-primary mr-3" id="file-upload-button">ファイル送信</button>
                 <button type="submit" class="btn btn-primary" id="start-video">画面共有開始</button>
@@ -105,9 +107,29 @@
                 <div class="ml-5">相手</div>
                 <div class="remote-streams m-3" id="remote-videos"></div>
             </div>
-
         </div>
     </div>
+
+    <div class="modal fade" id="confirm-send-file-modal" tabindex="-1" role="dialog" aria-labelledby="label1" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="label1">送信確認</h5>
+                    <button type="button" class="close cancel-file-send-btn" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    ファイルを送信しますか？
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary cancel-file-send-btn" data-dismiss="modal">キャンセル</button>
+                    <button type="button" id="file-send-btn" class="btn btn-primary">送信</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 {{ request.get_full_path | json_script:"RoomNameURL" }}
@@ -118,26 +140,30 @@
 <!-- JS読み込み -->
 {% block extrajs %}
 <script>
-    const CourseID = JSON.parse(document.getElementById('course-id').textContent);
-    const UserID = JSON.parse(document.getElementById('user-id').textContent);
-    let ws_protocol = 'ws'
+    {% include 'stumee_auth/js-csrftoken.html' %}
 
-    if (location.protocol == 'https:'){
-        ws_protocol = 'wss';
-    }
+    window.addEventListener('load', function() {
+        const CourseID = JSON.parse(document.getElementById('course-id').textContent);
+        const UserID = JSON.parse(document.getElementById('user-id').textContent);
+        let ws_protocol = 'ws'
 
-    const chatSocket = new WebSocket(
-        ws_protocol
-        + '://'
-        + window.location.host
-        + '/ws/chat/'
-        + CourseID
-        + '/question/'
-        + UserID
-        + '/'
-    );
+        if (location.protocol == 'https:'){
+            ws_protocol = 'wss';
+        }
 
-    {% include 'stumee_chat/js-related-frame-of-chat.html' %}
+        const chatSocket = new WebSocket(
+            ws_protocol
+            + '://'
+            + window.location.host
+            + '/ws/chat/'
+            + CourseID
+            + '/question/'
+            + UserID
+            + '/'
+        );
+
+        {% include 'stumee_chat/js-related-frame-of-chat.html' %}
+    })
 </script>
 
 <!-- include Long Polling function -->
