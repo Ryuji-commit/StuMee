@@ -79,6 +79,10 @@ document.querySelector('#chat-message-submit').onclick = function(e) {
 
 const htmlEscape = (str) => {
     if (!str) return;
+    // もしaタグを含んでいてscriptタグを含んでいなかったら
+    if (/^(?=.*a href)(?!.*<script>)/.test(str)) {
+        return str;
+    }
     return str.replace(/[<>&"'`]/g, (match) => {
         const escape = {
             '<': '&lt;',
