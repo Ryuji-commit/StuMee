@@ -15,7 +15,7 @@ chatSocket.onmessage = function(e) {
               + time
               + '</span>'
               + '<span class="talk-content">'
-              + data.message
+              + htmlEscape(data.message)
               + '</span>'
               + '</p>'
     } else {
@@ -34,7 +34,7 @@ chatSocket.onmessage = function(e) {
               + '</span>'
               + '</span>'
               + '<span class="talk-content">'
-              + data.message
+              + htmlEscape(data.message)
               + '</span>'
               + '</p>'
     }
@@ -76,6 +76,21 @@ document.querySelector('#chat-message-submit').onclick = function(e) {
     messageInputDom.value = '';
     messageInputDom.setAttribute("rows", 1);
 };
+
+const htmlEscape = (str) => {
+    if (!str) return;
+    return str.replace(/[<>&"'`]/g, (match) => {
+        const escape = {
+            '<': '&lt;',
+            '>': '&gt;',
+            '&': '&amp;',
+            '"': '&quot;',
+            "'": '&#39;',
+            '`': '&#x60;'
+        };
+        return escape[match];
+    });
+}
 
 document.getElementById("chat-message-input").oninput = height_expansion;
 

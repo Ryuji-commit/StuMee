@@ -11,6 +11,7 @@ register = template.Library()
 # この関数に時間を渡して、そのファイルが開けるかどうか判定する
 # もし開けなかったら、disableをつけるなりして、リンクを渡さないようにする
 # AWSのアクセス許容時間を調べる
+# あと、チャット送信時にバリデーションを行うようにする
 
 @register.filter
 @stringfilter
@@ -20,7 +21,7 @@ def my_urlize(text, autoescape=None):
     else:
         esc = (lambda x: x)
 
-    if "<a href" in text:
+    if "<a href" in text and "<script>" not in text:
         file_link = re.match(r'<a.*?href=(.*?)>', text)
         file_name = re.match(r'<a.*?>(.*?)</a>', text)
         result = '<a href={}>{}</a>'.format(file_link.group(1), file_name.group(1))
