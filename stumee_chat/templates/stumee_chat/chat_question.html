@@ -23,7 +23,7 @@
                                         質問に回答する
                                     </button>
                                     <!-- ドロップメニューの設定 -->
-                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <div class="dropdown-menu scrollable-menu" aria-labelledby="dropdownMenuButton">
                                         {% for channel in student_channel %}
                                             <a class="dropdown-item" href="{% url 'stumee_chat:chat_question' channel.course.id channel.user.id %}">{{ channel.user.username }}</a>
                                         {% endfor %}

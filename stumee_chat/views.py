@@ -23,7 +23,7 @@ def chat_question(request, course_id, user_id):
         is_discussion=False,
     )
 
-    student_channel = Channel.objects.exclude(user=course.create_user).filter(course=course).order_by('is_active')
+    student_channel = Channel.objects.exclude(user=course.create_user).filter(course=course).order_by('user__username')
     messages = Message.objects.filter(channel__id=channel.id).order_by('created_at')
     return render(request, 'stumee_chat/chat_question.html', {
         'course_id': course_id,
@@ -50,7 +50,7 @@ def chat_discussion(request, course_id):
         is_discussion=True,
     )
 
-    student_channel = Channel.objects.exclude(user=user).filter(course=course)
+    student_channel = Channel.objects.exclude(user=user).filter(course=course).order_by('user__username')
     messages = Message.objects.filter(channel__id=channel.id).order_by('created_at')
     return render(request, 'stumee_chat/chat_discussion.html', {
         'course_id': course_id,

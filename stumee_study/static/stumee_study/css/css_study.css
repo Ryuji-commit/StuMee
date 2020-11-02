@@ -135,3 +135,9 @@ div.operate_course a {
 .tooltip-inner {
     max-width: 300px;
 }
+
+.scrollable-menu {
+    height: auto;
+    max-height: 300px;
+    overflow: auto;
+}
