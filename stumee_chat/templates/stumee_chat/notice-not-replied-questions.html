@@ -25,11 +25,16 @@
                     parsedData = JSON.parse(studentsData);
                     parsedData.forEach(student => {
                         newElement +=
-                            '<a href= "'
+                           '<div class="row">'
+                           + '<a href= "'
                            + '{% url 'stumee_chat:chat_question' course_id 12345 %}'.replace(/12345/, student.id) //need change!
-                           + '" class="list-group-item list-group-item-action">'
+                           + '" class="list-group-item list-group-item-action col-8 rounded-0 h-100">'
                            + student.username
                            + '</a>'
+                           + `<button class="col-3 check-this-question btn btn-outline-secondary rounded-0 h-100" data-checked-question-id="${student.id}">`
+                           + '<i class="fas fa-check-circle"></i>'
+                           + '</button>'
+                           + '</div>'
                     });
                     studentsList.innerHTML = newElement;
                 })
@@ -41,5 +46,22 @@
                 });
         }
         poll([{id: "none", username: "none"}]);
+
+        $("#student-name-list").on("click","button.check-this-question",function(){
+            const checkedQuestionID = $(this).attr('data-checked-question-id');
+            checkTheQuestion(checkedQuestionID);
+        });
+
+        function checkTheQuestion(questionID) {
+            fetch("{% url "stumee_chat:inactivate-channel" course_id 12345 %}".replace(/12345/, questionID), {
+                method: 'GET',
+            }).then((response) => {
+                return response.json();
+            }).then((responseJson) => {
+                console.log(responseJson);
+            }).catch((error) => {
+                console.log(error);
+            });
+        }
     })
 </script>

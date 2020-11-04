@@ -90,3 +90,16 @@ def process_for_uploaded_file(request):
         file_obj = request.FILES['file']
         return JsonResponse({'url': url, 'filename': file_obj.name})
     return HttpResponseBadRequest()
+
+
+def inactivate_channel(request, course_id, user_id):
+    course = Course.objects.get(id=course_id)
+    student = CustomUser.objects.get(id=user_id)
+    channel = Channel.objects.get(course=course, user=student)
+    if channel.is_active:
+        message = "processed accordingly"
+        channel.is_active = False
+        channel.save()
+    else:
+        message = "failed inactivate"
+    return JsonResponse(data={'message': message})
