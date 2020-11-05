@@ -25,10 +25,10 @@
                     parsedData = JSON.parse(studentsData);
                     parsedData.forEach(student => {
                         newElement +=
-                           '<div class="row">'
+                           '<div class="row" style="max-width: 200px;">'
                            + '<a href= "'
                            + '{% url 'stumee_chat:chat_question' course_id 12345 %}'.replace(/12345/, student.id) //need change!
-                           + '" class="list-group-item list-group-item-action col-8 rounded-0 h-100">'
+                           + '" class="list-group-item list-group-item-action col-8 rounded-0 h-100 text-truncate">'
                            + student.username
                            + '</a>'
                            + `<button class="col-3 check-this-question btn btn-outline-secondary rounded-0 h-100" data-checked-question-id="${student.id}">`
