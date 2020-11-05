@@ -1,6 +1,7 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
+from django.conf import settings
 
 from .models import Message, Channel
 from stumee_study.models import Course
@@ -76,6 +77,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
             if self.user == channel_user:
                 channel.is_active = True
+                email_subject = "StuMee:新規の質問がありました"
+                email_message = "コース名[{}]にて、{}さんから新規の質問がありました。".format(course.title, channel_user.username)
+                from_email = settings.DEFAULT_FROM_EMAIL
+                for ta_user in course.staffs.all():
+                    ta_user.email_user(email_subject, email_message, from_email)
             else:
                 channel.is_active = False
             channel.save()
