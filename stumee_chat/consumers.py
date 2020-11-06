@@ -2,6 +2,7 @@ import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
 from django.conf import settings
+from django.core.mail import send_mail
 
 from .models import Message, Channel
 from stumee_study.models import Course
@@ -37,7 +38,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
         user_id = text_data_json['user_id']
         user_img = text_data_json['user_img']
         user_name = text_data_json['user_name']
-        await self.create_message(message)
         # Send message to room group
         await self.channel_layer.group_send(
             self.room_group_name,
@@ -63,6 +63,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
             'user_img': user_img,
             'user_name': user_name,
         }))
+        if self.user.id == user_id:
+            await self.create_message(message)
 
     @database_sync_to_async
     def create_message(self, message):
@@ -80,8 +82,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 email_subject = "StuMee:新規の質問がありました"
                 email_message = "コース名[{}]にて、{}さんから新規の質問がありました。".format(course.title, channel_user.username)
                 from_email = settings.DEFAULT_FROM_EMAIL
-                for ta_user in course.staffs.all():
-                    ta_user.email_user(email_subject, email_message, from_email)
+                recipient_list = list(course.staffs.values_list('email', flat=True))
+                send_mail(email_subject, email_message, from_email, recipient_list)
             else:
                 channel.is_active = False
             channel.save()
