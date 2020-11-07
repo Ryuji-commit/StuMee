@@ -9,4 +9,5 @@ urlpatterns = [
     path('<int:course_id>/response_unread_/', views.response_for_unread_question, name='polling-for-unread-question'),
     path('process_for_uploaded_file/', views.process_for_uploaded_file, name='process_for_uploaded_file'),
     path('<int:course_id>/inactivate_channel/<int:user_id>/', views.inactivate_channel, name='inactivate-channel'),
+    path('receive_and_save_problem_nums', views.receive_and_save_problem_nums, name='post-problem-nums')
 ]

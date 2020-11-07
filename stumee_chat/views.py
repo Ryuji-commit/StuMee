@@ -1,16 +1,15 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
-from django.views.decorators.http import condition
 from django.http import JsonResponse, HttpResponseBadRequest
+from django import forms
 import json
 import time
-import asyncio
 
 from .models import Message, Channel
 from stumee_study.models import Course
 from stumee_auth.models import CustomUser
-from .forms import FileUploadForm
+from .forms import FileUploadForm, ProblemNumsUploadForm
 
 # Create your views here.
 @login_required
@@ -25,12 +24,27 @@ def chat_question(request, course_id, user_id):
 
     student_channel = Channel.objects.exclude(user=course.create_user).filter(course=course).order_by('user__username')
     messages = Message.objects.filter(channel__id=channel.id).order_by('created_at')
+
+    if request.method == 'GET':
+        problem_nums_form = ProblemNumsUploadForm()
+        if course.problem_nums:
+            problem_nums = course.problem_nums
+            choices = [(i+1, "問題{}".format(i+1)) for i in range(problem_nums)]
+            choices.append((problem_nums+1, "終了"))
+            problem_nums_form.fields['problem_being_solved'].choices = choices
+            problem_nums_form.fields['problem_being_solved'].initial =\
+                channel.problem_being_solved if channel.problem_being_solved else 1
+        else:
+            problem_nums_form.fields['problem_being_solved'].widget = forms.HiddenInput()
+            problem_nums_form.fields['problem_being_solved'].choices = [(-1, "入力の必要はありません")]
+
     return render(request, 'stumee_chat/chat_question.html', {
         'course_id': course_id,
         'user_id': user_id,
         'chat_messages': messages,
         'student_channel': student_channel,
         'form': FileUploadForm(),
+        'problem_nums_form': problem_nums_form,
     })
 
 
@@ -103,3 +117,18 @@ def inactivate_channel(request, course_id, user_id):
     else:
         message = "failed inactivate"
     return JsonResponse(data={'message': message})
+
+
+def receive_and_save_problem_nums(request):
+    received_data = json.loads(request.body)
+    course_id = received_data['course_id']
+    user_id = received_data['user_id']
+    problem_nums = received_data['problem_nums']
+
+    course = Course.objects.get(id=course_id)
+    student = CustomUser.objects.get(id=user_id)
+    channel = Channel.objects.get(course=course, user=student)
+
+    channel.problem_being_solved = problem_nums
+    channel.save()
+    return JsonResponse(data={'problem_nums': problem_nums})

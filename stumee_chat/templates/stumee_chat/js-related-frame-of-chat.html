@@ -149,3 +149,25 @@ function sendFileURL(fileURL, fileName) {
         $('#confirm-send-file-modal').modal('hide');
     }
 }
+
+const problemNumsForm =  document.querySelector('#id_problem_being_solved');
+problemNumsForm.onchange = function(e) {
+    const form_value = problemNumsForm.value;
+    const data = {course_id: "{{course_id}}", user_id: "{{user.id}}", problem_nums: form_value};
+    fetch('{% url 'stumee_chat:post-problem-nums' %}', {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrftoken,
+        },
+    }).then(response => {
+        return response.json();
+    }).then(response => {
+        $('#id_problem_being_solved').tooltip('hide');
+        problemNumsForm.blur()
+        problemNumsForm.options[response.problem_nums-1].selected = true;
+    }).catch(error => {
+        console.log(error);
+    });
+}

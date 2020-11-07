@@ -15,3 +15,13 @@ class FileUploadForm(forms.Form):
         super().__init__(*args, **kwargs)
         self.fields['file'].widget.attrs = {'style': 'display:none'}
         self.fields['file'].label = ''
+
+
+class ProblemNumsUploadForm(forms.Form):
+    problem_being_solved = forms.ChoiceField(
+        label="進行度",
+        required=False,
+        widget=forms.widgets.Select(attrs={'class': 'form-control',
+                                           'data-toggle': 'tooltip',
+                                           'title': '現在取り組んでいる問題番号を選択'}),
+    )

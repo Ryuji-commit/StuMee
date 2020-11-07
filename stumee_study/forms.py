@@ -7,7 +7,7 @@ class CreateCourseForm(forms.ModelForm):
 
     class Meta:
         model = models.Course
-        fields = ('title', 'description', 'category', 'staffs', 'certification_key')
+        fields = ('title', 'description', 'category', 'staffs', 'certification_key', 'problem_nums')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -18,6 +18,8 @@ class CreateCourseForm(forms.ModelForm):
                                               'data-html': 'true'}
         self.fields['category'].widget.attrs = {'data-toggle': 'tooltip',
                                                 'title': '受講する学生の学年を選んでください'}
+        self.fields['problem_nums'].widget.attrs = {'data-toggle': 'tooltip',
+                                                    'title': '問題数を入力してください。これはオプションです。'}
         self.fields['certification_key'].widget.attrs = {'data-toggle': 'tooltip',
                                                          'title': '認証キーを設定してください<br>'
                                                                   '学生がコースに登録する際に必要です',
@@ -40,7 +42,7 @@ class UpdateCourseForm(forms.ModelForm):
 
     class Meta:
         model = models.Course
-        fields = ('title', 'description', 'category', 'staffs', 'certification_key')
+        fields = ('title', 'description', 'category', 'staffs', 'certification_key', 'problem_nums')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -51,6 +53,8 @@ class UpdateCourseForm(forms.ModelForm):
                                               'data-html': 'true'}
         self.fields['category'].widget.attrs = {'data-toggle': 'tooltip',
                                                 'title': '受講する学生の学年を選んでください'}
+        self.fields['problem_nums'].widget.attrs = {'data-toggle': 'tooltip',
+                                                    'title': '問題数を入力してください。これはオプションです。'}
         self.fields['certification_key'].widget.attrs = {'data-toggle': 'tooltip',
                                                          'title': '認証キーを設定してください<br>'
                                                                   '学生がコースに登録する際に必要です',

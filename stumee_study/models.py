@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 from stumee_auth.models import CustomUser
 from datetime import datetime
@@ -21,6 +22,7 @@ class Course(models.Model):
     students = models.ManyToManyField(CustomUser, related_name='students', blank=True, default=None)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
     certification_key = models.CharField(max_length=10, null=True)
+    problem_nums = models.IntegerField(null=True, blank=True, validators=[MinValueValidator(1), MaxValueValidator(50)])
 
     def __str__(self):
         return self.title
