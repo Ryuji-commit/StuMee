@@ -148,3 +148,20 @@ def student_info_of_the_course(request, course_id):
         'students_number': students_number,
         'students_message_number': students_message_number,
     })
+
+
+def response_students_progress_data(request):
+    course_id = request.POST.get('course_id')
+    course = Course.objects.get(id=course_id)
+    labels = ["問題 {}".format(i+1) for i in range(course.problem_nums)]
+    labels.append("終了")
+    data_sets = [{
+        "label": "学生の進捗状況(5分毎更新)",
+        "data": ["10", "20", "30", "3"]
+    }]
+    response_dict = {
+        "labels": labels,
+        "datasets": data_sets,
+        "options": {}
+    }
+    return JsonResponse(response_dict)

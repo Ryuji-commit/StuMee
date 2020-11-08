@@ -5,8 +5,8 @@
 {% block content %}
 <div class="container-fluid">
     <div class="row">
-        <div class="col-2 p-0">
-            <nav class="nav flex-column border-right ml-3">
+        <div class="col-2 p-0 border-right">
+            <nav class="nav flex-column ml-3">
                 <a href="" class="mb-3 text-primary font-weight-bold"><i class="fas fa-chart-line mr-1"></i>Dashboard</a>
                 <a href="" class="mb-3 text-dark font-weight-bold"><i class="fas fa-users mr-1"></i>Sample</a>
             </nav>
@@ -46,7 +46,47 @@
                     </div>
                 </div>
             </div>
+            <canvas id="graph-students-progress" class="my-3"></canvas>
         </div>
     </div>
 </div>
 {% endblock content %}
+
+{% block extrajs %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
+<script>
+    {% include 'stumee_auth/js-csrftoken.html' %}
+    myCanvas = document.getElementById('graph-students-progress');
+
+    function drawChart(responseData) {
+        if (myChart) {
+            myChart.destroy();
+        }
+
+        var myChart = new Chart(myCanvas, {
+            "type":"bar",
+            "data": responseData
+        });
+    }
+
+    function fetchStudentsProgressData() {
+        fetch('{% url 'stumee_chat:students-progress-data' %}', {
+            method: 'POST',
+            body: 'course_id={{course.id}}',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
+                'X-CSRFToken': csrftoken,
+            },
+        }).then(response => {
+            return response.json();
+        }).then(response => {
+            drawChart(response);
+        }).catch(error => {
+            console.log(error);
+        });
+    }
+
+    fetchStudentsProgressData();
+    setInterval(fetchStudentsProgressData, 5*60*1000);
+</script>
+{% endblock extrajs %}

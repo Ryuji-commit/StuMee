@@ -10,5 +10,6 @@ urlpatterns = [
     path('process_for_uploaded_file/', views.process_for_uploaded_file, name='process_for_uploaded_file'),
     path('<int:course_id>/inactivate_channel/<int:user_id>/', views.inactivate_channel, name='inactivate-channel'),
     path('receive_and_save_problem_nums', views.receive_and_save_problem_nums, name='post-problem-nums'),
-    path('<int:course_id>/students_info_of_this_course', views.student_info_of_the_course, name='students-info'),
+    path('<int:course_id>/students_info_of_this_course/', views.student_info_of_the_course, name='students-info'),
+    path('students_progress_data/', views.response_students_progress_data, name='students-progress-data')
 ]
