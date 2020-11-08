@@ -132,3 +132,19 @@ def receive_and_save_problem_nums(request):
     channel.problem_being_solved = problem_nums
     channel.save()
     return JsonResponse(data={'problem_nums': problem_nums})
+
+
+def student_info_of_the_course(request, course_id):
+    course = Course.objects.get(id=course_id)
+    # もし不正アクセスがあればindexページにリダイレクト
+    if not CustomUser.objects.filter(
+            Q(staffs=course) | Q(create_user=course), id=request.user.id
+    ).exists():
+        return redirect('stumee_study:study_index')
+    students_number = course.students.count()
+    students_message_number = Message.objects.filter(channel__course=course, channel__is_discussion=False).count()
+    return render(request, 'stumee_chat/student-info-of-the-course.html', {
+        'course': course,
+        'students_number': students_number,
+        'students_message_number': students_message_number,
+    })

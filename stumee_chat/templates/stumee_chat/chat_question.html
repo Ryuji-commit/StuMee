@@ -58,6 +58,9 @@
                 {% with course_id|judge_if_staffs as staff_list %}
                     {% if user.id in staff_list %}
                         <h1 class="h2">質問に回答</h1>
+                        <a href="{% url 'stumee_chat:students-info' course_id %}" id="student-info-button" class="btn btn-primary" target="_blank" rel="noopener noreferrer">
+                            ダッシュボード
+                        </a>
                     {% else %}
                         <h1 class="h2">TAに質問</h1>
                         {% if problem_nums_form %}

@@ -46,6 +46,9 @@
         <div role="main" class="col-md-8">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <h1 class="h2">相談部屋</h1>
+                <a href="{% url 'stumee_chat:students-info' course_id %}" id="student-info-button" class="btn btn-primary" target="_blank" rel="noopener noreferrer">
+                    ダッシュボード
+                </a>
             </div>
             <div id="chat-frame">
                 {% for message in chat_messages %}

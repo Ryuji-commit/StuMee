@@ -1,0 +1,52 @@
+{% extends 'stumee_study/study_base.html' %}
+
+{% block title %}コース名:{{ course.title }}の学生状況{% endblock title %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-2 p-0">
+            <nav class="nav flex-column border-right ml-3">
+                <a href="" class="mb-3 text-primary font-weight-bold"><i class="fas fa-chart-line mr-1"></i>Dashboard</a>
+                <a href="" class="mb-3 text-dark font-weight-bold"><i class="fas fa-users mr-1"></i>Sample</a>
+            </nav>
+        </div>
+        <div class="col-8" role="main">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h2>[{{ course.title }}] Dashboard</h2>
+            </div>
+            <div class="card-group">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-title text-center"><i class="fas fa-users fa-4x mr-1"></i></div>
+                        <p class="card-text text-center h3">{{ students_number }}</p>
+                        <p class="card-text text-center h5">学生数</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-title text-center"><i class="fas fa-comments fa-4x mr-1"></i></div>
+                        <p class="card-text text-center h3">{{ students_message_number }}</p>
+                        <p class="card-text text-center h5">質問と回答</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-title text-center"><i class="fas fa-question-circle fa-4x mr-1"></i></div>
+                        <p class="card-text text-center h3">
+                            {% if course.problem_nums %}
+                                {{course.problem_nums}}
+                            {% else %}
+                                未設定
+                            {% endif %}
+                        </p>
+                        <p class="card-text text-center h5">問題数</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

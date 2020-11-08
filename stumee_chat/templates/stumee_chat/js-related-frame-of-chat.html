@@ -166,10 +166,14 @@ if (problemNumsForm != null) {
             return response.json();
         }).then(response => {
             $('#id_problem_being_solved').tooltip('hide');
-            problemNumsForm.blur()
+            problemNumsForm.blur();
             problemNumsForm.options[response.problem_nums-1].selected = true;
         }).catch(error => {
             console.log(error);
         });
     }
+}
+
+document.querySelector('#student-info-button').onclick = function(e) {
+    this.blur();
 }
