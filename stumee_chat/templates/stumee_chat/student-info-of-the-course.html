@@ -46,7 +46,11 @@
                     </div>
                 </div>
             </div>
-            <canvas id="graph-students-progress" class="my-3"></canvas>
+            {% if course.problem_nums %}
+                <canvas id="graph-students-progress" class="my-3"></canvas>
+            {% else %}
+                <p class="mt-2 text-center h4">問題数は設定されていません</p>
+            {% endif %}
         </div>
     </div>
 </div>
@@ -86,7 +90,9 @@
         });
     }
 
-    fetchStudentsProgressData();
-    setInterval(fetchStudentsProgressData, 5*60*1000);
+    {% if course.problem_nums %}
+        fetchStudentsProgressData();
+        setInterval(fetchStudentsProgressData, 5*60*1000);
+    {% endif %}
 </script>
 {% endblock extrajs %}
