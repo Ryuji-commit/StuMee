@@ -2,9 +2,11 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.http import JsonResponse, HttpResponseBadRequest
+from django.contrib import messages
 from django import forms
 import json
 import time
+import datetime
 
 from .models import Message, Channel
 from stumee_study.models import Course
@@ -23,7 +25,13 @@ def chat_question(request, course_id, user_id):
     )
 
     student_channel = Channel.objects.exclude(user=course.create_user).filter(course=course).order_by('user__username')
-    messages = Message.objects.filter(channel__id=channel.id).order_by('created_at')
+    chat_messages = Message.objects.filter(channel__id=channel.id).order_by('created_at')
+
+    # 授業時間が設定されていれば、授業時間外であることを通知
+    if course.class_start_time and course.class_end_time:
+        time_now = datetime.datetime.now().time()
+        if not course.class_start_time <= time_now <= course.class_end_time:
+            messages.info(request, f'授業時間外です')
 
     if request.method == 'GET':
         problem_nums_form = ProblemNumsUploadForm()
@@ -41,7 +49,7 @@ def chat_question(request, course_id, user_id):
     return render(request, 'stumee_chat/chat_question.html', {
         'course_id': course_id,
         'user_id': user_id,
-        'chat_messages': messages,
+        'chat_messages': chat_messages,
         'student_channel': student_channel,
         'form': FileUploadForm(),
         'problem_nums_form': problem_nums_form,
@@ -64,11 +72,17 @@ def chat_discussion(request, course_id):
         is_discussion=True,
     )
 
+    # 授業時間が設定されていれば、授業時間外であることを通知
+    if course.class_start_time and course.class_end_time:
+        time_now = datetime.datetime.now().time()
+        if not course.class_start_time <= time_now <= course.class_end_time:
+            messages.info(request, f'授業時間外です')
+
     student_channel = Channel.objects.exclude(user=user).filter(course=course).order_by('user__username')
-    messages = Message.objects.filter(channel__id=channel.id).order_by('created_at')
+    chat_messages = Message.objects.filter(channel__id=channel.id).order_by('created_at')
     return render(request, 'stumee_chat/chat_discussion.html', {
         'course_id': course_id,
-        'chat_messages': messages,
+        'chat_messages': chat_messages,
         'student_channel': student_channel,
         'form': FileUploadForm(),
     })
