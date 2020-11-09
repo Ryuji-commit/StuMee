@@ -155,9 +155,14 @@ def response_students_progress_data(request):
     course = Course.objects.get(id=course_id)
     labels = ["問題 {}".format(i+1) for i in range(course.problem_nums)]
     labels.append("終了")
+
+    data = []
+    students_channels = Channel.objects.filter(course=course, is_discussion=False)
+    for problem_number in range(course.problem_nums+1):
+        data.append(students_channels.filter(problem_being_solved=problem_number+1).count())
     data_sets = [{
         "label": "学生の進捗状況(5分毎更新)",
-        "data": ["10", "20", "30", "3"]
+        "data": data
     }]
     response_dict = {
         "labels": labels,
