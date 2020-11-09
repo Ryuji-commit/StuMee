@@ -23,6 +23,8 @@ class Course(models.Model):
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
     certification_key = models.CharField(max_length=10, null=True)
     problem_nums = models.IntegerField(null=True, blank=True, validators=[MinValueValidator(1), MaxValueValidator(50)])
+    class_start_time = models.TimeField(null=True, blank=True)
+    class_end_time = models.TimeField(null=True, blank=True)
 
     def __str__(self):
         return self.title

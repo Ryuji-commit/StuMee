@@ -4,15 +4,35 @@
 
 {% block content %}
     <div class="container"><h1>コースを作成する</h1></div>
-    <form method="POST" action="">
-        <div class="container">
-            {% for field in form %}
-                <div class="form-group">
-                    {{ field.label_tag }}
-                    {{ field }}
-                    {{ field.errors }}
+        <form method="POST" action="">
+            <div class="container">
+                {% for field in form.visible_fields|slice:":6" %}
+                    <div class="form-group">
+                        {{ field.label_tag }}
+                        {{ field }}
+                        {{ field.errors }}
+                    </div>
+                {% endfor %}
+
+                <div class="form-row mb-3">
+                    {% for field in form.visible_fields|slice:"6:" %}
+                        <div class="col">
+                            {{ field.label_tag }}
+                            {{ field }}
+                            {{ field.errors }}
+                        </div>
+                    {% endfor %}
                 </div>
-            {% endfor %}
+
+                {% if form.hidden_fields %}
+                    {% for field in form.hidden_fields %}
+                        <div class="form-group">
+                            {{ field.label_tag }}
+                            {{ field }}
+                            {{ field.errors }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
             {% csrf_token %}
             <a class="btn btn-secondary btn-sm mr-2" role="button" href="{% url 'stumee_study:study_index' %}">取り消し</a>
             <button class="btn btn-primary btn-sm" type="submit">確定</button>
