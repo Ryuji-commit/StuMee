@@ -67,6 +67,9 @@ document.querySelector('#chat-message-submit').onclick = function(e) {
     if (!message) {
         return false;
     }
+    if (!isDuringClass()) {
+        alert("授業時間外です。このメッセージは読まれない可能性があります。");
+    }
     chatSocket.send(JSON.stringify({
         'message': message,
         'user_id': {{ user.id }},
@@ -76,6 +79,35 @@ document.querySelector('#chat-message-submit').onclick = function(e) {
     messageInputDom.value = '';
     messageInputDom.setAttribute("rows", 1);
 };
+
+function isDuringClass() {
+    // output [input, hour, minute]
+    {% if class_start_time %}
+        regex = /(\d+):(\d+)/
+        const regexResultOfStartTime = '{{ class_start_time|date:"H:i" }}'.match(regex);
+        const classStartTime = returnSetDate(regexResultOfStartTime[1], regexResultOfStartTime[2]);
+        const regexResultOfEndTime = '{{ class_end_time|date:"H:i" }}'.match(regex);
+        const classEndTime = returnSetDate(regexResultOfEndTime[1], regexResultOfEndTime[2]);
+
+        const now = new Date();
+        if (now >= classStartTime && now <= classEndTime) {
+            return true;
+        }
+        return false;
+    {% else %}
+        return true;
+    {% endif %}
+}
+
+function returnSetDate(hour, minute) {
+    const setDate = new Date();
+    setDate.setHours(hour);
+    setDate.setMinutes(minute);
+    setDate.setSeconds(0);
+    setDate.setMilliseconds(0);
+    return setDate;
+}
+
 
 const htmlEscape = (str) => {
     if (!str) return;

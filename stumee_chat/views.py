@@ -53,6 +53,8 @@ def chat_question(request, course_id, user_id):
         'student_channel': student_channel,
         'form': FileUploadForm(),
         'problem_nums_form': problem_nums_form,
+        'class_start_time': course.class_start_time,
+        'class_end_time': course.class_end_time,
     })
 
 
@@ -85,6 +87,8 @@ def chat_discussion(request, course_id):
         'chat_messages': chat_messages,
         'student_channel': student_channel,
         'form': FileUploadForm(),
+        'class_start_time': course.class_start_time,
+        'class_end_time': course.class_end_time,
     })
 
 
