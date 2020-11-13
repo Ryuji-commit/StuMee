@@ -35,6 +35,7 @@ class CustomUser(AbstractUser):
     ]
 
     user_auth = models.IntegerField(verbose_name='権限', default=0, choices=UserAuth)
+    is_certificated = models.BooleanField(default=False)
 
 
 class CertificationPass(models.Model):

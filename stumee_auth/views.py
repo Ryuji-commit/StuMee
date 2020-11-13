@@ -86,17 +86,32 @@ class UserProfileView(LoginRequiredMixin, generic.DetailView):
         return context
 
 
+# もしis_certificatedがTrueならホームに、Falseならフォームを入力
 class CustomCertificationView(generic.FormView):
     template_name = 'stumee_auth/login.html'
     form_class = forms.LoginCertificationForm
-    success_url = reverse_lazy('social:begin', args=['google-oauth2'])
+    success_url = reverse_lazy('stumee_auth:home')
+
+    def get(self, request, *args, **kwargs):
+        # もし認証済みであれば入力の必要がないためホームにリダイレクト
+        if request.user.is_certificated:
+            redirect_url = reverse_lazy('stumee_auth:home')
+            return redirect(redirect_url)
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
+        return self.render_to_response(self.get_context_data(form=form))
 
     def form_valid(self, form):
         certification_pass = form.cleaned_data['certification_password_login']
+        # 入力した認証キーがあっていればホームにリダイレクト
         if CertificationPass.objects.filter(login_certification_key=certification_pass).exists():
+            request_user = self.request.user
+            request_user.is_certificated = True
+            request_user.save()
             return super(CustomCertificationView, self).form_valid(form)
         else:
-            redirect_url = reverse('stumee_auth:home')
+            # 間違っていればログアウトさせる
+            redirect_url = reverse_lazy('stumee_auth:logout')
             return redirect(redirect_url)
 
 

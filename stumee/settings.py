@@ -114,9 +114,10 @@ AUTHENTICATION_BACKENDS = (
 Auth PassWard here 
 '''
 
-LOGIN_URL = 'stumee_auth:login'
+LOGIN_URL = reverse_lazy('social:begin', args=['google-oauth2'])
 LOGOUT_URL = 'stumee_auth:logout'
 LOGOUT_REDIRECT_URL = 'stumee_auth:home'
+LOGIN_REDIRECT_URL = 'stumee_auth:certification-page'
 
 
 # Password validation
@@ -153,16 +154,11 @@ USE_TZ = True
 if DEBUG:
     # on local
     AWS_S3_ENDPOINT_URL = 'http://192.168.99.102:9000'
-    LOGIN_REDIRECT_URL = 'stumee_auth:home'
 else:
     # when on server
     AWS_S3_ENDPOINT_URL = 'https://ymir.eng.kagawa-u.ac.jp'
     AWS_QUERYSTRING_AUTH = False
     AWS_S3_SIGNATURE_VERSION = 's3'
-
-    # when collect static
-    # AWS_S3_ENDPOINT_URL = 'http://133.92.145.23:9000'
-    LOGIN_REDIRECT_URL = 'https://ymir.eng.kagawa-u.ac.jp/stumee/home/'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/

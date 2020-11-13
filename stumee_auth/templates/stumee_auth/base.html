@@ -60,7 +60,7 @@
                         </li>
                     {% else %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'stumee_auth:login' %}">Login</a>
+                            <a class="nav-link" href="{% url 'social:begin' 'google-oauth2' %}">Login</a>
                         </li>
                     {% endif %}
                 </ul>
