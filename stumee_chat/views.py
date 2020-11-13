@@ -14,7 +14,7 @@ from stumee_auth.models import CustomUser
 from .forms import FileUploadForm, ProblemNumsUploadForm
 
 # Create your views here.
-@login_required
+@login_required(redirect_field_name=None)
 def chat_question(request, course_id, user_id):
     course = Course.objects.get(id=course_id)
     user = CustomUser.objects.get(id=user_id)
@@ -58,7 +58,7 @@ def chat_question(request, course_id, user_id):
     })
 
 
-@login_required
+@login_required(redirect_field_name=None)
 def chat_discussion(request, course_id):
     course = Course.objects.get(id=course_id)
     # もし不正アクセスがあればindexページにリダイレクト

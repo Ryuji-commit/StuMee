@@ -18,7 +18,7 @@ def home(request):
 
 
 # The view for setting user profile
-@login_required
+@login_required(redirect_field_name=None)
 def user_setting(request):
     initial_dict = {
         'username': request.user.username,

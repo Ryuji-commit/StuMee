@@ -22,7 +22,7 @@ class IndexView(generic.ListView):
 
 
 # Ask question
-@login_required
+@login_required(redirect_field_name=None)
 def post_thread(request):
     if request.method == "POST":
         form = forms.ThreadForm(request.POST)
@@ -44,7 +44,7 @@ def post_thread(request):
 
 
 # Thread detail
-@login_required
+@login_required(redirect_field_name=None)
 def thread(request, thread_id):
     thread = get_object_or_404(Thread, pk=thread_id)
     comments = Comment.objects.filter(thread=thread).order_by('-good_count')
@@ -77,7 +77,7 @@ def thread(request, thread_id):
 
 
 # Add good for thread
-@login_required
+@login_required(redirect_field_name=None)
 def add_good_for_thread(request, thread_id):
     thread = get_object_or_404(Thread, pk=thread_id)
     good_user_list = [thread_good.user.id for thread_good in ThreadGood.objects.filter(thread=thread).all()]
@@ -94,7 +94,7 @@ def add_good_for_thread(request, thread_id):
 
 
 # Add good for comment
-@login_required
+@login_required(redirect_field_name=None)
 def add_good_for_comment(request, comment_id):
     comment = get_object_or_404(Comment, pk=comment_id)
     good_user_list = [comment_good.user.id for comment_good in CommentGood.objects.filter(comment=comment).all()]
@@ -112,7 +112,7 @@ def add_good_for_comment(request, comment_id):
 
 
 # Pick the thread
-@login_required
+@login_required(redirect_field_name=None)
 def pick_up_thread(request, thread_id):
     thread_picked = get_object_or_404(Thread, pk=thread_id)
     if request.method == "POST":

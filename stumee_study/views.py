@@ -11,7 +11,7 @@ from .forms import CreateCourseForm, CreateCategoryForm, UpdateCourseForm, Cours
 
 
 # Course list
-@login_required
+@login_required(redirect_field_name=None)
 def study_index(request):
     course_list = Course.objects.order_by('-make_date')
     category_list = Category.objects.all()
