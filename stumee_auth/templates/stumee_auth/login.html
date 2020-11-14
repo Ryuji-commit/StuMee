@@ -1,8 +1,11 @@
 {% extends 'stumee_auth/auth_base.html' %}
 
-{% block title %}Loginページ{% endblock title %}
+{% block title %}認証コード入力{% endblock title %}
 
-{% block content %}
+{% block main-nav %}
+{% endblock main-nav %}
+
+{% block certification-form %}
     <div class="container">
         <div class="h4 mb-5 pt-3">
             認証コードを入力してください。
@@ -22,4 +25,4 @@
             </form>
         </div>
     </div>
-{% endblock content %}
+{% endblock certification-form %}

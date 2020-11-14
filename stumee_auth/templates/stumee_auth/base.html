@@ -20,7 +20,7 @@
         {% block externalfile %}{% endblock externalfile %}
     </head>
     <body style="width:100%;">
-
+        {% block main-nav %}
         <nav class="navbar navbar-expand-sm navbar-light bg-light fixed-top">
 
             <!--Logo-->
@@ -75,8 +75,8 @@
                     aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
             </button>
-
         </nav>
+        {% endblock main-nav %}
 
         <div style="margin-top:80px;">
             {% if messages %}
@@ -92,8 +92,22 @@
                 </div>
             {% endif %}
 
-            {% block content %}
-            {% endblock content %}
+            <!-- もしユーザがログインしていて、認証コードを未入力の場合(認証パス入力フォームも含む) -->
+            {% if user.is_authenticated and not user.is_certificated %}
+                {% block certification-form %}
+                    <div class="container">
+                        <div class="text-center">
+                            <h3>認証コード未入力エラー</h3>
+                            <a href="{% url 'stumee_auth:certification-page' %}" class="btn btn-primary mt-3" role="button">
+                                ログイン時の認証コードが未入力です。<br>このボタンをクリックしてください。
+                            </a>
+                        </div>
+                    </div>
+                {% endblock certification-form %}
+            {% else %}
+                {% block content %}
+                {% endblock content %}
+            {% endif %}
         </div>
 
         {% block extrajs %}
