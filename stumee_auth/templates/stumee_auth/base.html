@@ -92,8 +92,8 @@
                 </div>
             {% endif %}
 
-            <!-- もしユーザがログインしていて、認証コードを未入力の場合(認証パス入力フォームも含む) -->
             {% if user.is_authenticated and not user.is_certificated %}
+                <!-- もしユーザがログインしていて、認証コードを未入力の場合(認証パス入力フォームも含む) -->
                 {% block certification-form %}
                     <div class="container">
                         <div class="text-center">
