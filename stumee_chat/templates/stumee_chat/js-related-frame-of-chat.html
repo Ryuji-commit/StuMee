@@ -176,11 +176,31 @@ function sendFileURL(fileURL, fileName) {
 
     $('#confirm-send-file-modal').modal('show');
     document.querySelector('#file-send-btn').onclick = function(e) {
-        messageInputDom.value = `<a href=${fileURL}>ファイル：${fileName}</a>`;
+        messageInputDom.value = `<a href=${fileURL} class="posted-file">ファイル：${fileName}</a>`;
         document.querySelector('#chat-message-submit').click();
         $('#confirm-send-file-modal').modal('hide');
     }
 }
+
+
+$("#chat-frame").on("click", ".posted-file", function (e) {
+    e.preventDefault();
+    let fileName = $(this).text();
+    $("#showFileContentsModal").modal({}, {
+        fileName: fileName,
+    });
+});
+
+$("#showFileContentsModal").on('show.bs.modal', function(e) {
+    var modal = $(this);
+    var fileName = e.relatedTarget.fileName;
+    modal.find("#showFileContentsModalTitle").text(fileName);
+});
+
+$("#showFileContentsModal").on('hidden.bs.modal', function (e) {
+    $("#showFileContentsModalTitle").text("");
+});
+
 
 const problemNumsForm =  document.querySelector('#id_problem_being_solved');
 if (problemNumsForm != null) {
