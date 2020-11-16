@@ -164,41 +164,91 @@ document.querySelector('#id_file').onchange = function(e) {
     }).then(response => {
         return response.json();
     }).then(response => {
-        const extension = response.url.split('.').pop().toLowerCase();
         sendFileURL(response.url, response.filename);
     }).catch(error => {
         console.log(error);
+        alert("ファイルの送信に失敗しました");
     });
 }
 
 function sendFileURL(fileURL, fileName) {
     const messageInputDom = document.querySelector('#chat-message-input');
+    const imageFileExtensions = ['png', 'jpg', 'jpeg', 'gif'];
+    let lowerFileExtension = getLowerFileExtension(fileName);
 
     $('#confirm-send-file-modal').modal('show');
     document.querySelector('#file-send-btn').onclick = function(e) {
-        messageInputDom.value = `<a href=${fileURL} class="posted-file">ファイル：${fileName}</a>`;
+        if (imageFileExtensions.includes(lowerFileExtension)) {
+            messageInputDom.value = `<a href=${fileURL}>画像：${fileName}</a>`;
+        } else {
+            messageInputDom.value = `<a href=${fileURL} class="posted-file">ファイル：${fileName}</a>`;
+        }
         document.querySelector('#chat-message-submit').click();
         $('#confirm-send-file-modal').modal('hide');
     }
 }
 
+function getLowerFileExtension(fileName) {
+    return fileName.toLowerCase().split(/#|\?/)[0].split('.').pop().trim()
+}
+
+function readContentsOfClickedFile(fileURL, fileName) {
+    fetch(fileURL)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('ファイルにアクセスできませんでした');
+            }
+            return response.blob();
+        })
+        .then(blob => new File([blob], fileName))
+        .then(file => {
+            let fileReader = new FileReader();
+            fileReader.readAsText(file);
+
+            fileReader.onload = function () {
+                let fileContents = fileReader.result;
+                $("#showFileContentsModal").modal({}, {
+                    fileName: fileName,
+                    fileContents: fileContents,
+                });
+            };
+
+            fileReader.onerror = function () {
+                throw new Error('ファイルの読み込みに失敗しました');
+            }
+        })
+        .catch(error => {
+            alert(error);
+        });
+}
 
 $("#chat-frame").on("click", ".posted-file", function (e) {
     e.preventDefault();
     let fileName = $(this).text();
-    $("#showFileContentsModal").modal({}, {
-        fileName: fileName,
-    });
+    let fileURL = $(this).attr("href");
+    return readContentsOfClickedFile(fileURL, fileName);
 });
 
 $("#showFileContentsModal").on('show.bs.modal', function(e) {
-    var modal = $(this);
-    var fileName = e.relatedTarget.fileName;
+    let modal = $(this);
+    let fileName = e.relatedTarget.fileName;
+    let fileContents = e.relatedTarget.fileContents;
+    let escapedFileContents = htmlEscape(fileContents);
+
     modal.find("#showFileContentsModalTitle").text(fileName);
+    modal.find("#showFileContentsModalBody").html(`<pre><code>${escapedFileContents}</code></pre>`);
+
+    // re highlight before show modal
+    for (const block of document.querySelectorAll('pre code')) {
+        hljs.highlightBlock(block);
+        hljs.lineNumbersBlock(block);
+    }
 });
 
 $("#showFileContentsModal").on('hidden.bs.modal', function (e) {
-    $("#showFileContentsModalTitle").text("");
+    let modal = $(this);
+    modal.find("#showFileContentsModalTitle").text("");
+    modal.find("#showFileContentsModalBody").text("");
 });
 
 
