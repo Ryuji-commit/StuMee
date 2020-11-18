@@ -179,7 +179,7 @@ function sendFileURL(fileURL, fileName) {
     $('#confirm-send-file-modal').modal('show');
     document.querySelector('#file-send-btn').onclick = function(e) {
         if (imageFileExtensions.includes(lowerFileExtension)) {
-            messageInputDom.value = `<a href=${fileURL}>画像：${fileName}</a>`;
+            messageInputDom.value = `<a href=${fileURL} class="posted-image">画像：${fileName}</a>`;
         } else {
             messageInputDom.value = `<a href=${fileURL} class="posted-file">ファイル：${fileName}</a>`;
         }
@@ -229,19 +229,49 @@ $("#chat-frame").on("click", ".posted-file", function (e) {
     return readContentsOfClickedFile(fileURL, fileName);
 });
 
+$("#chat-frame").on("click", ".posted-image", function (e) {
+    e.preventDefault();
+    let imageName = $(this).text();
+    let imageURL = $(this).attr("href");
+
+    fetch(imageURL)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('画像にアクセスできませんでした');
+            }else {
+                $("#showFileContentsModal").modal({}, {
+                    fileName: imageName,
+                    imageURL: imageURL,
+                });
+            }
+        })
+        .catch(error => {
+            alert(error);
+        });
+});
+
 $("#showFileContentsModal").on('show.bs.modal', function(e) {
     let modal = $(this);
     let fileName = e.relatedTarget.fileName;
-    let fileContents = e.relatedTarget.fileContents;
-    let escapedFileContents = htmlEscape(fileContents);
-
     modal.find("#showFileContentsModalTitle").text(fileName);
-    modal.find("#showFileContentsModalBody").html(`<pre><code>${escapedFileContents}</code></pre>`);
 
-    // re highlight before show modal
-    for (const block of document.querySelectorAll('pre code')) {
-        hljs.highlightBlock(block);
-        hljs.lineNumbersBlock(block);
+    // クリックされたのがソースコードなら
+    if (e.relatedTarget.fileContents) {
+        let fileContents = e.relatedTarget.fileContents;
+        let escapedFileContents = htmlEscape(fileContents);
+        modal.find("#showFileContentsModalBody").html(`<pre><code>${escapedFileContents}</code></pre>`);
+
+        // re highlight before show modal
+        for (const block of document.querySelectorAll('pre code')) {
+            hljs.highlightBlock(block);
+            hljs.lineNumbersBlock(block);
+        }
+    }
+
+    // クリックされたのが画像ファイルなら
+    if (e.relatedTarget.imageURL) {
+        let imageURL = e.relatedTarget.imageURL;
+        modal.find("#showFileContentsModalBody").html(`<image src='${imageURL}' class='img-fluid mx-auto d-block'>`);
     }
 });
 
