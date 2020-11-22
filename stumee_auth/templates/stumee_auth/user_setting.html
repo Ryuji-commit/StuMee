@@ -122,5 +122,11 @@
             const previewIconname = document.querySelector('#posted-iconname');
             previewIconname.textContent = imageFile.name;
         }
+
+        document.onkeydown = function(e) {
+            if (e.ctrlKey && e.keyCode==13) {
+                document.userSetting.submit();
+            }
+        }
     </script>
 {% endblock extrajs %}
