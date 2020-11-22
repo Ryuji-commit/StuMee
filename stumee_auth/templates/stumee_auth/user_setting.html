@@ -3,7 +3,7 @@
 {% block title %}設定{% endblock title %}
 
 {% block content %}
-    <form method="POST" enctype="multipart/form-data">
+    <form method="POST" enctype="multipart/form-data" name="userSetting">
         <div class="container">
             <div class="form-group">
                 <div class="row">
@@ -33,6 +33,7 @@
                             <span class="btn btn-secondary">
                                 変更{{ form.original_image }}
                             </span>
+                            <span id="posted-iconname"></span>
                         </label>
                     </div>
                 </div>
@@ -104,3 +105,22 @@
         </div>
     </div>
 {% endblock content %}
+
+{% block extrajs %}
+    {{ block.super }}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const changeUserIconForm = document.querySelector('#id_original_image');
+            const handleFile = () => {
+                const inputFiles = changeUserIconForm.files;
+                previewFile(inputFiles[0]);
+            }
+            changeUserIconForm.addEventListener('change', handleFile);
+        });
+
+        function previewFile(imageFile){
+            const previewIconname = document.querySelector('#posted-iconname');
+            previewIconname.textContent = imageFile.name;
+        }
+    </script>
+{% endblock extrajs %}
