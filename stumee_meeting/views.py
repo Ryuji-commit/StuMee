@@ -81,7 +81,7 @@ def thread(request, thread_id):
 def add_good_for_thread(request, thread_id):
     thread = get_object_or_404(Thread, pk=thread_id)
     good_user_list = [thread_good.user.id for thread_good in ThreadGood.objects.filter(thread=thread).all()]
-    if request.method == "POST":
+    if request.method == "GET":
         if request.user.id in good_user_list:
             ThreadGood.objects.filter(user=request.user, thread=thread).delete()
         else:
@@ -98,7 +98,7 @@ def add_good_for_thread(request, thread_id):
 def add_good_for_comment(request, comment_id):
     comment = get_object_or_404(Comment, pk=comment_id)
     good_user_list = [comment_good.user.id for comment_good in CommentGood.objects.filter(comment=comment).all()]
-    if request.method == "POST":
+    if request.method == "GET":
         if request.user.id in good_user_list:
             CommentGood.objects.filter(user=request.user, comment=comment).delete()
         else:

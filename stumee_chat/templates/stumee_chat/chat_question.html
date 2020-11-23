@@ -1,4 +1,5 @@
 {% extends 'stumee_study/study_base.html' %}
+{% load static %}
 
 {% block title %}質問ルーム{% endblock %}
 
@@ -169,9 +170,8 @@
 
 <!-- JS読み込み -->
 {% block extrajs %}
+<script type="text/javascript" src="{% static 'stumee_auth/js/js-csrf-token.js'%}"></script>
 <script>
-    {% include 'stumee_auth/js-csrftoken.html' %}
-
     window.addEventListener('load', function() {
         const CourseID = JSON.parse(document.getElementById('course-id').textContent);
         const UserID = JSON.parse(document.getElementById('user-id').textContent);

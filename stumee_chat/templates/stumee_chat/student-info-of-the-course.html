@@ -1,4 +1,5 @@
 {% extends 'stumee_study/study_base.html' %}
+{% load static %}
 
 {% block title %}コース名:{{ course.title }}の学生状況{% endblock title %}
 
@@ -58,8 +59,8 @@
 
 {% block extrajs %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
+<script type="text/javascript" src="{% static 'stumee_auth/js/js-csrf-token.js'%}"></script>
 <script>
-    {% include 'stumee_auth/js-csrftoken.html' %}
     myCanvas = document.getElementById('graph-students-progress');
 
     function drawChart(responseData) {
