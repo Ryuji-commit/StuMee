@@ -5,7 +5,7 @@ import os
 
 class MediaStorage(S3Boto3Storage):
     location = 'media'  # /media というURLで配信
-    file_overwrite = True  # 上書きする
+    file_overwrite = False  # 上書きしない
 
     def _save(self, name, content):
         """
