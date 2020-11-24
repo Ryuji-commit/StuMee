@@ -168,6 +168,8 @@ document.querySelector('#id_file').onchange = function(e) {
     }).catch(error => {
         console.log(error);
         alert("ファイルの送信に失敗しました");
+    }).finally(() => {
+        document.querySelector('#id_file').value = '';
     });
 }
 
