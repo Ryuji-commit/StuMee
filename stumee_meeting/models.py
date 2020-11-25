@@ -37,3 +37,10 @@ class ThreadGood(models.Model):
 class CommentGood(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.PROTECT, default=1)
     comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
+
+
+class CommentToComment(models.Model):
+    comment = models.ForeignKey(Comment, on_delete=models.CASCADE, related_name='comment_to_comment')
+    comment_to_comment = models.TextField('コメント', max_length=200)
+    up_date = models.DateTimeField(default=datetime.now)
+    user = models.ForeignKey(CustomUser, on_delete=models.PROTECT, default=1)

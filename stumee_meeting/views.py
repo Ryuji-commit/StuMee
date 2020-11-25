@@ -5,6 +5,7 @@ from taggit.models import Tag
 from django.db.models import Count
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
+from django.contrib import messages
 
 from .models import Thread, Comment, ThreadGood, CommentGood
 from stumee_auth.models import CustomUser
@@ -55,22 +56,38 @@ def thread(request, thread_id):
         thread_comment.save()
 
     if request.method == "POST":
-        form = forms.CommentForm(request.POST)
-        if form.is_valid():
-            comment = form.save(commit=False)
-            comment.no = Comment.objects.filter(thread=thread).count()+1
-            comment.user = request.user
-            comment.thread = thread
-            comment.save()
-            return HttpResponseRedirect(request.path)
+        if 'answer-submit-btn' in request.POST:
+            answer_form = forms.CommentForm(request.POST)
+            if answer_form.is_valid():
+                comment = answer_form.save(commit=False)
+                comment.no = Comment.objects.filter(thread=thread).count()+1
+                comment.user = request.user
+                comment.thread = thread
+                comment.save()
+                return HttpResponseRedirect(request.path)
+            else:
+                messages.error(request, '使用できない文字列が含まれます', extra_tags='danger')
+                return HttpResponseRedirect(request.path)
+        elif 'comment-submit-btn' in request.POST:
+            comment_form = forms.CommentToCommentForm(request.POST)
+            if comment_form.is_valid():
+                comment_to_comment = comment_form.save(commit=False)
+                comment_to_comment.user = request.user
+                comment_to_comment.save()
+                return HttpResponseRedirect(request.path)
+            else:
+                messages.error(request, '使用できない文字列が含まれます', extra_tags='danger')
+                return HttpResponseRedirect(request.path)
     else:
-        form = forms.CommentForm()
+        answer_form = forms.CommentForm()
+        comment_form = forms.CommentToCommentForm()
     return render(
         request,
         'stumee_meeting/thread.html',
         {
             'thread': thread,
-            'form': form,
+            'answer_form': answer_form,
+            'comment_form': comment_form,
             'comments': comments,
         }
     )

@@ -5,7 +5,7 @@ from stumee_auth.models import CustomUser
 
 
 class ThreadAdmin(admin.ModelAdmin):
-    fields = ['title', 'description', 'name', 'tag']
+    fields = ['title', 'description', 'tag']
 
 
 admin.site.register(Thread, ThreadAdmin)

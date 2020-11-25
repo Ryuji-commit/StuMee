@@ -1,7 +1,3 @@
-div.thread_contents {
-    margin-bottom:20px;
-}
-
 input#id_comment {
     height:150px;
     width:300px;
@@ -19,4 +15,13 @@ span.comment-good-mark {
 
 .need-pre-wrap {
     white-space: pre-wrap;
+}
+
+.add-comment-to-comment:hover {
+    color: lightskyblue;
+}
+
+.add-comment-to-comment {
+    cursor: pointer;
+    color: rgba(0,0,0,0.6);
 }

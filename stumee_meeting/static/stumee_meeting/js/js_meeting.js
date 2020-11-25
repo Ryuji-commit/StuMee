@@ -2,12 +2,11 @@ $(function(){
     $("textarea#id_comment").on("keydown", function(e){
         if(e.ctrlKey){
 			if(e.keyCode === 13 && $(this).val()){
-				$('button#comment-submit-btn').click();
+				$('button#answer-submit-btn').click();
       	    }
       	}
     });
 });
-
 
 
 // 一般に使用するjs

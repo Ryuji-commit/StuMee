@@ -60,7 +60,7 @@
                 <h4 class="mb-3">この質問に対する回答</h4>
                 {% if comments %}
                 {% for comment in comments %}
-                    <div class="thread_contents border-bottom pb-4">
+                    <div class="thread_contents border-bottom mb-1 mt-5">
                         <div class="text need-pre-wrap">{{ comment.comment }}</div>
                         <div class="comment-good">
                             <span class="comment-good-mark" data-href="{% url 'stumee_meeting:comment_good' comment.id %}">&hearts;</span>
@@ -78,6 +78,16 @@
                             </div>
                         </div>
                     </div>
+
+                    {% if comment.comment_to_comment.all %}
+                        {% for comment_to_comment in comment.comment_to_comment.all %}
+                            <div class="comment_contents border-bottom ml-4 text-left">
+                                <p class="pt-2 need-pre-wrap">{{ comment_to_comment.comment_to_comment }} - <a href="{% url 'stumee_auth:profile' comment_to_comment.user.id %}">{{ comment_to_comment.user.username }}</a></p>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+
+                    <small class="add-comment-to-comment ml-4" data-comment-pk="{{ comment.pk }}" data-comment-username="{{ comment.user.username }}">コメント追加</small>
                 {% endfor %}
                 {% else %}
                 <div>まだ回答がありません。</div>
@@ -85,16 +95,28 @@
             </div>
 
             <div>
-                <h4 class="mt-4">この質問に回答する</h4>
-                <form method="POST" action="">
-                    {% for field in form %}
+                <h4 class="mt-4" id="comment-forms-title">この質問に回答する</h4>
+                <form method="POST" action="" id="answer-comment-form">
+                    {% for field in answer_form %}
                         <div class="form-group">
                             {{ field }}
                             {{ field.errors }}
                         </div>
                     {% endfor %}
                     {% csrf_token %}
-                    <button class="btn btn-primary btn-sm" type="submit" id="comment-submit-btn">回答する</button>
+                    <button class="btn btn-primary btn-sm" type="submit" id="answer-submit-btn" name="answer-submit-btn">回答する</button>
+                </form>
+
+                <form method="POST" action="" id="comment-to-comment-form" style="display:none">
+                    {% for field in comment_form %}
+                        <div class="form-group">
+                            {{ field }}
+                            {{ field.errors }}
+                        </div>
+                    {% endfor %}
+                    {% csrf_token %}
+                    <button class="btn btn-secondary btn-sm" id="comment-cancel-btn">キャンセル</button>
+                    <button class="btn btn-primary btn-sm" type="submit" id="comment-submit-btn" name="comment-submit-btn">コメントする</button>
                 </form>
             </div>
 
@@ -106,5 +128,6 @@
 {% block extrajs %}
     {{ block.super }}
     <script type="text/javascript" src="{% static 'stumee_meeting/js/js-add-good-count.js'%}"></script>
+    <script type="text/javascript" src="{% static 'stumee_meeting/js/js-comment-to-comment.js'%}"></script>
 {% endblock extrajs %}
 
