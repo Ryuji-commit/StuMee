@@ -27,6 +27,8 @@ function SetUpCommentForm(e){
     commentFormsTitle.innerText = `@${clickedButton.dataset.commentUsername} にコメント`;
     console.log(commentSelectForm);
     commentSelectForm.value = clickedButton.dataset.commentPk;
+
+    document.getElementById('id_comment_to_comment').focus();
 }
 
 function OperateDisplayAnswerForm(isShow) {
