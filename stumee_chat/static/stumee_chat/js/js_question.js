@@ -88,9 +88,9 @@ function setupRoomEventHandlers(room){
         newVideo.srcObject = stream;
         newVideo.muted = true;
         newVideo.playsInline = true;
+        newVideo.controls = true;
         newVideo.setAttribute('data-peer-id', stream.peerId);
         $('#remote-videos').append(newVideo);
-        setUpUnMutedButton(stream.peerId);
         await newVideo.play().catch(console.error);
     });
 
@@ -136,25 +136,6 @@ function setupEndCallUI() {
 function removeAllRemoteVideos(){
     $('#remote-videos').empty();
     $('#videos-container').hide();
-}
-
-function UnMuteRemoteVideo(video_id) {
-    const remoteVideo = remoteVideos.querySelector('[data-peer-id="' + video_id + '"]');
-    remoteVideo.muted = false;
-    console.log('un muted');
-    const unMutedButton = document.querySelector('[id="' + video_id + '"]');
-    unMutedButton.remove();
-}
-
-function setUpUnMutedButton(StreamPeerID){
-    const $remoteVideo = remoteVideos.querySelector('[data-peer-id="' + StreamPeerID + '"]');
-    const UnMutedButton = document.createElement('button');
-    UnMutedButton.setAttribute('type', 'submit');
-    UnMutedButton.setAttribute('class', 'btn btn-primary un-muted mb-2 align-top');
-    UnMutedButton.setAttribute('id', StreamPeerID);
-    UnMutedButton.setAttribute('onclick', "UnMuteRemoteVideo(this.id);");
-    UnMutedButton.innerHTML = '相手の音声を追加'
-    $remoteVideo.before(UnMutedButton);
 }
 
 $(function(){

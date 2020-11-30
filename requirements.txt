@@ -1,12 +1,12 @@
-Django
+Django == 3.1
 psycopg2
 social-auth-app-django
 django-taggit
 Pillow
 django-imagekit
 django-cleanup
-channels
-channels_redis
+channels == 2.4.0
+channels_redis == 3.0.1
 django-storages
 boto3
 

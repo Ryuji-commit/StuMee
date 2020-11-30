@@ -6,6 +6,8 @@ from django.db.models import Count
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse
 
 from .models import Thread, Comment, ThreadGood, CommentGood
 from stumee_auth.models import CustomUser
@@ -195,3 +197,17 @@ class AllUserView(generic.ListView):
     def get_queryset(self):
         queryset = CustomUser.objects.all()
         return queryset
+
+
+class DeleteThreadView(LoginRequiredMixin, generic.DeleteView):
+    model = Thread
+
+    def get_success_url(self):
+        return reverse('stumee_meeting:index')
+
+    def delete(self, request, *args, **kwargs):
+        self.object = request_delete_thread = self.get_object()
+        if request.user == request_delete_thread.user:
+            request_delete_thread.delete()
+
+        return redirect(self.get_success_url())

@@ -28,7 +28,7 @@
                                             {% endif %}
                                         {% endblock show_is_picked %}
                                     </div>
-                                    <div class="col-sm-2">
+                                    <div class="col-sm-2 row">
                                         {% if user.user_auth is not 0 and user.is_authenticated %}
                                         <form action="{% url 'stumee_meeting:thread_pickup' thread.id %}" method="post">
                                             {% csrf_token %}
@@ -40,6 +40,36 @@
                                             {% endif %}
                                         </form>
                                         {% endif %}
+
+                                        {% ifequal user thread.user %}
+                                        <div class="ml-3 pt-1">
+                                            <a data-toggle="modal" data-target="#ThreadDeleteModal{{ thread.pk }}"><i class="fas fa-trash-alt"></i></a>
+                                            <!-- modal Course Delete Modal -->
+                                            <div class="modal fade" id="ThreadDeleteModal{{ thread.pk }}" tabindex="-1" role="dialog" aria-labelledby="ThreadDeleteModal" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="ThreadDeleteModalLabel">削除確認</h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="閉じる">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body text-center">
+                                                            スレッド【{{ thread.title }}】を完全に削除しますか？
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">閉じる</button>
+                                                            <form action="{% url 'stumee_meeting:delete_thread' thread.pk %}" method="post">
+                                                                {% csrf_token %}
+                                                                <button type="submit" class="btn btn-danger">削除</button>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- modal end -->
+                                        </div>
+                                        {% endifequal %}
                                     </div>
                                 </div>
                             </div>
