@@ -1,3 +1,6 @@
+const chatFrame = document.getElementById('chat-frame');
+chatFrame.scrollTop = chatFrame.scrollHeight;
+
 chatSocket.onmessage = function(e) {
     const data = JSON.parse(e.data);
     const now = new Date();
@@ -39,6 +42,7 @@ chatSocket.onmessage = function(e) {
               + '</p>'
     }
     document.getElementById('chat-append-by-js').insertAdjacentHTML('beforeend',h);
+    chatFrame.scrollTop = chatFrame.scrollHeight;
 };
 
 chatSocket.onclose = function(e) {
