@@ -40,7 +40,7 @@ async function RoomLogin(is_video_flag){
         const localVideo = document.getElementById('local-video');
 
         LocalStream = new MediaStream();
-        ScreenShareStream = await navigator.mediaDevices.getDisplayMedia({video: {width:1000, height:800} , audio: false})
+        ScreenShareStream = await navigator.mediaDevices.getDisplayMedia({video: {width:1920, height:1080} , audio: false})
         AudioStream = await navigator.mediaDevices.getUserMedia({video: false, audio: true})
 
         ScreenShareStream.getVideoTracks().forEach(track => {
@@ -57,6 +57,7 @@ async function RoomLogin(is_video_flag){
         localVideo.muted = true;
         localVideo.srcObject = LocalStream;
         localVideo.playsInline = true;
+        localVideo.classList.add('w-100');
         await localVideo.play().catch(console.error);
 
         // logged in Room
@@ -90,6 +91,7 @@ function setupRoomEventHandlers(room){
         newVideo.playsInline = true;
         newVideo.controls = true;
         newVideo.setAttribute('data-peer-id', stream.peerId);
+        newVideo.classList.add('w-100');
         $('#remote-videos').append(newVideo);
         await newVideo.play().catch(console.error);
     });
