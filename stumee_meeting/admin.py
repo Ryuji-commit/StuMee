@@ -9,4 +9,3 @@ class ThreadAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Thread, ThreadAdmin)
-admin.site.register(CustomUser)

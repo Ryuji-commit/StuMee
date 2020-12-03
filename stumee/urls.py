@@ -27,7 +27,7 @@ urlpatterns = [
     path('stumee/study/', include('stumee_study.urls')),
     path('stumee/chat/', include('stumee_chat.urls')),
     path('stumee/auth/', include('social_django.urls', namespace='social')),
-    path('stumee/admin/', admin.site.urls),
+    path('okura/admin/', admin.site.urls),
 ]
 
 urlpatterns += staticfiles_urlpatterns()
