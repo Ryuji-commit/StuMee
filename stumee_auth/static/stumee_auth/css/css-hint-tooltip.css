@@ -1,0 +1,33 @@
+.hint-tooltip{
+    position: relative;
+    cursor: pointer;
+}
+
+.how-to-use {
+    display: none;
+    position: absolute;
+    padding: 10px;
+    font-size: 12px;
+    line-height: 1.6em;
+    color: #fff;
+    border-radius: 5px;
+    background: #000;
+    width: 200px;
+}
+
+.how-to-use:before {
+    content: "";
+    position: absolute;
+    top: -24px;
+    right: 5%;
+    border: 15px solid transparent;
+    border-top: 15px solid #000;
+    margin-left: -15px;
+    transform: rotateZ(180deg);
+}
+
+.hint-tooltip:hover .how-to-use{
+    display: inline-block;
+    top: 45px;
+    right: 0px;
+}

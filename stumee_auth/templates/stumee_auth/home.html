@@ -1,16 +1,36 @@
 {% extends 'stumee_auth/auth_base.html' %}
+{% load static %}
 
 {% block title %}StuMee home{% endblock title %}
 
+{% block externalfile %}
+    <link rel="stylesheet" href="{% static 'stumee_auth/css/css-typed.css' %}">
+{% endblock externalfile %}
+
+{% block hint_tooltip %}
+    <div class="how-to-use home-hint">
+        こんな感じでStuMeeの使い方が表示されます。
+    </div>
+{% endblock hint_tooltip %}
+
 {% block content %}
     {% if user.is_authenticated %}
-        <p class="display-4">Hello, {{ user.username }}</p>
-        <p>以下のアンケートにご協力ください。次のURLからも回答することができます。<a href="https://forms.gle/ZYd8gocS8jY9sr1c8">https://forms.gle/ZYd8gocS8jY9sr1c8</a></p>
+        <p id="typing-space" class="lead text-center"></p>
+        <p class="text-center h5 pt-4"><u>以下のアンケートにご協力ください</u><br>
+            <small class="text-muted"><a href="https://forms.gle/ZYd8gocS8jY9sr1c8">このリンク</a>からも回答することができます。</small>
+        </p>
+
         <div class="text-center">
             <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSeIw1IEB0EhfAzo6yZ1hlv0pG5awAALYFHRCFGZWkq3F-JL_A/viewform?embedded=true"
-                    width="640" height="1021" frameborder="0" marginheight="0" marginwidth="0">読み込んでいます…</iframe>
+                    width="640" height="1200" frameborder="0" marginheight="0" marginwidth="0">読み込んでいます…</iframe>
         </div>>
+        {{ user.username|json_script:"username" }}
     {% else %}
         <p>please login for StuMee</p>
     {% endif %}
 {% endblock content %}
+
+{% block extrajs %}
+    {{ block.super }}
+    <script type="text/javascript" src="{% static 'stumee_auth/js/js-typed.js'%}"></script>
+{% endblock extrajs %}

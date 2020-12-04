@@ -10,6 +10,10 @@
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
         <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <!-- font awesome -->
+        <link href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" rel="stylesheet">
+        <!-- Hint Tooltip css -->
+        <link rel="stylesheet" href="{% static 'stumee_auth/css/css-hint-tooltip.css' %}">
 
         <!-- Optional JavaScript -->
         <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -61,6 +65,17 @@
                 </ul>
 
                 <ul class="navbar-nav">
+                    <div class="hint-tooltip d-flex align-items-center">
+                        <li class="nav-item">
+                            <i class="far fa-question-circle fa-lg pt-2 mr-3"></i>
+                        </li>
+                        {% block hint_tooltip %}
+                        <div class="how-to-use">
+                            こんな感じでStuMeeの使い方が表示されます。
+                        </div>
+                        {% endblock hint_tooltip %}
+                    </div>
+
                     {% block search_form %}
                     {% endblock search_form %}
 

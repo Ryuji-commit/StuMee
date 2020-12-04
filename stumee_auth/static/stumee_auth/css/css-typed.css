@@ -1,0 +1,15 @@
+p#typing-space {
+    white-space: pre-line;
+}
+
+p#typing-space::after {
+  content: '';
+  border-right: 2px solid;
+  animation: flashing 0.8s linear infinite;
+}
+
+@keyframes flashing {
+  0% {
+    opacity: 0;
+  }
+}
