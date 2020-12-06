@@ -7,7 +7,8 @@
         このページは設定ページです。<br>
         ユーザ名の変更や権限の変更、<br>
         アイコン画像を設定できます。<br>
-        好きなユーザ名とアイコン画像を設定してください。
+        好きなユーザ名とアイコン画像を設定してください。<br>
+        ショートカットキーはctrl+Enterです。
     </div>
 {% endblock hint_tooltip %}
 
@@ -50,7 +51,7 @@
 
             {% csrf_token %}
 
-            <div class="row">
+            <div class="row mb-3">
                 <button class="btn btn-primary btn-sm" type="submit">更新</button>
             </div>
         </div>

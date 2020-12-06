@@ -3,6 +3,7 @@ from django.views import generic
 from django.urls import reverse_lazy, reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib import messages
 
 from .models import CustomUser, CertificationPass
 from stumee_meeting.models import Thread, Comment
@@ -36,8 +37,10 @@ def user_setting(request):
             if CertificationPass.objects.filter(change_ta_certification_key=input_key).exists():
                 initial_dict['user_auth'] = 1
                 profile_form = forms.ProfileForm(initial=initial_dict)
+                messages.success(request, 'TA認証キーの入力に成功しました!反映のために更新ボタンを押してください。')
             else:
                 redirect_url = reverse('stumee_auth:home')
+                messages.error(request, '認証に失敗しました', extra_tags='danger')
                 return redirect(redirect_url)
 
         # Teacherへの権限変更認証キーが入力されたら
@@ -46,8 +49,10 @@ def user_setting(request):
             if CertificationPass.objects.filter(change_teacher_certification_key=input_key).exists():
                 initial_dict['user_auth'] = 2
                 profile_form = forms.ProfileForm(initial=initial_dict)
+                messages.success(request, 'Teacher認証キーの入力に成功しました!反映のために更新ボタンを押してください。')
             else:
                 redirect_url = reverse('stumee_auth:home')
+                messages.error(request, '認証に失敗しました', extra_tags='danger')
                 return redirect(redirect_url)
 
         # プロフィールは無条件に変更できる。(認証キーではじかれたらリダイレクトするはずなので)
