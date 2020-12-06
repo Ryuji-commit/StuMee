@@ -1,6 +1,15 @@
 {% extends 'stumee_auth/auth_base.html' %}
 
-{% block title %}設定{% endblock title %}
+{% block title %}設定ページ{% endblock title %}
+
+{% block hint_tooltip %}
+    <div class="how-to-use setting-hint">
+        このページは設定ページです。<br>
+        ユーザ名の変更や権限の変更、<br>
+        アイコン画像を設定できます。<br>
+        好きなユーザ名とアイコン画像を設定してください。
+    </div>
+{% endblock hint_tooltip %}
 
 {% block content %}
     <form method="POST" enctype="multipart/form-data" name="userSetting">

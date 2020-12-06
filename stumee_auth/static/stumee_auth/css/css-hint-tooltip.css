@@ -31,3 +31,23 @@
     top: 45px;
     right: 0px;
 }
+
+.how-to-use.setting-hint {
+    width: 230px;
+}
+
+.how-to-use.meeting-hint {
+    width: 430px;
+}
+
+.how-to-use.meeting-hint.tooltip-TA {
+    width: 380px;
+}
+
+.how-to-use.meeting-hint:before {
+    right: 3%;
+}
+
+.how-to-use.thread-hint {
+    width: 320px;
+}

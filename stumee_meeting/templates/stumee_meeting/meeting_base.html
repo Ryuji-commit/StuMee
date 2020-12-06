@@ -5,6 +5,23 @@
     <link rel="stylesheet" type="text/css" href="{% static 'stumee_meeting/css/css_meeting.css' %}">
 {% endblock externalfile %}
 
+{% block hint_tooltip %}
+    {% if user.user_auth is not 0 and user.is_authenticated %}
+    <div class="how-to-use meeting-hint tooltip-TA">
+        このページでは、掲示板形式で質問に回答することができます。<br>
+        Pickボタンを押すことで質問を学生に注目させることができます。<br>
+        また、演習に必要な知識やよくある質問を、TAがスレッドに<br>まとめて学生に提示するといった用途も想定しています。
+    </div>
+    {% else %}
+    <div class="how-to-use meeting-hint">
+        このページでは、掲示板形式で他の学生やTAに質問をすることができます。<br>
+        先生やTAにタグを指定してされている場合、そのタグを使用してください。<br>
+        他の学生の質問に回答できる場合、積極的に回答して助け合いましょう。<br>
+        しかし、答えに近い回答をすることは避けてください。
+    </div>
+    {% endif %}
+{% endblock hint_tooltip %}
+
 {% block search_form %}
     <!-- Meeting search form -->
     <form class="form-inline my-lg-0 mr-3" action="{% url 'stumee_search:meeting_search' %}" method="get">
