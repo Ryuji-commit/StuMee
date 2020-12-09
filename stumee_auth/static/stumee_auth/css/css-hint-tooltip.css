@@ -51,3 +51,11 @@
 .how-to-use.thread-hint {
     width: 320px;
 }
+
+.how-to-use.study-hint {
+    width: 350px;
+}
+
+.how-to-use.study-hint:before {
+    right: 3%;
+}

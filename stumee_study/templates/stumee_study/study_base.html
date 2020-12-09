@@ -10,6 +10,31 @@
 <link rel="stylesheet" type="text/css" href="{% static 'stumee_study/css/css_study.css' %}">
 {% endblock externalfile %}
 
+{% block hint_tooltip %}
+    {% if user.user_auth == 2 and user.is_authenticated %}
+    <div class="how-to-use study-hint tooltip-Teacher">
+        このページではコースを作成・管理することができます。<br>
+        設定した認証キーは学生がコースに登録する際に使用するので、学生に通知してください。<br>
+        また、問題数を設定することでダッシュボードに学生の進捗グラフが表示されます。<br>
+        授業時間の設定を行うことで、チャット送信時に授業時間外であればアラートが表示されるようになります。<br>
+        コースでは、学生がTAと一対一でチャットや画面共有をしたり、TA同士で質問に対して相談したりすることができます。
+    </div>
+    {% elif user.user_auth == 1 and user.is_authenticated %}
+    <div class="how-to-use study-hint tooltip-TA">
+        このページでは学生の質問に対してチャットや画面共有などを用いて回答することができます。<br>
+        また、相談部屋ではTA同士で質問に対して相談することができます。<br>
+        ダッシュボードにはコースの登録者やメッセージ数、学生の進捗状況が表示されます。
+    </div>
+    {% else %}
+    <div class="how-to-use study-hint">
+        このページではTAと一対一のチャットと画面共有で質問することができます。<br>
+        受講する授業名をクリックして先生から教えられた認証コードを入力してください。<br>
+        相手が画面共有を行っている際、画面が小さければコントロールパネル右下の全画面表示機能を使用してください。<br>
+        右上に問題数フォームが表示されている場合、現在行っている問題番号を選択してください。
+    </div>
+    {% endif %}
+{% endblock hint_tooltip %}
+
 {% block search_form %}
 <form class="form-inline my-lg-0 mr-3" action="{% url 'stumee_search:study_search' %}" method="get">
     <div class="input-group">
