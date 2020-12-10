@@ -104,8 +104,12 @@
                 <textarea id="chat-message-input" rows="1" class="form-control" placeholder="質問を入力(Ctrl+Enterで送信)"></textarea><br>
                 <button type="submit" class="btn btn-primary mr-3" id="chat-message-submit">チャット送信</button>
                 <button type="submit" class="btn btn-primary mr-3" id="file-upload-button">ファイル送信</button>
-                <button type="submit" class="btn btn-primary" id="start-video">画面共有開始</button>
+                <button type="submit" class="btn btn-success" id="start-video">画面共有開始</button>
                 <button type="submit" class="btn btn-danger" id="end-video">画面共有停止</button>
+                <!--
+                <button type="submit" class="btn btn-success" id="un-mute-button"><i class="fas fa-microphone"></i></button>
+                <button type="submit" class="btn btn-danger" id="mute-button"><i class="fas fa-microphone-slash"></i></button>
+                -->
                 {{ form.as_p }}
             </div>
             {{ course_id|json_script:"course-id" }}
