@@ -100,16 +100,18 @@
                 </div>
             </div>
 
-            <div class="form-group mt-5">
+            <div class="form-group mt-5 mb-5 pb-2">
                 <textarea id="chat-message-input" rows="1" class="form-control" placeholder="質問を入力(Ctrl+Enterで送信)"></textarea><br>
                 <button type="submit" class="btn btn-primary mr-3" id="chat-message-submit">チャット送信</button>
                 <button type="submit" class="btn btn-primary mr-3" id="file-upload-button">ファイル送信</button>
                 <button type="submit" class="btn btn-success" id="start-video">画面共有開始</button>
                 <button type="submit" class="btn btn-danger" id="end-video">画面共有停止</button>
-                <!--
-                <button type="submit" class="btn btn-success" id="un-mute-button"><i class="fas fa-microphone"></i></button>
-                <button type="submit" class="btn btn-danger" id="mute-button"><i class="fas fa-microphone-slash"></i></button>
-                -->
+                <button type="submit" class="btn btn-success" id="un-mute-button" data-toggle="tooltip" title="マイクをオンにする">
+                    <i class="fas fa-microphone"></i>
+                </button>
+                <button type="submit" class="btn btn-danger" id="mute-button" data-toggle="tooltip" title="マイクをオフにする">
+                    <i class="fas fa-microphone-slash"></i>
+                </button>
                 {{ form.as_p }}
             </div>
             {{ course_id|json_script:"course-id" }}
@@ -117,9 +119,7 @@
 
             <!-- 画面共有 -->
             <div id="videos-container">
-                <div class="ml-5">自分</div>
-                <video id="local-video" class="m-3"></video>
-                <div class="ml-5">相手</div>
+                <div class="ml-5">通話の際は必ずミュート解除</div>
                 <div class="remote-streams m-3" id="remote-videos"></div>
             </div>
         </div>

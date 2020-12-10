@@ -9,39 +9,63 @@ let LocalStream = null;
 let ScreenShareStream = null;
 let AudioStream = null;
 let remoteVideos = document.getElementById('remote-videos');
+let isScreenShare = false;
+let isAudio = false;
 
 peer.on('open', function(){
     console.log('connected');
-    RoomLogin(false);
+    RoomLogin();
 });
 
 $('#start-video').on('click', function() {
+    stopTracksAllStream();
     existingRoom.close();
-    RoomLogin(true);
+    isScreenShare = true;
+    RoomLogin();
 });
 
 $('#end-video').on('click', function() {
-    const localVideo = document.getElementById('local-video');
-    if (localVideo != null){
-        localVideo.srcObject.getTracks().forEach(track => track.stop());
-        localVideo.srcObject = null;
-        ScreenShareStream.getTracks().forEach(track => track.stop());
-        AudioStream.getTracks().forEach(track => track.stop());
-        LocalStream.getTracks().forEach(track => track.stop());
-    }
+    stopTracksAllStream();
     existingRoom.close();
     setupMakeCallUI();
-    RoomLogin(false);
+    isScreenShare = false;
+    RoomLogin();
 });
 
-async function RoomLogin(is_video_flag){
-    const RoomName = JSON.parse(document.getElementById('RoomNameURL').textContent);
-    if(is_video_flag == true){
-        const localVideo = document.getElementById('local-video');
+$('#un-mute-button').on('click', function(){
+    stopTracksAllStream();
+    existingRoom.close();
+    isAudio = true;
+    RoomLogin();
+});
 
-        LocalStream = new MediaStream();
-        ScreenShareStream = await navigator.mediaDevices.getDisplayMedia({video: {width:1920, height:1080} , audio: false})
-        AudioStream = await navigator.mediaDevices.getUserMedia({video: false, audio: true})
+$('#mute-button').on('click', function(){
+    stopTracksAllStream();
+    existingRoom.close();
+    isAudio = false;
+    showUnMuteButton();
+    RoomLogin();
+});
+
+function stopTracksAllStream(){
+    if (AudioStream){
+        AudioStream.getTracks().forEach(track => track.stop());
+    }
+    if (ScreenShareStream){
+        ScreenShareStream.getTracks().forEach(track => track.stop());
+    }
+    if (LocalStream){
+        LocalStream.getTracks().forEach(track => track.stop());
+    }
+}
+
+async function RoomLogin(){
+    const RoomName = JSON.parse(document.getElementById('RoomNameURL').textContent);
+
+    LocalStream = new MediaStream();
+    if (isScreenShare && isAudio){
+        ScreenShareStream = await navigator.mediaDevices.getDisplayMedia({video: {width:1920, height:1080} , audio: false});
+        AudioStream = await navigator.mediaDevices.getUserMedia({video: false, audio: true});
 
         ScreenShareStream.getVideoTracks().forEach(track => {
             LocalStream.addTrack(track.clone())
@@ -49,30 +73,28 @@ async function RoomLogin(is_video_flag){
         AudioStream.getAudioTracks().forEach(track => {
             LocalStream.addTrack(track.clone())
         });
-
-        $('#videos-container').show();
         setupEndCallUI();
-
-        // render local video
-        localVideo.muted = true;
-        localVideo.srcObject = LocalStream;
-        localVideo.playsInline = true;
-        localVideo.classList.add('w-100');
-        await localVideo.play().catch(console.error);
-
-        // logged in Room
-        room = peer.joinRoom(RoomName,{
-            mode: 'sfu',
-            stream: LocalStream,
+        showMuteButton();
+    }else if(isScreenShare){
+        ScreenShareStream = await navigator.mediaDevices.getDisplayMedia({video: {width:1920, height:1080} , audio: false});
+        ScreenShareStream.getVideoTracks().forEach(track => {
+            LocalStream.addTrack(track.clone())
         });
-        console.log(room);
+        setupEndCallUI();
+    }else if(isAudio){
+        AudioStream = await navigator.mediaDevices.getUserMedia({video: false, audio: true});
+        AudioStream.getAudioTracks().forEach(track => {
+            LocalStream.addTrack(track.clone())
+        });
+        showMuteButton();
     }else{
         LocalStream = null;
-        room = peer.joinRoom(RoomName,{
-            mode: 'sfu',
-            stream: null,
-        });
     }
+    // logged in Room
+    room = peer.joinRoom(RoomName,{
+        mode: 'sfu',
+        stream: LocalStream,
+    });
     console.log(room);
     setupRoomEventHandlers(room);
 }
@@ -103,10 +125,6 @@ function setupRoomEventHandlers(room){
     room.on('peerLeave', function(peerId){
         console.log(peerId + 'leaved');
         const remoteVideo = remoteVideos.querySelector('[data-peer-id="' + peerId + '"]');
-        const unMutedButton = document.querySelector('[id="' + peerId + '"]');
-        if (unMutedButton != null){
-            unMutedButton.remove();
-        }
 
         if (remoteVideo != null){
             remoteVideo.srcObject.getTracks().forEach(track => track.stop());
@@ -114,7 +132,7 @@ function setupRoomEventHandlers(room){
             remoteVideo.remove();
         }
 
-        if (LocalStream == null){
+        if (document.getElementById('remote-videos').childElementCount === 0){
             removeAllRemoteVideos();
         }
     });
@@ -135,6 +153,16 @@ function setupEndCallUI() {
     $('#end-video').show();
 }
 
+function showMuteButton() {
+    $('#mute-button').show();
+    $('#un-mute-button').hide();
+}
+
+function showUnMuteButton() {
+    $('#mute-button').hide();
+    $('#un-mute-button').show();
+}
+
 function removeAllRemoteVideos(){
     $('#remote-videos').empty();
     $('#videos-container').hide();
@@ -144,4 +172,5 @@ $(function(){
     // ページ読み込み時に実行したい処理
     $('#end-video').hide();
     $('#videos-container').hide();
+    $('#mute-button').hide();
 });
