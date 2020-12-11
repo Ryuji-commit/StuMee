@@ -117,7 +117,6 @@ Auth PassWard here
 LOGIN_URL = reverse_lazy('social:begin', args=['google-oauth2'])
 LOGOUT_URL = 'stumee_auth:logout'
 LOGOUT_REDIRECT_URL = 'stumee_auth:home'
-LOGIN_REDIRECT_URL = 'stumee_auth:certification-page'
 
 
 # Password validation
@@ -153,9 +152,11 @@ USE_TZ = True
 
 if DEBUG:
     # on local
+    LOGIN_REDIRECT_URL = 'stumee_auth:certification-page'
     AWS_S3_ENDPOINT_URL = 'http://192.168.99.102:9000'
 else:
     # when on server
+    LOGIN_REDIRECT_URL = 'https://ymir.eng.kagawa-u.ac.jp/stumee/login/'
     AWS_S3_ENDPOINT_URL = 'https://ymir.eng.kagawa-u.ac.jp'
     AWS_QUERYSTRING_AUTH = False
     AWS_S3_SIGNATURE_VERSION = 's3'
