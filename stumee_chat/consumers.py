@@ -79,14 +79,15 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
             if self.user == channel_user:
                 channel.is_active = True
-                email_subject = "StuMee:新規の質問がありました"
-                email_message = "コース名[{}]にて、{}さんから新規の質問がありました。\n質問内容: {}"\
-                    .format(course.title, channel_user.username, message)
-                from_email = settings.DEFAULT_FROM_EMAIL
-                recipient_list = list(course.staffs.values_list('email', flat=True))
-                if course.create_user.email:
-                    recipient_list.append(course.create_user.email)
-                send_mail(email_subject, email_message, from_email, recipient_list)
+                if len(message) >= 30 and 'class="posted-' not in message:
+                    email_subject = "{}さんから質問がありました".format(channel_user.username)
+                    email_message = "コース名[{}]にて、{}さんから新規の質問がありました。\n\n質問内容: {}"\
+                        .format(course.title, channel_user.username, message)
+                    from_email = settings.DEFAULT_FROM_EMAIL
+                    recipient_list = list(course.staffs.values_list('email', flat=True))
+                    if course.create_user.email:
+                        recipient_list.append(course.create_user.email)
+                    send_mail(email_subject, email_message, from_email, recipient_list)
             else:
                 channel.is_active = False
             channel.save()
