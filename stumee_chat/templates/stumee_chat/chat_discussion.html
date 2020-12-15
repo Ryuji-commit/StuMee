@@ -43,7 +43,7 @@
 
                     <li class="nav-item text-center mt-5">
                         <span class="small font-weight-bold">直近のメッセージ</span>
-                        <ul class="list-group list-group-flush overflow-auto" style="height:150px">
+                        <ul class="list-group list-group-flush overflow-auto replied-messages" style="height:150px">
                             {% for replied_message in replied_messages %}
                             <a href="{% url 'stumee_chat:chat_question' replied_message.channel.course.id replied_message.channel.user.id %}"
                                class="list-group-item" data-toggle="tooltip" data-html="true" data-placement="right"

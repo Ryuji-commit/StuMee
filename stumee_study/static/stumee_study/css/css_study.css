@@ -141,3 +141,18 @@ div.operate_course a {
     max-height: 300px;
     overflow: auto;
 }
+
+.replied-messages::-webkit-scrollbar{
+  width: 10px;
+}
+.replied-messages::-webkit-scrollbar-track{
+  background: #fff;
+  border: none;
+  border-radius: 10px;
+  box-shadow: inset 0 0 2px #777;
+}
+.replied-messages::-webkit-scrollbar-thumb{
+  background: #00bfff;
+  border-radius: 10px;
+  box-shadow: none;
+}
