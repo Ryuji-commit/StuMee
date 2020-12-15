@@ -57,6 +57,19 @@
 
                             <li class=" nav-item text-center list-group" id="student-name-list">
                             </li>
+
+                            <li class="nav-item text-center mt-5">
+                                <span class="small font-weight-bold">直近のメッセージ</span>
+                                <ul class="list-group list-group-flush overflow-auto" style="height:150px">
+                                    {% for replied_message in replied_messages %}
+                                    <a href="{% url 'stumee_chat:chat_question' replied_message.channel.course.id replied_message.channel.user.id %}"
+                                       class="list-group-item" data-toggle="tooltip" data-placement="right"
+                                       title="{{ replied_message.content|striptags }}">
+                                        {{ replied_message.channel.user.username }}
+                                    </a>
+                                    {% endfor %}
+                                </ul>
+                            </li>
                         {% else %}
                             <li class="nav-item" style="background-color: #e0ffff; border-right: solid 3px orange;">
                                 <a class="nav-link" href="">TAに質問する</a>
