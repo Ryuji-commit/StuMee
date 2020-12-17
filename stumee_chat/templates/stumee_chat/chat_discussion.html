@@ -47,7 +47,7 @@
                             {% for replied_message in replied_messages %}
                             <a href="{% url 'stumee_chat:chat_question' replied_message.channel.course.id replied_message.channel.user.id %}"
                                class="list-group-item" data-toggle="tooltip" data-html="true" data-placement="right"
-                               title="{{ replied_message.content|striptags }}">
+                               title="{{ replied_message.content|striptags|truncatechars:20 }}">
                                 {{ replied_message.channel.user.username }}
                             </a>
                             {% endfor %}
