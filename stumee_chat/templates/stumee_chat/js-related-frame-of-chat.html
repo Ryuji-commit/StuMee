@@ -1,4 +1,7 @@
 const chatFrame = document.getElementById('chat-frame');
+const displayEnteringUser = document.getElementById('display-entering-user');
+const typeMessage = "MESSAGE";
+const typeEntering = "ENTERING";
 chatFrame.scrollTop = chatFrame.scrollHeight;
 
 chatSocket.onmessage = function(e) {
@@ -7,6 +10,12 @@ chatSocket.onmessage = function(e) {
     const hour = ('00' + now.getHours()).slice(-2);
     const minute = ('00' + now.getMinutes()).slice(-2);
     const time = hour + ':' + minute;
+
+    if (data.message_type == typeEntering) {
+        handleDisplayEnteringUser(htmlEscape(data.message));
+        return false;
+    }
+
     if ({{ user.id }} == data.user_id){
         var h = '<p class="chat-talk mytalk">'
               + '<span class="talk-icon">'
@@ -55,7 +64,6 @@ chatSocket.onclose = function(e) {
     }
 };
 
-
 document.querySelector('#chat-message-input').focus();
 document.querySelector('#chat-message-input').onkeyup = function(e) {
     if (e.ctrlKey){
@@ -65,24 +73,54 @@ document.querySelector('#chat-message-input').onkeyup = function(e) {
     }
 };
 
-document.querySelector('#chat-message-submit').onclick = function(e) {
-    const messageInputDom = document.querySelector('#chat-message-input');
-    const message = messageInputDom.value;
+document.querySelector('#chat-message-input').addEventListener('input',function(e){
+    chatMessageSubmit("{{ user.username }}さんが入力中...", messageType=typeEntering);
+}, false);
+
+function handleDisplayEnteringUser(message) {
     if (!message) {
         return false;
     }
+
+    if (!displayEnteringUser.textContent) {
+        displayEnteringUser.textContent = message;
+    }
+
+    setTimeout(
+        function () {
+            displayEnteringUser.textContent = '';
+        },
+        "3000"
+    );
+    document.querySelector('#chat-message-input').before('');
+}
+
+document.querySelector('#chat-message-submit').onclick = function(e) {
+    const messageInputDom = document.querySelector('#chat-message-input');
+    const message = messageInputDom.value;
+
     if (!isDuringClass()) {
         alert("授業時間外です。このメッセージは読まれない可能性があります。");
     }
+
+    chatMessageSubmit(message);
+    messageInputDom.value = '';
+    messageInputDom.setAttribute("rows", 1);
+};
+
+function chatMessageSubmit(message, messageType=typeMessage) {
+    if (!message) {
+        return false;
+    }
+
     chatSocket.send(JSON.stringify({
         'message': message,
         'user_id': {{ user.id }},
         'user_img': "{{ user.small.url }}",
         'user_name': "{{ user.username }}",
+        'message_type': messageType,
     }));
-    messageInputDom.value = '';
-    messageInputDom.setAttribute("rows", 1);
-};
+}
 
 function isDuringClass() {
     // output [input, hour, minute]

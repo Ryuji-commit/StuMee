@@ -38,6 +38,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         user_id = text_data_json['user_id']
         user_img = text_data_json['user_img']
         user_name = text_data_json['user_name']
+        message_type = text_data_json['message_type']
         # Send message to room group
         await self.channel_layer.group_send(
             self.room_group_name,
@@ -47,6 +48,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 'user_id': user_id,
                 'user_img': user_img,
                 'user_name': user_name,
+                'message_type': message_type,
             }
         )
 
@@ -56,14 +58,16 @@ class ChatConsumer(AsyncWebsocketConsumer):
         user_id = event['user_id']
         user_img = event['user_img']
         user_name = event['user_name']
+        message_type = event['message_type']
         # Send message to WebSocket
         await self.send(text_data=json.dumps({
             'message': message,
             'user_id': user_id,
             'user_img': user_img,
             'user_name': user_name,
+            'message_type': message_type,
         }))
-        if self.user.id == user_id:
+        if self.user.id == user_id and message_type != "ENTERING":
             await self.create_message(message)
 
     @database_sync_to_async
@@ -130,7 +134,9 @@ class DiscussionConsumer(AsyncWebsocketConsumer):
         user_id = text_data_json['user_id']
         user_img = text_data_json['user_img']
         user_name = text_data_json['user_name']
-        await self.create_message(message)
+        message_type = text_data_json['message_type']
+        if message_type != "ENTERING":
+            await self.create_message(message)
         # Send message to room group
         await self.channel_layer.group_send(
             self.room_group_name,
@@ -140,6 +146,7 @@ class DiscussionConsumer(AsyncWebsocketConsumer):
                 'user_id': user_id,
                 'user_img': user_img,
                 'user_name': user_name,
+                'message_type': message_type,
             }
         )
 
@@ -149,12 +156,14 @@ class DiscussionConsumer(AsyncWebsocketConsumer):
         user_id = event['user_id']
         user_img = event['user_img']
         user_name = event['user_name']
+        message_type = event['message_type']
         # Send message to WebSocket
         await self.send(text_data=json.dumps({
             'message': message,
             'user_id': user_id,
             'user_img': user_img,
             'user_name': user_name,
+            'message_type': message_type,
         }))
 
     @database_sync_to_async
