@@ -12,6 +12,9 @@ chatSocket.onmessage = function(e) {
     const time = hour + ':' + minute;
 
     if (data.message_type == typeEntering) {
+        if (data.user_name == '{{ user.username }}') {
+            return false;
+        }
         handleDisplayEnteringUser(htmlEscape(data.message));
         return false;
     }
@@ -81,6 +84,7 @@ function handleDisplayEnteringUser(message) {
     if (!message) {
         return false;
     }
+    userName = message.match(/(.*)さんが入力中/)[1];
 
     if (!displayEnteringUser.textContent) {
         displayEnteringUser.textContent = message;
