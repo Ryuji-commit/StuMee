@@ -2,6 +2,8 @@ const chatFrame = document.getElementById('chat-frame');
 const displayEnteringUser = document.getElementById('display-entering-user');
 const typeMessage = "MESSAGE";
 const typeEntering = "ENTERING";
+let clearEnteringTimer;
+
 chatFrame.scrollTop = chatFrame.scrollHeight;
 
 chatSocket.onmessage = function(e) {
@@ -90,13 +92,13 @@ function handleDisplayEnteringUser(message) {
         displayEnteringUser.textContent = message;
     }
 
-    setTimeout(
+    clearTimeout(clearEnteringTimer);
+    clearEnteringTimer = setTimeout(
         function () {
             displayEnteringUser.textContent = '';
         },
-        "3000"
+        "2000"
     );
-    document.querySelector('#chat-message-input').before('');
 }
 
 document.querySelector('#chat-message-submit').onclick = function(e) {
