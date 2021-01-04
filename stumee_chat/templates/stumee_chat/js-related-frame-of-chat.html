@@ -90,6 +90,14 @@ function handleDisplayEnteringUser(message) {
 
     if (!displayEnteringUser.textContent) {
         displayEnteringUser.textContent = message;
+    }else if (!displayEnteringUser.textContent.includes(userName)) {
+        displayEnteringUser.textContent = message.replace(/(.*)さんが入力中/, '$1さん他が入力中');
+        setTimeout(
+            function () {
+                displayEnteringUser.textContent = '';
+            },
+            "2000"
+        );
     }
 
     clearTimeout(clearEnteringTimer);
