@@ -59,6 +59,7 @@ def chat_question(request, course_id, user_id):
         'class_start_time': course.class_start_time,
         'class_end_time': course.class_end_time,
         'replied_messages': replied_messages,
+        'this_channel': channel,
     })
 
 
