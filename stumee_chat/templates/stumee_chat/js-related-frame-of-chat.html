@@ -92,21 +92,15 @@ function handleDisplayEnteringUser(message) {
         displayEnteringUser.textContent = message;
     }else if (!displayEnteringUser.textContent.includes(userName)) {
         displayEnteringUser.textContent = message.replace(/(.*)さんが入力中/, '$1さん他が入力中');
-        setTimeout(
-            function () {
-                displayEnteringUser.textContent = '';
-            },
-            "2000"
-        );
+        setTimeout(resetDisplayingEnteringUser, "2000");
     }
 
     clearTimeout(clearEnteringTimer);
-    clearEnteringTimer = setTimeout(
-        function () {
-            displayEnteringUser.textContent = '';
-        },
-        "2000"
-    );
+    clearEnteringTimer = setTimeout(resetDisplayingEnteringUser, "2000");
+}
+
+function resetDisplayingEnteringUser() {
+    displayEnteringUser.textContent = '';
 }
 
 document.querySelector('#chat-message-submit').onclick = function(e) {
