@@ -227,10 +227,11 @@
     })
 </script>
 
-<!-- include Long Polling function -->
+<!-- include Long Polling function and share message -->
 {% with course_id|judge_if_staffs as staff_list %}
     {% if user.id in staff_list %}
         {% include 'stumee_chat/notice-not-replied-questions.html' %}
+        <script type="text/javascript" src="{% static 'stumee_chat/js/js_share_message.js'%}"></script>
     {% endif %}
 {% endwith %}
 

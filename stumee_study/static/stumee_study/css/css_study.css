@@ -132,6 +132,17 @@ div.operate_course a {
     border-left-color: #78FF6C;
 }
 
+.talk-content .share-message-btn {
+    position: absolute;
+    right: 5px;
+    bottom: 0;
+    cursor: pointer;
+}
+
+.talk-content .share-message-btn:hover {
+    color: orange;
+}
+
 .tooltip-inner {
     max-width: 300px;
 }
