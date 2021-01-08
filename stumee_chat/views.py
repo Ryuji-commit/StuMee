@@ -4,6 +4,7 @@ from django.db.models import Q, F
 from django.http import JsonResponse, HttpResponseBadRequest
 from django.contrib import messages
 from django import forms
+from django.urls import reverse_lazy
 import json
 import time
 import datetime
@@ -85,6 +86,8 @@ def chat_discussion(request, course_id):
         if not course.class_start_time <= time_now <= course.class_end_time:
             messages.info(request, f'授業時間外です')
 
+    session_shared_message = request.session.pop('shared_message', '')
+
     student_channel = Channel.objects.exclude(user=user).filter(course=course).order_by('user__username')
     replied_messages = Message.objects.exclude(channel__user=course.create_user).filter(
         channel__course=course, channel__user=F('user')
@@ -98,6 +101,7 @@ def chat_discussion(request, course_id):
         'class_start_time': course.class_start_time,
         'class_end_time': course.class_end_time,
         'replied_messages': replied_messages,
+        'session_shared_message': session_shared_message,
     })
 
 
@@ -197,3 +201,16 @@ def response_students_progress_data(request):
         "options": {}
     }
     return JsonResponse(response_dict)
+
+
+def save_shared_message_to_session(request):
+    received_data = json.loads(request.body, strict=False)
+    course_id = received_data['course_id']
+    shared_message = received_data['shared_message']
+    request.session['shared_message'] = shared_message
+
+    response_message = "セッションへの保存に失敗しました"
+    if 'shared_message' in request.session:
+        response_message = "正常に保存されました"
+    redirect_url = reverse_lazy('stumee_chat:chat_discussion', kwargs={'course_id': course_id})
+    return JsonResponse({'redirect_url': redirect_url, 'response_message': response_message})

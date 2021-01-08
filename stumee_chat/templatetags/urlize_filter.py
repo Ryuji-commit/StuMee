@@ -21,12 +21,12 @@ def my_urlize(text, autoescape=None):
     else:
         esc = (lambda x: x)
 
-    if "<a href" in text and "<script>" not in text:
-        file_link = re.match(r'<a.*?href=(.*?)>', text)
-        file_name = re.match(r'<a.*?>(.*?)</a>', text)
-        result = '<a href={}>{}</a>'.format(file_link.group(1), file_name.group(1))
-    else:
+    pattern = re.compile(r'<(?!/)(?!a\s+href\s?=\s?"?https?.*?(192.168.99.102|ymir.eng.kagawa-u.ac.jp)).*?>', re.S)
+    if pattern.search(text):
         result = esc(text)
+    else:
+        result = text
+
     return mark_safe(result)
 
 

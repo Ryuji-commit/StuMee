@@ -141,9 +141,6 @@
                 </button>
                 {{ form.as_p }}
             </div>
-            {{ course_id|json_script:"course-id" }}
-            {{ user_id|json_script:"user-id" }}
-
             <!-- 画面共有 -->
             <div id="videos-container">
                 <div class="ml-5">通話の際は必ずミュート解除</div>
@@ -195,6 +192,15 @@
 </div>
 
 {{ request.get_full_path | json_script:"RoomNameURL" }}
+{{ course_id|json_script:"course-id" }}
+{{ user_id|json_script:"user-id" }}
+
+{% with course_id|judge_if_staffs as staff_list %}
+    {% if user.id in staff_list %}
+        <script id="is-display-shareBtn" type="application/json">true</script>
+    {% endif %}
+{% endwith %}
+
 {% load static %}
 <script type="text/javascript" src="{% static 'stumee_chat/js/js_question.js'%}" defer="defer"></script>
 {% endblock %}
@@ -231,7 +237,6 @@
 {% with course_id|judge_if_staffs as staff_list %}
     {% if user.id in staff_list %}
         {% include 'stumee_chat/notice-not-replied-questions.html' %}
-        <script type="text/javascript" src="{% static 'stumee_chat/js/js_share_message.js'%}"></script>
     {% endif %}
 {% endwith %}
 

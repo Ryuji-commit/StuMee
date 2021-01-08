@@ -2,6 +2,9 @@ const chatFrame = document.getElementById('chat-frame');
 const displayEnteringUser = document.getElementById('display-entering-user');
 const typeMessage = "MESSAGE";
 const typeEntering = "ENTERING";
+const elementIsDisplayShareBtn = document.getElementById("is-display-shareBtn");
+const isDisplayShareBtn = elementIsDisplayShareBtn != null ? JSON.parse(elementIsDisplayShareBtn.textContent) : false;
+const elementSessionSharedMessage = document.getElementById("session-shared-message");
 let clearEnteringTimer;
 
 chatFrame.scrollTop = chatFrame.scrollHeight;
@@ -56,6 +59,13 @@ chatSocket.onmessage = function(e) {
               + '</p>'
     }
     document.getElementById('chat-append-by-js').insertAdjacentHTML('beforeend',h);
+
+    if (isDisplayShareBtn) {
+        const appendedNode = document.getElementById('chat-append-by-js').lastElementChild;
+        let appendedNodeContent = appendedNode.querySelector('.talk-content');
+        appendedNodeContent.addEventListener("mouseenter", addMessageShareButton, false);
+        appendedNodeContent.addEventListener("mouseleave", removeMessageShareButton, false);
+    }
     chatFrame.scrollTop = chatFrame.scrollHeight;
 };
 
@@ -161,8 +171,8 @@ function returnSetDate(hour, minute) {
 
 const htmlEscape = (str) => {
     if (!str) return;
-    // もしaタグを含んでいてscriptタグを含んでいなかったら
-    if (/^(?=.*a href)(?!.*<script>)/.test(str)) {
+    const regex = /<(?!\/)(?!a\s+href\s?=\s?"?https?.*?(192.168.99.102|ymir.eng.kagawa-u.ac.jp)).*?>/s;
+    if (!regex.test(str)) {
         return str;
     }
     return str.replace(/[<>&"'`]/g, (match) => {
@@ -356,4 +366,82 @@ if (problemNumsForm != null) {
             console.log(error);
         });
     }
+}
+
+handleDisplayShareButton();
+
+function handleDisplayShareButton() {
+    if (!isDisplayShareBtn) {
+        return false;
+    }
+    const chatContents = document.querySelectorAll(".talk-content");
+    chatContents.forEach(function (element) {
+        element.addEventListener("mouseenter", addMessageShareButton, false);
+        element.addEventListener("mouseleave", removeMessageShareButton, false);
+    });
+}
+
+function addMessageShareButton(e) {
+    const element = e.currentTarget;
+    let shareButton = document.createElement("span");
+    shareButton.innerHTML = '<i class="fas fa-share-square fa-xs"></i>';
+    shareButton.classList.add("share-message-btn");
+    shareButton.addEventListener("click", handleClickedShareButton, false);
+    element.appendChild(shareButton);
+}
+
+function removeMessageShareButton(e) {
+    const element = e.currentTarget;
+    const shareButton = element.lastElementChild;
+    if (e.relatedTarget != shareButton) {
+        element.removeChild(shareButton);
+    }
+}
+
+function handleClickedShareButton(e) {
+    const clickedElement = e.currentTarget;
+    const sharedMessageText = getMessageContent(clickedElement.parentNode);
+    const postText = `共有されたメッセージ(<a href=${location.href}>URL</a>):\n${sharedMessageText}`;
+    const data = {course_id: CourseID, shared_message: postText};
+    fetch('{% url 'stumee_chat:save-shared-message' %}', {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: {
+            'Content-Type': 'application/json; charset=utf-8',
+            'X-CSRFToken': csrftoken,
+        },
+    }).then(response => {
+        return response.json();
+    }).then(response => {
+        if (response.response_message == "正常に保存されました") {
+            window.location.href = response.redirect_url;
+        }
+    }).catch(error => {
+        console.log(error);
+    });
+}
+
+function getMessageContent(element) {
+    let resultText = "";
+    for(childElm of element.childNodes){
+        if(childElm.nodeName == "#text"){
+            resultText += childElm.nodeValue;
+        }
+        if(childElm.nodeName == "A"){
+            resultText += childElm.outerHTML;
+        }
+    }
+    return resultText;
+}
+
+chatSocket.onopen = function(e) {
+    if (elementSessionSharedMessage != null) {
+        loadSharedMessage();
+    }
+}
+
+function loadSharedMessage() {
+    const SharedMessage = JSON.parse(elementSessionSharedMessage.textContent);
+    document.querySelector('#chat-message-input').value = SharedMessage;
+    document.querySelector('#chat-message-submit').click();
 }

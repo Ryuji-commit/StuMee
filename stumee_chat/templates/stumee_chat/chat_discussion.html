@@ -142,8 +142,12 @@
             </div>
         </div>
     </div>
-
 </div>
+
+{% if session_shared_message %}
+    {{ session_shared_message|json_script:"session-shared-message" }}
+{% endif %}
+
 {% endblock %}
 
 <!-- JS読み込み -->
