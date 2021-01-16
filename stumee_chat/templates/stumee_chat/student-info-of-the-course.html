@@ -37,13 +37,10 @@
                     <div class="card-body">
                         <div class="card-title text-center"><i class="fas fa-question-circle fa-3x mr-1"></i></div>
                         <p class="card-text text-center h3">
-                            {% if course.problem_nums %}
-                                {{course.problem_nums}}
-                            {% else %}
-                                未設定
-                            {% endif %}
+                            {{ questioners_number }}
+                            <span class="small">(今日:{{ today_questioners_number }})</span>
                         </p>
-                        <p class="card-text text-center h5">問題数</p>
+                        <p class="card-text text-center h5">質問者</p>
                     </div>
                 </div>
             </div>

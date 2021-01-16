@@ -174,10 +174,19 @@ def student_info_of_the_course(request, course_id):
         return redirect('stumee_study:study_index')
     students_number = course.students.count()
     students_message_number = Message.objects.filter(channel__course=course, channel__is_discussion=False).count()
+
+    questioners = Message.objects.filter(
+        channel__course=course, channel__is_discussion=False, channel__user=F('user')
+    ).order_by('channel__pk').distinct('channel__pk')
+    questioners_number = questioners.count()
+    today_questioners_number = questioners.filter(created_at__date=datetime.date.today()).count()
+
     return render(request, 'stumee_chat/student-info-of-the-course.html', {
         'course': course,
         'students_number': students_number,
         'students_message_number': students_message_number,
+        'questioners_number': questioners_number,
+        'today_questioners_number': today_questioners_number,
     })
 
 
