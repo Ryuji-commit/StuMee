@@ -27,7 +27,7 @@
                         newElement +=
                            '<div class="row" style="max-width: 200px;">'
                            + '<a href= "'
-                           + '{% url 'stumee_chat:chat_question' course_id 12345 %}'.replace(/12345/, student.id) //need change!
+                           + '{% url 'stumee_chat:chat_question' course_id 12345 %}'.replace(/\/question\/12345\//, `/question/${student.id}/`)
                            + '" class="list-group-item list-group-item-action col-8 rounded-0 h-100 text-truncate">'
                            + student.username
                            + '</a>'
@@ -43,6 +43,7 @@
                 })
                 .finally(() => {
                     setTimeout(poll, 2000, parsedData);
+                    callRequestPastMessages();
                 });
         }
         poll([{id: "none", username: "none"}]);
@@ -53,7 +54,7 @@
         });
 
         function checkTheQuestion(questionID) {
-            fetch("{% url "stumee_chat:inactivate-channel" course_id 12345 %}".replace(/12345/, questionID), {
+            fetch("{% url "stumee_chat:inactivate-channel" course_id 12345 %}".replace(/\/inactivate_channel\/12345\//, `/inactivate_channel/${questionID}/`), {
                 method: 'GET',
             }).then((response) => {
                 return response.json();
@@ -67,5 +68,49 @@
 
     document.querySelector('#student-info-button').onclick = function(e) {
         this.blur();
+    }
+
+    document.getElementById("is-self-messages").onchange = callRequestPastMessages;
+
+    function callRequestPastMessages(){
+        const isSelfMessageForm = document.getElementById("is-self-messages");
+        if(isSelfMessageForm.checked) {
+            requestPastMessages(true);
+        }else {
+            requestPastMessages(false);
+        }
+    }
+
+    function requestPastMessages(isSelfMessages){
+        const CourseID = JSON.parse(document.getElementById('course-id').textContent);
+        fetch("{% url "stumee_chat:response-past-messages" %}", {
+            method: 'POST',
+            body: JSON.stringify({course_id:CourseID, is_self_messages:isSelfMessages}),
+            headers: {
+                'Content-Type': 'application/json; charset=utf-8',
+                'X-CSRFToken': csrftoken,
+            },
+        }).then((response) => {
+            if (response.status != 200) {
+                console.log("status" + response.status);
+            }
+            return response.json();
+        }).then((pastMessages) => {
+            let newElement = '';
+            let listGroup = document.getElementById('past-messages');
+            parsedData = JSON.parse(pastMessages);
+            parsedData.forEach(message => {
+                newElement +=
+                   '<a href="{% url 'stumee_chat:chat_question' course_id 12345 %}"'.replace(/\/question\/12345\//, `/question/${message.user_id}/`)
+                   +' class="list-group-item" data-toggle="tooltip" data-placement="right"'
+                   +` title=${message.content}>`
+                   +message.user_name
+                   +'</a>'
+            });
+            listGroup.innerHTML = newElement;
+        })
+        .catch((error) => {
+            console.log(error);
+        })
     }
 </script>

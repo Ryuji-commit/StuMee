@@ -5,5 +5,7 @@ $(function(){
         $('#modalCategoryForm').find('input[type="text"]').val('');
     });
 
-    $('[data-toggle="tooltip"]').tooltip();
+    $('body').tooltip({
+        selector: '[data-toggle="tooltip"]'
+    });
 });

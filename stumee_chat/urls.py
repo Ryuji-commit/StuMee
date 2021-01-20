@@ -12,5 +12,6 @@ urlpatterns = [
     path('receive_and_save_problem_nums', views.receive_and_save_problem_nums, name='post-problem-nums'),
     path('<int:course_id>/students_info_of_this_course/', views.student_info_of_the_course, name='students-info'),
     path('students_progress_data/', views.response_students_progress_data, name='students-progress-data'),
-    path('save_shared_message/', views.save_shared_message_to_session, name='save-shared-message')
+    path('save_shared_message/', views.save_shared_message_to_session, name='save-shared-message'),
+    path('response_past_messages/', views.response_list_of_past_messages, name='response-past-messages'),
 ]

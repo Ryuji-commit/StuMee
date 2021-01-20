@@ -5,6 +5,7 @@ from django.http import JsonResponse, HttpResponseBadRequest
 from django.contrib import messages
 from django import forms
 from django.urls import reverse_lazy
+from django.utils.html import strip_tags
 import json
 import time
 import datetime
@@ -26,9 +27,6 @@ def chat_question(request, course_id, user_id):
     )
 
     student_channel = Channel.objects.exclude(user=course.create_user).filter(course=course).order_by('user__username')
-    replied_messages = Message.objects.exclude(channel__user=course.create_user).filter(
-        channel__course=course, channel__user=F('user')
-    ).order_by('-created_at')[:15]
     chat_messages = Message.objects.filter(channel__id=channel.id).order_by('created_at')
 
     # 授業時間が設定されていれば、授業時間外であることを通知
@@ -59,7 +57,6 @@ def chat_question(request, course_id, user_id):
         'problem_nums_form': problem_nums_form,
         'class_start_time': course.class_start_time,
         'class_end_time': course.class_end_time,
-        'replied_messages': replied_messages,
         'this_channel': channel,
     })
 
@@ -89,9 +86,6 @@ def chat_discussion(request, course_id):
     session_shared_message = request.session.pop('shared_message', '')
 
     student_channel = Channel.objects.exclude(user=user).filter(course=course).order_by('user__username')
-    replied_messages = Message.objects.exclude(channel__user=course.create_user).filter(
-        channel__course=course, channel__user=F('user')
-    ).order_by('-created_at')[:15]
     chat_messages = Message.objects.filter(channel__id=channel.id).order_by('created_at')
     return render(request, 'stumee_chat/chat_discussion.html', {
         'course_id': course_id,
@@ -100,7 +94,6 @@ def chat_discussion(request, course_id):
         'form': FileUploadForm(),
         'class_start_time': course.class_start_time,
         'class_end_time': course.class_end_time,
-        'replied_messages': replied_messages,
         'session_shared_message': session_shared_message,
     })
 
@@ -210,6 +203,42 @@ def response_students_progress_data(request):
         "options": {}
     }
     return JsonResponse(response_dict)
+
+
+def response_list_of_past_messages(request):
+    received_data = json.loads(request.body)
+    course_id = received_data['course_id']
+    is_self_messages = received_data['is_self_messages']
+    try:
+        course = Course.objects.get(id=course_id)
+    except Course.DoesNotExist:
+        return JsonResponse(data={}, status=404)
+
+    if is_self_messages:
+        # 自分のメッセージをセット
+        response_messages = Message.objects.exclude(channel__user=course.create_user).filter(
+            channel__course=course, channel__is_discussion=False, user=request.user
+        ).order_by('-created_at')[:15]
+    else:
+        # 学生のメッセージをセット
+        response_messages = Message.objects.exclude(channel__user=course.create_user).filter(
+            channel__course=course, channel__user=F('user')
+        ).order_by('-created_at')[:15]
+
+    response_data = []
+    for message in response_messages:
+        message_user_id = message.channel.user.id
+        message_username = message.channel.user.username
+        message_content = strip_tags(message.content)
+        if len(message_content) >= 20:
+            message_content = message_content[:20]
+
+        response_data.append({'course_id': course_id,
+                              'user_id': message_user_id,
+                              'content': message_content,
+                              'user_name': message_username})
+
+    return JsonResponse(json.dumps(response_data), safe=False)
 
 
 def save_shared_message_to_session(request):

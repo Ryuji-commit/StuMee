@@ -60,14 +60,11 @@
 
                             <li class="nav-item text-center mt-5">
                                 <span class="small font-weight-bold">直近のメッセージ</span>
-                                <ul class="list-group list-group-flush overflow-auto replied-messages" style="height:150px">
-                                    {% for replied_message in replied_messages %}
-                                    <a href="{% url 'stumee_chat:chat_question' replied_message.channel.course.id replied_message.channel.user.id %}"
-                                       class="list-group-item" data-toggle="tooltip" data-placement="right"
-                                       title="{{ replied_message.content|striptags|truncatechars:20 }}">
-                                        {{ replied_message.channel.user.username }}
-                                    </a>
-                                    {% endfor %}
+                                <div class="form-check">
+                                      <input class="form-check-input" type="checkbox" id="is-self-messages">
+                                      <label class="form-check-label" for="is-self-messages">Only My Message</label>
+                                </div>
+                                <ul class="list-group list-group-flush overflow-auto replied-messages" id="past-messages" style="height:150px">
                                 </ul>
                             </li>
                         {% else %}
