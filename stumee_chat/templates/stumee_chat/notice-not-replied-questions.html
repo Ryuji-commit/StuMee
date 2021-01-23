@@ -103,7 +103,7 @@
                 newElement +=
                    '<a href="{% url 'stumee_chat:chat_question' course_id 12345 %}"'.replace(/\/question\/12345\//, `/question/${message.user_id}/`)
                    +' class="list-group-item" data-toggle="tooltip" data-placement="right"'
-                   +` title=${message.content}>`
+                   +` title="${message.content}">`
                    +message.user_name
                    +'</a>'
             });
