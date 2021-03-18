@@ -1,4 +1,4 @@
-Django == 3.1
+Django == 3.1.6
 psycopg2
 social-auth-app-django
 django-taggit
