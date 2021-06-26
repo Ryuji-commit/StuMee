@@ -114,6 +114,7 @@ AUTHENTICATION_BACKENDS = (
 Auth PassWard here 
 '''
 
+SOCIAL_AUTH_REDIRECT_IS_HTTPS = True
 LOGIN_URL = reverse_lazy('social:begin', args=['google-oauth2'])
 LOGOUT_URL = 'stumee_auth:logout'
 LOGOUT_REDIRECT_URL = 'stumee_auth:home'
@@ -153,7 +154,14 @@ USE_TZ = True
 if DEBUG:
     # on local
     LOGIN_REDIRECT_URL = 'stumee_auth:certification-page'
-    AWS_S3_ENDPOINT_URL = 'http://192.168.99.102:9000'
+    # self signed certificate
+    AWS_S3_ENDPOINT_URL = 'https://minio.192.168.99.102.nip.io/'
+    AWS_S3_USE_SSL = False
+    AWS_S3_VERIFY = False
+    AWS_S3_SIGNATURE_VERSION = 's3'
+
+    # when run collect static
+    # AWS_S3_ENDPOINT_URL = 'http://192.168.99.102:9000/'
 else:
     # when on server
     LOGIN_REDIRECT_URL = 'https://ymir.eng.kagawa-u.ac.jp/stumee/login/'
